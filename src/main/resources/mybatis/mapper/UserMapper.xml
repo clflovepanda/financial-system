@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.financial.user.dao.UserDao">
+    <resultMap id="BaseResultMap" type="com.pro.financial.user.dao.entity.UserEntity">
+        <id column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="dep_id" property="depId" jdbcType="BIGINT"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="create_datetime" property="createDatetime" jdbcType="TIMESTAMP"/>
+        <result column="register_time" property="registerTime" jdbcType="TIMESTAMP"/>
+        <collection property="roleName" ofType="java.lang.String">
+            <constructor>
+                <arg column="role_name"/>
+            </constructor>
+        </collection>
+    </resultMap>
+    <select id="userList" resultMap="BaseResultMap">
+       SELECT u.user_id, u.dep_id, u.username, u.email, u.mobile, u.create_datetime, u.register_time, r.role_name
+        FROM `user` u
+        LEFT JOIN user_role_relation ur USING (user_id)
+        LEFT JOIN role r USING (role_id)
+        WHERE 1 = 1
+        <if test="username != null  and username != ''">
+            AND u.username like "%${username}%"
+        </if>
+        <if test="mobile != null  and mobile != ''">
+            AND u.mobile = #{mobile}
+        </if>
+        <if test="role != null  and role != ''">
+            AND r.role_id = #{role}
+        </if>
+        <if test="state != null  and state != ''">
+            AND u.state = #{state}
+        </if>
+        <if test="depId != null  and depId != ''">
+            AND u.dep_id = #{depId}
+        </if>
+        <if test="startDt != null  and endDt != null">
+            AND u.create_datetime > #{startDt}
+            AND u.create_datetime <![CDATA[ < ]]> #{endDt}
+        </if>
+    </select>
+    <update id="update" parameterType="map">
+        UPDATE `user`
+        <set>
+            <if test="user.depId != null">
+                dep_id = #{user.depId},
+            </if>
+            <if test="user.username != null">
+                username = #{user.username},
+            </if>
+            <if test="user.email != null">
+                email = #{user.email},
+            </if>
+            <if test="user.mobile != null">
+                mobile = #{user.mobile},
+            </if>
+            <if test="user.password != null">
+                password = #{user.password},
+            </if>
+            <if test="user.state != null">
+                state = #{user.state},
+            </if>
+        </set>
+        WHERE user_id = #{user.userId}
+    </update>
+    <select id="getUserById" resultMap="BaseResultMap">
+        SELECT u.user_id, u.dep_id, u.username, u.email, u.mobile, u.create_datetime, u.register_time, r.role_name
+        FROM `user` u
+        LEFT JOIN user_role_relation ur USING (user_id)
+        LEFT JOIN role r USING (role_id)
+        WHERE user_id = #{userId}
+    </select>
+</mapper>
