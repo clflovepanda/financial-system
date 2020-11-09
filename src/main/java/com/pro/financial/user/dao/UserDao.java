@@ -30,6 +30,6 @@ public interface UserDao {
 
     UserEntity getUserById(@Param("userId") int userId);
 
-    @Select("SELECT * FROM `user` WHERE username = #{username} OR mobile = #{username} OR email = #{username}")
     List<UserEntity> getUserInfo(@Param("username") String userName);
+
 }

@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface RoleDao {
 
-    @Select("select * from role order by taxis")
+    @Select("select * from role where state = '1' order by taxis")
     List<RoleEntity> getRole();
 
     @Insert({
@@ -49,9 +49,8 @@ public interface RoleDao {
             "r.role_id, r.role_name " +
             "FROM " +
             "role r " +
-//            "LEFT JOIN role_permission_relation rp USING ( role_id ) " +
-//            "LEFT JOIN permission p USING ( permission_id )  " +
             "WHERE " +
             "role_id = #{roleId}")
     RoleEntity getRoleByRoleId(@Param("roleId") Integer roleId);
+
 }
