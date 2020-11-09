@@ -3,7 +3,9 @@ package com.pro.financial.user.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.pro.financial.user.biz.RoleBiz;
 import com.pro.financial.user.dto.RoleDto;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,6 +60,38 @@ public class RoleController {
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", roleDto);
+        return result;
+    }
+
+    @RequestMapping("/update")
+    public JSONObject updateRole(@RequestBody JSONObject jsonInfo) {
+        JSONObject result = new JSONObject();
+        RoleDto roleDto = jsonInfo.toJavaObject(RoleDto.class);
+        String roleName = roleDto.getRoleName();
+        Integer roleId = roleDto.getRoleId();
+        if (roleId == null || roleId < 1) {
+            result.put("code", 1001);
+            result.put("msg", "角色Id为空!");
+            return result;
+        }
+        if (StringUtils.isEmpty(roleName)) {
+            result.put("code", 1001);
+            result.put("msg", "角色名字为空!");
+            return result;
+        }
+        if (CollectionUtils.isEmpty(roleDto.getPermissions())) {
+            result.put("code", 1001);
+            result.put("msg", "角色权限为空!");
+            return result;
+        }
+        int count = roleBiz.update(roleDto);
+        if (count == 0) {
+            result.put("code", 2001);
+            result.put("msg", "更新失败");
+        } else {
+            result.put("code", 0);
+            result.put("msg", "");
+        }
         return result;
     }
 

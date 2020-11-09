@@ -3,5 +3,22 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pro.financial.user.dao.RoleDao">
-
+    <update id="update" parameterType="map">
+        UPDATE `role`
+        <set>
+            <if test="role.roleName != null">
+                role_name = #{role.roleName},
+            </if>
+            <if test="role.remark != null">
+                remark = #{role.remark},
+            </if>
+            <if test="role.state != null">
+                state = #{role.state},
+            </if>
+            <if test="role.taxis != null">
+                taxis = #{role.taxis},
+            </if>
+        </set>
+        WHERE role_id = #{role.roleId}
+    </update>
 </mapper>

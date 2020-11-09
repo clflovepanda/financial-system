@@ -70,7 +70,9 @@ public class UserController {
         String depId = request.getParameter("depId");
         String startDt = request.getParameter("startDt");
         String endDt = request.getParameter("endDt");
-        List<UserDto> userDtos = userBiz.userList(username, mobile, role, state, depId, startDt, endDt);
+        Integer limit = StringUtils.isEmpty(request.getParameter("limit")) ? null : Integer.parseInt(request.getParameter("limit"));
+        Integer offset = StringUtils.isEmpty(request.getParameter("offset")) ? null : Integer.parseInt(request.getParameter("offset"));
+        List<UserDto> userDtos = userBiz.userList(username, mobile, role, state, depId, startDt, endDt, limit, offset);
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", userDtos);

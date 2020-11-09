@@ -42,6 +42,40 @@
             AND u.create_datetime > #{startDt}
             AND u.create_datetime <![CDATA[ < ]]> #{endDt}
         </if>
+        AND u.user_id IN (
+        SELECT uid.user_id FROM
+        (
+        SELECT distinct u.user_id
+        FROM `user` u
+        LEFT JOIN user_role_relation ur USING (user_id)
+        LEFT JOIN role r USING (role_id)
+        WHERE 1 = 1
+        <if test="username != null  and username != ''">
+            AND u.username like "%${username}%"
+        </if>
+        <if test="mobile != null  and mobile != ''">
+            AND u.mobile = #{mobile}
+        </if>
+        <if test="role != null  and role != ''">
+            AND r.role_id = #{role}
+        </if>
+        <if test="state != null  and state != ''">
+            AND u.state = #{state}
+        </if>
+        <if test="depId != null  and depId != ''">
+            AND u.dep_id = #{depId}
+        </if>
+        <if test="startDt != null  and endDt != null">
+            AND u.create_datetime > #{startDt}
+            AND u.create_datetime <![CDATA[ < ]]> #{endDt}
+        </if>
+        ORDER BY u.user_id
+        <if test="offset != null and limit != 0">
+            limit ${offset} , ${limit}
+        </if>
+        ) uid
+        )
+
     </select>
     <update id="update" parameterType="map">
         UPDATE `user`

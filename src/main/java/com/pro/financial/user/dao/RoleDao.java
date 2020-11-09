@@ -53,4 +53,8 @@ public interface RoleDao {
             "role_id = #{roleId}")
     RoleEntity getRoleByRoleId(@Param("roleId") Integer roleId);
 
+    int update(@Param("role") RoleEntity role);
+
+    @Delete("delete from role_permission_relation where role_id = #{roleId}")
+    int deleRolePermission(@Param("roleId") Integer roleId);
 }

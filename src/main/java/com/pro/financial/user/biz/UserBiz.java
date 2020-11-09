@@ -50,7 +50,7 @@ public class UserBiz {
         return false;
     }
 
-    public List<UserDto> userList(String username, String mobile, String role, String state, String depId, String startDt, String endDt) {
+    public List<UserDto> userList(String username, String mobile, String role, String state, String depId, String startDt, String endDt, Integer limit, Integer offset) {
         List<UserDto> userDtos = new ArrayList<>();
         Date startDate = null;
         Date endDate = null;
@@ -64,7 +64,7 @@ public class UserBiz {
             }
 
         }
-        List<UserEntity> userList = userDao.userList(username, mobile, role, state, depId, startDate, endDate);
+        List<UserEntity> userList = userDao.userList(username, mobile, role, state, depId, startDate, endDate, limit, offset);
         return ConvertUtil.convert(UserEntity2Dto.instance, userList);
     }
 

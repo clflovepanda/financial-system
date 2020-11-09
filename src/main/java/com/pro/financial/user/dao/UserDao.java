@@ -23,7 +23,8 @@ public interface UserDao {
 
     List<UserEntity> userList(@Param("username") String username, @Param("mobile") String mobile, @Param("role") String role,
                               @Param("state") String state, @Param("depId") String depId,
-                              @Param("startDt") Date startDt, @Param("endDt") Date endDt);
+                              @Param("startDt") Date startDt, @Param("endDt") Date endDt,
+                              @Param("limit") Integer limit, @Param("offset") Integer offset);
 
 
     int update(@Param("user") UserEntity userEntity);
