@@ -105,4 +105,30 @@ public class RoleController {
         result.put("data", dataSourceDtos);
         return result;
     }
+
+    @RequestMapping("/changerolestate")
+    public JSONObject changeRoleState(HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        String roleIdStr = request.getParameter("roleId");
+        Integer roleId = null;
+        try {
+            roleId = Integer.parseInt(roleIdStr);
+        } catch (Exception e) {
+            roleId = 0;
+        }
+        if (roleId < 1) {
+            result.put("code", 1001);
+            result.put("msg", "角色Id为空!");
+            return result;
+        }
+        boolean success = roleBiz.changeRoleState(roleId);
+        if (success) {
+            result.put("code", 0);
+            result.put("msg", "");
+        } else {
+            result.put("code", 1001);
+            result.put("msg", "修改用户状态失败");
+        }
+        return result;
+    }
 }

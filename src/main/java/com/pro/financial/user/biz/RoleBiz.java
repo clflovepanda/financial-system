@@ -1,6 +1,7 @@
 package com.pro.financial.user.biz;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pro.financial.consts.CommonConst;
 import com.pro.financial.user.converter.RoleDto2Entity;
 import com.pro.financial.user.converter.RoleEntity2Dto;
 import com.pro.financial.user.dao.DataSourceDao;
@@ -9,6 +10,8 @@ import com.pro.financial.user.dao.entity.PermissionEntity;
 import com.pro.financial.user.dao.entity.RoleEntity;
 import com.pro.financial.user.dto.DataSourceDto;
 import com.pro.financial.user.dto.RoleDto;
+import com.pro.financial.user.dto.UserDto;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,5 +78,21 @@ public class RoleBiz {
 
     public List<DataSourceDto> getParentDataSource() {
         return dataSourceDao.getParentDataSource();
+    }
+
+    public boolean changeRoleState(Integer roleId) {
+        boolean result = true;
+        String state = CommonConst.common_invalid;
+        try {
+            RoleDto user = this.getRoleByRoleId(roleId);
+            if (StringUtils.equals(CommonConst.common_invalid, user.getState())) {
+                roleDao.changeRoleState(roleId, CommonConst.common_valid);
+            }
+            roleDao.changeRoleState(roleId, CommonConst.common_invalid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return !result;
+        }
+        return result;
     }
 }

@@ -62,4 +62,7 @@ public interface RoleDao {
      */
     @Delete("delete from role_permission_relation where role_id = #{roleId}")
     int deleRolePermission(@Param("roleId") Integer roleId);
+
+    @Update("update `role` set state = #{state} where role_id = #{roleId}")
+    int changeRoleState(@Param("roleId") Integer roleId, @Param("state") String state);
 }
