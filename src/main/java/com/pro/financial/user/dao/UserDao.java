@@ -1,10 +1,7 @@
 package com.pro.financial.user.dao;
 
 import com.pro.financial.user.dao.entity.UserEntity;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -33,4 +30,6 @@ public interface UserDao {
 
     List<UserEntity> getUserInfo(@Param("username") String userName);
 
+    @Update("update `user` set state = #{state} where user_id = #{userId}")
+    int changeUserState(@Param("userId") int userId, @Param("state") String state);
 }

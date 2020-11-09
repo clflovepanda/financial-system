@@ -1,6 +1,7 @@
 package com.pro.financial.user.biz;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pro.financial.consts.CommonConst;
 import com.pro.financial.user.converter.UserEntity2Dto;
 import com.pro.financial.user.dao.RoleDao;
 import com.pro.financial.user.dao.UserDao;
@@ -78,5 +79,21 @@ public class UserBiz {
         UserEntity userEntity = userDao.getUserById(userId);
 
         return UserEntity2Dto.instance.convert(userEntity);
+    }
+
+    public boolean changeUserState(int userId) {
+        boolean result = true;
+        String state = CommonConst.common_invalid;
+        try {
+            UserDto user = this.getUserById(userId);
+            if (StringUtils.equals(CommonConst.common_invalid, user.getState())) {
+                userDao.changeUserState(userId, CommonConst.common_valid);
+            }
+            userDao.changeUserState(userId, CommonConst.common_invalid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return !result;
+        }
+        return result;
     }
 }

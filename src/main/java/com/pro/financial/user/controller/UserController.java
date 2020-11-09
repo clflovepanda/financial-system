@@ -121,4 +121,31 @@ public class UserController {
 
         return result;
     }
+    @RequestMapping("/changeuserstate")
+    public JSONObject changeUserState(HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        String uid = request.getParameter("userId");
+        int userId = 0;
+        try {
+            userId = Integer.parseInt(uid);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (userId < 1) {
+            result.put("code", 1003);
+            result.put("msg", "用户id有误");
+            return result;
+        }
+        boolean success = userBiz.changeUserState(userId);
+        if (success) {
+            result.put("code", 0);
+            result.put("msg", "");
+        } else {
+            result.put("code", 1001);
+            result.put("msg", "修改用户状态失败");
+        }
+
+
+        return result;
+    }
 }

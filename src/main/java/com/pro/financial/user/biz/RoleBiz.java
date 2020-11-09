@@ -60,7 +60,6 @@ public class RoleBiz {
         RoleEntity roleEntity = RoleDto2Entity.instance.convert(roleDto);
         //修改角色
         int count = 0;
-        //TODO
         if (!CollectionUtils.isEmpty(roleEntity.getPermissions())) {
             count = roleDao.update(roleEntity);
             for (PermissionEntity permissionEntity : roleEntity.getPermissions()) {
