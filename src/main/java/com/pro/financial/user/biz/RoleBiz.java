@@ -3,9 +3,11 @@ package com.pro.financial.user.biz;
 import com.alibaba.fastjson.JSONObject;
 import com.pro.financial.user.converter.RoleDto2Entity;
 import com.pro.financial.user.converter.RoleEntity2Dto;
+import com.pro.financial.user.dao.DataSourceDao;
 import com.pro.financial.user.dao.RoleDao;
 import com.pro.financial.user.dao.entity.PermissionEntity;
 import com.pro.financial.user.dao.entity.RoleEntity;
+import com.pro.financial.user.dto.DataSourceDto;
 import com.pro.financial.user.dto.RoleDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,8 @@ public class RoleBiz {
 
     @Autowired
     private RoleDao roleDao;
+    @Autowired
+    private DataSourceDao dataSourceDao;
 
     public List<RoleDto> getRole() {
         List<RoleDto> roleDtos = null;
@@ -56,8 +60,7 @@ public class RoleBiz {
         RoleEntity roleEntity = RoleDto2Entity.instance.convert(roleDto);
         //修改角色
         int count = 0;
-        List<PermissionEntity> permissionAdd = new ArrayList<>();
-        List<PermissionEntity> permissionUpdate = new ArrayList<>();
+        //TODO
         if (!CollectionUtils.isEmpty(roleEntity.getPermissions())) {
             count = roleDao.update(roleEntity);
             for (PermissionEntity permissionEntity : roleEntity.getPermissions()) {
@@ -69,5 +72,9 @@ public class RoleBiz {
 
         //修改权限
         return count;
+    }
+
+    public List<DataSourceDto> getParentDataSource() {
+        return dataSourceDao.getParentDataSource();
     }
 }

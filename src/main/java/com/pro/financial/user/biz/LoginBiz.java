@@ -58,6 +58,7 @@ public class LoginBiz {
                 List<PermissionEntity> permissionEntities = permissionDao.getPermissionByRoleIds(roleIds);
                 UserDto userDto = UserEntity2Dto.instance.convert(userEntities.get(0));
                 userDto.setPermissions(ConvertUtil.convert(PermissionEntity2Dto.instance, permissionEntities));
+                //TODO 返回数据权限
                 result.put("code", 0);
                 result.put("msg", "");
                 result.put("data", userDto);
@@ -85,6 +86,7 @@ public class LoginBiz {
                     List<PermissionEntity> permissionEntities = permissionDao.getPermissionByRoleIds(roleIds);
                     UserDto userDto = UserEntity2Dto.instance.convert(userEntity);
                     userDto.setPermissions(ConvertUtil.convert(PermissionEntity2Dto.instance, permissionEntities));
+                    //TODO 返回数据权限
                     result.put("code", 0);
                     result.put("msg", "");
                     result.put("data", userDto);

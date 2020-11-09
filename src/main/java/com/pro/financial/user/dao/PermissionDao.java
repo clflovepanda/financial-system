@@ -10,9 +10,15 @@ import java.util.List;
 @Repository
 public interface PermissionDao {
 
+    /**
+     *
+     * @param roleId 角色id
+     * @return
+     */
     @Select("SELECT * FROM permission\n" +
             "LEFT JOIN role_permission_relation USING (permission_id) " +
-            "WHERE role_id = #{roleId}")
+            "WHERE role_id = #{roleId} " +
+            "AND state = 0")
     List<PermissionEntity> getPermissionByRoleId(@Param("roleId") int roleId);
 
     @Select({"<script>" +

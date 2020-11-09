@@ -2,6 +2,7 @@ package com.pro.financial.user.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pro.financial.user.biz.RoleBiz;
+import com.pro.financial.user.dto.DataSourceDto;
 import com.pro.financial.user.dto.RoleDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,4 +96,13 @@ public class RoleController {
         return result;
     }
 
+    @RequestMapping("/getparentdatasource")
+    public JSONObject getDataSource(@RequestBody JSONObject jsonInfo) {
+        JSONObject result = new JSONObject();
+        List<DataSourceDto> dataSourceDtos = roleBiz.getParentDataSource();
+        result.put("code", 0);
+        result.put("msg", "");
+        result.put("data", dataSourceDtos);
+        return result;
+    }
 }

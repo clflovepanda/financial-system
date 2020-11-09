@@ -55,6 +55,11 @@ public interface RoleDao {
 
     int update(@Param("role") RoleEntity role);
 
+    /**
+     * 删除现有权限
+     * @param roleId
+     * @return
+     */
     @Delete("delete from role_permission_relation where role_id = #{roleId}")
     int deleRolePermission(@Param("roleId") Integer roleId);
 }
