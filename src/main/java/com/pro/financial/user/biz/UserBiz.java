@@ -82,7 +82,6 @@ public class UserBiz {
         int count = userDao.update(userEntity);
         userDao.deleteRole(userEntity.getUserId());
         roleDao.addUserRoleRelation(userEntity.getUserId(), user.getRoleId());
-        //TODO 更新权限
         return count;
     }
 
