@@ -1,11 +1,15 @@
 package com.pro.financial.user.dao;
 
+import com.pro.financial.user.dao.entity.DataSourceEntity;
+import com.pro.financial.user.dao.entity.PermissionEntity;
 import com.pro.financial.user.dao.entity.RoleEntity;
+import com.pro.financial.user.dto.DataSourceDto;
 import com.pro.financial.user.dto.PermissionDto;
 import com.pro.financial.user.dto.RoleDto;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
@@ -32,7 +36,7 @@ public interface RoleDao {
             "<script> insert into role_permission_relation (role_id, permission_id)" +
                     "values " +
                     "<foreach collection=\"list\" item=\"item\" index=\"index\" separator=\",\" >" +
-                    "(#{item.permissionId}, #{roleId})" +
+                    "(#{roleId} ,#{item.permissionId})" +
                     "</foreach>" +
                     "</script>"
     })
@@ -43,7 +47,8 @@ public interface RoleDao {
             @Result(property = "roleName", column ="role_name" ),
             @Result(property = "permissionId", column ="permission_id" ),
             @Result(property = "uri", column ="uri" ),
-            @Result(property = "permissions", column = "role_id", many = @Many(select = "com.pro.financial.user.dao.PermissionDao.getPermissionByRoleId"))
+            @Result(property = "permissions", column = "role_id", many = @Many(select = "com.pro.financial.user.dao.PermissionDao.getPermissionByRoleId")),
+            @Result(property = "dataSources", column = "role_id", many = @Many(select = "com.pro.financial.user.dao.RoleDao.getPermissionByRoleId"))
     })
     @Select("SELECT " +
             "r.role_id, r.role_name " +
@@ -65,4 +70,32 @@ public interface RoleDao {
 
     @Update("update `role` set state = #{state} where role_id = #{roleId}")
     int changeRoleState(@Param("roleId") Integer roleId, @Param("state") String state);
+
+    @Insert({
+            "<script> insert into role_datasource_relation (role_id, data_source_id)" +
+                    "values " +
+                    "<foreach collection=\"list\" item=\"item\" index=\"index\" separator=\",\" >" +
+                    "(#{roleId}, #{item.dataSourceId})" +
+                    "</foreach>" +
+                    "</script>"
+    })
+    int addRoleDataSource(@Param("roleId") Integer roleId, @Param("list") List<DataSourceDto> dataSourceDtos);
+
+    @Delete("delete from role_datasource_relation where role_id = #{roleId}")
+    int deleRoleDataSource(@Param("roleId") Integer roleId);
+
+    @Select({"<script>" +
+            "SELECT * FROM data_source\n" +
+            "LEFT JOIN role_datasource_relation USING (data_source_id) " +
+            "WHERE role_id in " +
+            "<foreach collection='list' item='item' index='index' separator=',' open='(' close=')'>" +
+            "#{item}" +
+            "</foreach>" +
+            "</script>"})
+    List<DataSourceEntity> getDatasourceByRoleIds(@Param("list") List<Integer> roleIds);
+
+    @Select("SELECT * FROM data_source\n" +
+            "LEFT JOIN role_datasource_relation USING (data_source_id) " +
+            "WHERE role_id = #{roleId} ")
+    List<DataSourceEntity> getPermissionByRoleId(@Param("roleId") int roleId);
 }

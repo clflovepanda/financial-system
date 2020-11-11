@@ -6,6 +6,7 @@ import com.pro.financial.user.converter.RoleDto2Entity;
 import com.pro.financial.user.converter.RoleEntity2Dto;
 import com.pro.financial.user.dao.DataSourceDao;
 import com.pro.financial.user.dao.RoleDao;
+import com.pro.financial.user.dao.entity.DataSourceEntity;
 import com.pro.financial.user.dao.entity.PermissionEntity;
 import com.pro.financial.user.dao.entity.RoleEntity;
 import com.pro.financial.user.dto.DataSourceDto;
@@ -38,13 +39,16 @@ public class RoleBiz {
 
     /**
      * 添加角色和角色所对应的权限
+     *
      * @param roleDto
      * @return
      */
+    @Transactional(rollbackFor = Exception.class)
     public int addRole(RoleDto roleDto) {
         roleDto.setCreateDatetime(new Date());
         int role = roleDao.addRole(roleDto);
         roleDao.addRolePermission(roleDto.getRoleId(), roleDto.getPermissions());
+        roleDao.addRoleDataSource(roleDto.getRoleId(), roleDto.getDataSources());
         return role;
     }
 
@@ -55,6 +59,7 @@ public class RoleBiz {
 
     /**
      * 修改角色名字和角色对应的权限
+     *
      * @param roleDto
      * @return
      */
@@ -65,12 +70,15 @@ public class RoleBiz {
         int count = 0;
         if (!CollectionUtils.isEmpty(roleEntity.getPermissions())) {
             count = roleDao.update(roleEntity);
-            for (PermissionEntity permissionEntity : roleEntity.getPermissions()) {
-                //先删除之前的
-                roleDao.deleRolePermission(roleDto.getRoleId());
-                roleDao.addRolePermission(roleDto.getRoleId(), roleDto.getPermissions());
+            //先删除之前的
+            roleDao.deleRolePermission(roleDto.getRoleId());
+            roleDao.addRolePermission(roleDto.getRoleId(), roleDto.getPermissions());
+            if (!CollectionUtils.isEmpty(roleEntity.getDataSources())) {
+                roleDao.deleRoleDataSource(roleDto.getRoleId());
+                roleDao.addRoleDataSource(roleDto.getRoleId(), roleDto.getDataSources());
             }
         }
+
 
         //修改权限
         return count;

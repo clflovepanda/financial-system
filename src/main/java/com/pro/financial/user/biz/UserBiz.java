@@ -2,10 +2,14 @@ package com.pro.financial.user.biz;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pro.financial.consts.CommonConst;
+import com.pro.financial.user.converter.CompanyEntity2Dto;
 import com.pro.financial.user.converter.UserEntity2Dto;
+import com.pro.financial.user.dao.CompanyDao;
 import com.pro.financial.user.dao.RoleDao;
 import com.pro.financial.user.dao.UserDao;
+import com.pro.financial.user.dao.entity.CompanyEntity;
 import com.pro.financial.user.dao.entity.UserEntity;
+import com.pro.financial.user.dto.CompanyDto;
 import com.pro.financial.user.dto.RoleDto;
 import com.pro.financial.user.dto.UserDto;
 import com.pro.financial.utils.ConvertUtil;
@@ -27,6 +31,9 @@ public class UserBiz {
 
     @Autowired
     private RoleDao roleDao;
+
+    @Autowired
+    private CompanyDao companyDao;
 
     @Transactional(rollbackFor = Exception.class)
     public int addUser(UserDto user, List<Integer> roleIds) {
@@ -72,7 +79,10 @@ public class UserBiz {
     public int update(UserDto user) {
         UserEntity userEntity = JSONObject.parseObject(JSONObject.toJSONString(user), UserEntity.class);
         userEntity.setRegisterTime(new Date());
-        return userDao.update(userEntity);
+        int count = userDao.update(userEntity);
+        userDao.deleteRole(userEntity.getUserId());
+        roleDao.addUserRoleRelation(userEntity.getUserId(), user.getRoleId());
+        return count;
     }
 
     public UserDto getUserById(int userId) {
@@ -95,5 +105,10 @@ public class UserBiz {
             return !result;
         }
         return result;
+    }
+
+    public List<CompanyDto> getCompany() {
+        List<CompanyEntity> companyEntities = companyDao.getCompany();
+        return ConvertUtil.convert(CompanyEntity2Dto.instance, companyEntities);
     }
 }

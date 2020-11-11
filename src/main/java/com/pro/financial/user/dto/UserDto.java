@@ -1,5 +1,6 @@
 package com.pro.financial.user.dto;
 
+import com.pro.financial.user.dao.entity.RoleEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,5 +23,6 @@ public class UserDto {
     private Date createDatetime;
     private List<Integer> roleId;
     private List<String> roleName;
+    private List<RoleEntity> roles;
     private List<PermissionDto> permissions;
 }

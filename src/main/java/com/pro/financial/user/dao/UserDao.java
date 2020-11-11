@@ -32,4 +32,12 @@ public interface UserDao {
 
     @Update("update `user` set state = #{state} where user_id = #{userId}")
     int changeUserState(@Param("userId") int userId, @Param("state") String state);
+
+    /**
+     *
+     * @param userId
+     * @return
+     */
+    @Delete("delete from user_role_relation where user_id = #{userId}")
+    int deleteRole(@Param("userId") Integer userId);
 }

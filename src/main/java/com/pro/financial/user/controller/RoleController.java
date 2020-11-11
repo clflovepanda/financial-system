@@ -21,6 +21,10 @@ public class RoleController {
     @Autowired
     private RoleBiz roleBiz;
 
+    /**
+     * 获取所有角色
+     * @return
+     */
     @RequestMapping("/get")
     public JSONObject getRole() {
         JSONObject result = new JSONObject();
@@ -31,17 +35,26 @@ public class RoleController {
         return result;
     }
 
+    /**
+     * 添加角色和对应的权限
+     * @param jsonInfo
+     * @return
+     */
     @RequestMapping("/add")
     public JSONObject addRole(@RequestBody JSONObject jsonInfo) {
         JSONObject result = new JSONObject();
         RoleDto roleDto = jsonInfo.getJSONObject("role").toJavaObject(RoleDto.class);
-        System.out.println(roleDto.toString());
         roleBiz.addRole(roleDto);
         result.put("code", 0);
         result.put("msg", "");
         return result;
     }
 
+    /**
+     * 根据角色id获取角色信息
+     * @param request
+     * @return
+     */
     @RequestMapping("/getbyroleid")
     public JSONObject getByRoleId(HttpServletRequest request) {
         JSONObject result = new JSONObject();
@@ -64,6 +77,11 @@ public class RoleController {
         return result;
     }
 
+    /**
+     * 修改角色 和角色权限
+     * @param jsonInfo
+     * @return
+     */
     @RequestMapping("/update")
     public JSONObject updateRole(@RequestBody JSONObject jsonInfo) {
         JSONObject result = new JSONObject();
@@ -96,8 +114,12 @@ public class RoleController {
         return result;
     }
 
+    /**
+     * 获取1级数据源
+     * @return
+     */
     @RequestMapping("/getparentdatasource")
-    public JSONObject getDataSource(@RequestBody JSONObject jsonInfo) {
+    public JSONObject getDataSource() {
         JSONObject result = new JSONObject();
         List<DataSourceDto> dataSourceDtos = roleBiz.getParentDataSource();
         result.put("code", 0);
@@ -106,6 +128,11 @@ public class RoleController {
         return result;
     }
 
+    /**
+     * 修改角色冻结/启用状态
+     * @param request
+     * @return
+     */
     @RequestMapping("/changerolestate")
     public JSONObject changeRoleState(HttpServletRequest request) {
         JSONObject result = new JSONObject();

@@ -18,7 +18,7 @@ public interface PermissionDao {
     @Select("SELECT * FROM permission\n" +
             "LEFT JOIN role_permission_relation USING (permission_id) " +
             "WHERE role_id = #{roleId} " +
-            "AND state = 0")
+            "AND state = 1")
     List<PermissionEntity> getPermissionByRoleId(@Param("roleId") int roleId);
 
     @Select({"<script>" +
