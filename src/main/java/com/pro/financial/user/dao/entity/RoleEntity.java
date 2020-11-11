@@ -21,4 +21,5 @@ public class RoleEntity {
     private Date createDatetime;
     private String exattribute;
     private List<PermissionEntity> permissions;
+    private List<DataSourceEntity> dataSources;
 }

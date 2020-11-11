@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/login")
@@ -23,13 +21,12 @@ public class LoginController {
     private LoginBiz loginBiz;
 
     @RequestMapping("/check")
-    public JSONObject check(@RequestBody JSONObject jsonInfo) {
+    public JSONObject check(@RequestBody JSONObject jsonInfo, HttpServletRequest request, HttpServletResponse response) {
         JSONObject result = new JSONObject();
         String userName = jsonInfo.getString("userName");
         String password = jsonInfo.getString("password");
-        return loginBiz.login(userName, password);
+        return loginBiz.login(userName, password, request, response);
     }
-
     /**
      * 响应图形验证码页面
      * @return

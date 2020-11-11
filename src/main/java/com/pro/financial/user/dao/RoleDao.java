@@ -1,11 +1,13 @@
 package com.pro.financial.user.dao;
 
 import com.pro.financial.user.dao.entity.RoleEntity;
+import com.pro.financial.user.dto.DataSourceDto;
 import com.pro.financial.user.dto.PermissionDto;
 import com.pro.financial.user.dto.RoleDto;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
@@ -32,7 +34,7 @@ public interface RoleDao {
             "<script> insert into role_permission_relation (role_id, permission_id)" +
                     "values " +
                     "<foreach collection=\"list\" item=\"item\" index=\"index\" separator=\",\" >" +
-                    "(#{item.permissionId}, #{roleId})" +
+                    "(#{roleId} ,#{item.permissionId})" +
                     "</foreach>" +
                     "</script>"
     })
@@ -65,4 +67,17 @@ public interface RoleDao {
 
     @Update("update `role` set state = #{state} where role_id = #{roleId}")
     int changeRoleState(@Param("roleId") Integer roleId, @Param("state") String state);
+
+    @Insert({
+            "<script> insert into role_datasource_relation (role_id, data_source_id)" +
+                    "values " +
+                    "<foreach collection=\"list\" item=\"item\" index=\"index\" separator=\",\" >" +
+                    "(#{roleId}, #{item.dataSourceId},)" +
+                    "</foreach>" +
+                    "</script>"
+    })
+    int addRoleDataSource(@Param("roleId") Integer roleId, @Param("list") List<DataSourceDto> dataSourceDtos);
+
+    @Delete("delete from role_datasource_relation where role_id = #{roleId}")
+    int deleRoleDataSource(@Param("roleId") Integer roleId);
 }

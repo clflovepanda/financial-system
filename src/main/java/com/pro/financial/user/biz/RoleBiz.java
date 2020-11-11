@@ -6,6 +6,7 @@ import com.pro.financial.user.converter.RoleDto2Entity;
 import com.pro.financial.user.converter.RoleEntity2Dto;
 import com.pro.financial.user.dao.DataSourceDao;
 import com.pro.financial.user.dao.RoleDao;
+import com.pro.financial.user.dao.entity.DataSourceEntity;
 import com.pro.financial.user.dao.entity.PermissionEntity;
 import com.pro.financial.user.dao.entity.RoleEntity;
 import com.pro.financial.user.dto.DataSourceDto;
@@ -41,10 +42,11 @@ public class RoleBiz {
      * @param roleDto
      * @return
      */
-    public int addRole(RoleDto roleDto) {
+    public int  addRole(RoleDto roleDto) {
         roleDto.setCreateDatetime(new Date());
         int role = roleDao.addRole(roleDto);
         roleDao.addRolePermission(roleDto.getRoleId(), roleDto.getPermissions());
+        roleDao.addRoleDataSource(roleDto.getRoleId(), roleDto.getDataSources());
         return role;
     }
 
@@ -70,7 +72,14 @@ public class RoleBiz {
                 roleDao.deleRolePermission(roleDto.getRoleId());
                 roleDao.addRolePermission(roleDto.getRoleId(), roleDto.getPermissions());
             }
+            if (!CollectionUtils.isEmpty(roleEntity.getDataSources())) {
+                for (DataSourceEntity dataSourceEntity : roleEntity.getDataSources()) {
+                    roleDao.deleRoleDataSource(roleDto.getRoleId());
+                    roleDao.addRoleDataSource(roleDto.getRoleId(), roleDto.getDataSources());
+                }
+            }
         }
+
 
         //修改权限
         return count;

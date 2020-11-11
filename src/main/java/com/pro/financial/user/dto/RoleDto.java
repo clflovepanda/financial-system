@@ -19,4 +19,5 @@ public class RoleDto {
     private String taxis;
     private Date createDatetime;
     private List<PermissionDto> permissions;
+    private List<DataSourceDto> dataSources;
 }

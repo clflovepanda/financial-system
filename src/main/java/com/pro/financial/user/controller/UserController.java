@@ -2,6 +2,7 @@ package com.pro.financial.user.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pro.financial.user.biz.UserBiz;
+import com.pro.financial.user.dto.CompanyDto;
 import com.pro.financial.user.dto.UserDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,6 +147,16 @@ public class UserController {
         }
 
 
+        return result;
+    }
+
+    @RequestMapping("/getCompany")
+    public JSONObject getCompany(HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        List<CompanyDto> companyDtos = userBiz.getCompany();
+        result.put("code", 0);
+        result.put("msg", "");
+        result.put("data", companyDtos);
         return result;
     }
 }

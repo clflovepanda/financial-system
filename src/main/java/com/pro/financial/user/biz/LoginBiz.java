@@ -1,21 +1,30 @@
 package com.pro.financial.user.biz;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pro.financial.consts.CommonConst;
 import com.pro.financial.user.converter.PermissionEntity2Dto;
 import com.pro.financial.user.converter.UserEntity2Dto;
+import com.pro.financial.user.dao.DataSourceDao;
 import com.pro.financial.user.dao.PermissionDao;
 import com.pro.financial.user.dao.UserDao;
+import com.pro.financial.user.dao.entity.DataSourceEntity;
 import com.pro.financial.user.dao.entity.PermissionEntity;
 import com.pro.financial.user.dao.entity.RoleEntity;
 import com.pro.financial.user.dao.entity.UserEntity;
 import com.pro.financial.user.dto.UserDto;
 import com.pro.financial.utils.ConvertUtil;
+import com.pro.financial.utils.CookieUtil;
 import com.pro.financial.utils.MD5Util;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +35,8 @@ public class LoginBiz {
     private UserDao userDao;
     @Autowired
     private PermissionDao permissionDao;
+    @Autowired
+    private DataSourceDao dataSourceDao;
 
     /**
      *
@@ -33,7 +44,7 @@ public class LoginBiz {
      * @param password
      * @return
      */
-    public JSONObject login(String userName, String password) {
+    public JSONObject login(String userName, String password, HttpServletRequest request, HttpServletResponse response) {
         JSONObject result = new JSONObject();
         //获取用户信息
         List<UserEntity> userEntities = userDao.getUserInfo(userName);
@@ -56,9 +67,19 @@ public class LoginBiz {
                     roleIds.add(roleEntity.getRoleId());
                 }
                 List<PermissionEntity> permissionEntities = permissionDao.getPermissionByRoleIds(roleIds);
+                List<DataSourceEntity> dataSourceEntities = dataSourceDao.getDatasourceByRoleIds(roleIds);
                 UserDto userDto = UserEntity2Dto.instance.convert(userEntities.get(0));
-                userDto.setPermissions(ConvertUtil.convert(PermissionEntity2Dto.instance, permissionEntities));
-                //TODO 返回数据权限
+                String permissionJsonStr = JSONObject.toJSONString(permissionEntities);
+                String permissionCookieName = CommonConst.cookie_permission_head + userDto.getUserId();
+                String datasourceCookieName = CommonConst.cookie_datasource_head + userDto.getUserId();
+                String datasourceJsonStr = JSONObject.toJSONString(dataSourceEntities);
+                String userJsonStr = JSONObject.toJSONString(userDto);
+                //菜单权限存入cookie
+                CookieUtil.addCookie(response, permissionCookieName, permissionJsonStr, 3600);
+                // 数据权限存入cookie
+                CookieUtil.addCookie(response, datasourceCookieName, datasourceJsonStr, 3600);
+                CookieUtil.addCookie(response, CommonConst.cookie_user_head, userJsonStr, 3600);
+                request.getSession().setAttribute(CommonConst.cookie_user_head, userJsonStr);
                 result.put("code", 0);
                 result.put("msg", "");
                 result.put("data", userDto);
@@ -84,9 +105,38 @@ public class LoginBiz {
                         roleIds.add(roleEntity.getRoleId());
                     }
                     List<PermissionEntity> permissionEntities = permissionDao.getPermissionByRoleIds(roleIds);
+                    List<DataSourceEntity> dataSourceEntities = dataSourceDao.getDatasourceByRoleIds(roleIds);
                     UserDto userDto = UserEntity2Dto.instance.convert(userEntity);
-                    userDto.setPermissions(ConvertUtil.convert(PermissionEntity2Dto.instance, permissionEntities));
-                    //TODO 返回数据权限
+                    String permissionJsonStr = JSONObject.toJSONString(permissionEntities);
+                    String permissionCookieName = CommonConst.cookie_permission_head + userDto.getUserId();
+                    String datasourceCookieName = CommonConst.cookie_datasource_head + userDto.getUserId();
+                    String datasourceJsonStr = JSONObject.toJSONString(dataSourceEntities);
+                    String userJsonStr = JSONObject.toJSONString(userDto);
+                    String permissionCookieEncode = null;
+                    String datasourceCookieEncode = null;
+                    String userCookieEncode = null;
+                    try {
+                        permissionCookieEncode = URLEncoder.encode(permissionJsonStr, "utf-8");
+                        datasourceCookieEncode = URLEncoder.encode(datasourceJsonStr, "utf-8");
+                        userCookieEncode = URLEncoder.encode(userJsonStr, "utf-8");
+
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                        result.put("code", 9000);
+                        result.put("msg", "保存cookie失败");
+                        return result;
+                    }
+                    if (StringUtils.isEmpty(permissionCookieEncode) || StringUtils.isEmpty(datasourceCookieEncode) || StringUtils.isEmpty(userCookieEncode)) {
+                        result.put("code", 9000);
+                        result.put("msg", "保存cookie失败");
+                        return result;
+                    }
+                    //菜单权限存入cookie
+                    CookieUtil.addCookie(response, permissionCookieName, permissionCookieEncode, 3600);
+                    // 数据权限存入cookie
+                    CookieUtil.addCookie(response, datasourceCookieName, datasourceCookieEncode, 3600);
+                    CookieUtil.addCookie(response, CommonConst.cookie_user_head, userCookieEncode, 3600);
+                    request.getSession().setAttribute(CommonConst.cookie_user_head, userJsonStr);
                     result.put("code", 0);
                     result.put("msg", "");
                     result.put("data", userDto);
