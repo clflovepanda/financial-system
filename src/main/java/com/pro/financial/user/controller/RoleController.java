@@ -117,11 +117,10 @@ public class RoleController {
 
     /**
      * 获取1级数据源
-     * @param jsonInfo
      * @return
      */
     @RequestMapping("/getparentdatasource")
-    public JSONObject getDataSource(@RequestBody JSONObject jsonInfo) {
+    public JSONObject getDataSource() {
         JSONObject result = new JSONObject();
         List<DataSourceDto> dataSourceDtos = roleBiz.getParentDataSource();
         result.put("code", 0);

@@ -39,10 +39,12 @@ public class RoleBiz {
 
     /**
      * 添加角色和角色所对应的权限
+     *
      * @param roleDto
      * @return
      */
-    public int  addRole(RoleDto roleDto) {
+    @Transactional(rollbackFor = Exception.class)
+    public int addRole(RoleDto roleDto) {
         roleDto.setCreateDatetime(new Date());
         int role = roleDao.addRole(roleDto);
         roleDao.addRolePermission(roleDto.getRoleId(), roleDto.getPermissions());
@@ -57,6 +59,7 @@ public class RoleBiz {
 
     /**
      * 修改角色名字和角色对应的权限
+     *
      * @param roleDto
      * @return
      */
@@ -67,16 +70,12 @@ public class RoleBiz {
         int count = 0;
         if (!CollectionUtils.isEmpty(roleEntity.getPermissions())) {
             count = roleDao.update(roleEntity);
-            for (PermissionEntity permissionEntity : roleEntity.getPermissions()) {
-                //先删除之前的
-                roleDao.deleRolePermission(roleDto.getRoleId());
-                roleDao.addRolePermission(roleDto.getRoleId(), roleDto.getPermissions());
-            }
+            //先删除之前的
+            roleDao.deleRolePermission(roleDto.getRoleId());
+            roleDao.addRolePermission(roleDto.getRoleId(), roleDto.getPermissions());
             if (!CollectionUtils.isEmpty(roleEntity.getDataSources())) {
-                for (DataSourceEntity dataSourceEntity : roleEntity.getDataSources()) {
-                    roleDao.deleRoleDataSource(roleDto.getRoleId());
-                    roleDao.addRoleDataSource(roleDto.getRoleId(), roleDto.getDataSources());
-                }
+                roleDao.deleRoleDataSource(roleDto.getRoleId());
+                roleDao.addRoleDataSource(roleDto.getRoleId(), roleDto.getDataSources());
             }
         }
 

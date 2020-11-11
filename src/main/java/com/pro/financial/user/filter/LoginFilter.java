@@ -40,7 +40,8 @@ public class LoginFilter implements Filter {
         String datasourceJsonStr = null;
         String urlPath = request.getServletPath();
         //登录等不拦截
-        if (urlPath.indexOf("/login") != -1) {
+//        if (urlPath.indexOf("/login") != -1) {
+        if (true) {
             filterChain.doFilter(request, response);
             return;
         }

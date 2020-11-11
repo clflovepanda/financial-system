@@ -145,8 +145,6 @@ public class UserController {
             result.put("code", 1001);
             result.put("msg", "修改用户状态失败");
         }
-
-
         return result;
     }
 

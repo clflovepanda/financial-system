@@ -9,6 +9,7 @@
         <result column="username" property="username" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
         <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="VARCHAR"/>
         <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
         <result column="create_datetime" property="createDatetime" jdbcType="TIMESTAMP"/>
         <result column="register_time" property="registerTime" jdbcType="TIMESTAMP"/>
@@ -102,7 +103,7 @@
         WHERE user_id = #{user.userId}
     </update>
     <select id="getUserById" resultMap="BaseResultMap">
-        SELECT u.user_id, u.dep_id, u.username, u.email, u.mobile, u.create_datetime, u.register_time, r.role_name
+        SELECT u.user_id, u.dep_id, u.username, u.email, u.state, u.mobile, u.create_datetime, u.register_time, r.role_name
         FROM `user` u
         LEFT JOIN user_role_relation ur USING (user_id)
         LEFT JOIN role r USING (role_id)

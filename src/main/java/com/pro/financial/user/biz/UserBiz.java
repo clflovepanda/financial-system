@@ -79,7 +79,11 @@ public class UserBiz {
     public int update(UserDto user) {
         UserEntity userEntity = JSONObject.parseObject(JSONObject.toJSONString(user), UserEntity.class);
         userEntity.setRegisterTime(new Date());
-        return userDao.update(userEntity);
+        int count = userDao.update(userEntity);
+        userDao.deleteRole(userEntity.getUserId());
+        roleDao.addUserRoleRelation(userEntity.getUserId(), user.getRoleId());
+        //TODO 更新权限
+        return count;
     }
 
     public UserDto getUserById(int userId) {

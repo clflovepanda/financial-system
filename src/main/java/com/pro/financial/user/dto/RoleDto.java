@@ -14,7 +14,7 @@ public class RoleDto {
     private Integer roleId;
     private String roleName;
     private String isSysRole;
-    private String remarks;
+    private String remark;
     private String state;
     private String taxis;
     private Date createDatetime;
