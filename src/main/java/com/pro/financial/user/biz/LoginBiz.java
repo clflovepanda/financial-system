@@ -79,7 +79,8 @@ public class LoginBiz {
                 // 数据权限存入cookie
                 CookieUtil.addCookie(response, datasourceCookieName, datasourceJsonStr, 3600);
                 CookieUtil.addCookie(response, CommonConst.cookie_user_head, userJsonStr, 3600);
-                request.getSession().setAttribute(CommonConst.cookie_user_head, userJsonStr);
+                request.getSession().setAttribute(permissionCookieName, permissionJsonStr);
+                request.getSession().setAttribute(datasourceCookieName, datasourceJsonStr);
                 result.put("code", 0);
                 result.put("msg", "");
                 result.put("data", userDto);
