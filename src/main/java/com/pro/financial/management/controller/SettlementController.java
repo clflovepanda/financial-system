@@ -53,7 +53,7 @@ public class SettlementController {
         }
         if (settlementId < 1) {
             result.put("code", 1001);
-            result.put("msg", "合同号有误");
+            result.put("msg", "结算单号有误");
             return result;
         }
         SettlementDto settlementDto = settlementBiz.getBySettlementId(settlementId);
@@ -66,7 +66,7 @@ public class SettlementController {
         SettlementDto settlementDto = JSONObject.parseObject(jsonInfo.toJSONString(), SettlementDto.class);
         if (settlementDto.getSettlementId() == null || settlementDto.getSettlementId() < 1) {
             result.put("code", 1001);
-            result.put("msg", "合同号有误");
+            result.put("msg", "结算单号有误");
             return result;
         }
         int count = settlementBiz.updateSettlement(settlementDto);
@@ -84,7 +84,7 @@ public class SettlementController {
         }
         if (settlementId < 1) {
             result.put("code", 1001);
-            result.put("msg", "合同号有误");
+            result.put("msg", "结算单号有误");
             return result;
         }
         settlementBiz.deleteSettlement(settlementId);

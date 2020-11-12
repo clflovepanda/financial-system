@@ -52,7 +52,7 @@ public class QuotationController {
         }
         if (quotationId < 1) {
             result.put("code", 1001);
-            result.put("msg", "合同号有误");
+            result.put("msg", "报价单号有误");
             return result;
         }
         QuotationDto quotationDto = quotationBiz.getByQuotationId(quotationId);
@@ -65,7 +65,7 @@ public class QuotationController {
         QuotationDto quotationDto = JSONObject.parseObject(jsonInfo.toJSONString(), QuotationDto.class);
         if (quotationDto.getQuotationId() == null || quotationDto.getQuotationId() < 1) {
             result.put("code", 1001);
-            result.put("msg", "合同号有误");
+            result.put("msg", "报价单号有误");
             return result;
         }
         int count = quotationBiz.updateQuotation(quotationDto);
@@ -83,7 +83,7 @@ public class QuotationController {
         }
         if (quotationId < 1) {
             result.put("code", 1001);
-            result.put("msg", "合同号有误");
+            result.put("msg", "报价单号有误");
             return result;
         }
         quotationBiz.deleteQuotation(quotationId);
