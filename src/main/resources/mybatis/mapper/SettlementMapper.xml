@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.financial.management.dao.SettlementDao">
+    <select id="getContarct" resultType="com.pro.financial.management.dao.entity.SettlementEntity">
+        select * from settlement
+        where 1=1
+        <if test="settlementName != null">
+            and settlement_name LIKE "%${settlementName}%"
+        </if>
+        <if test="settlementNo != null">
+            and settlement_no LIKE "%${settlementNo}%"
+        </if>
+        <if test="offset != null and limit != 0">
+            limit ${offset} , ${limit}
+        </if>
+        order by settlement_id desc
+    </select>
+
+    <update id="updateSettlementById" parameterType="map">
+        UPDATE `settlement`
+        <set>
+            <if test="settlement.projectId != null">
+                project_id = #{settlement.projectId},
+            </if>
+            <if test="settlement.settlementNo != null">
+                settlement_no = #{settlement.settlementNo},
+            </if>
+            <if test="settlement.isLastSettlement != null">
+                is_last_settlement = #{settlement.isLastSettlement},
+            </if>
+            <if test="settlement.settlementIncome != null">
+                settlement_income = #{settlement.settlementIncome},
+            </if>
+            <if test="settlement.settlementName != null">
+                settlement_name = #{settlement.settlementName},
+            </if>
+            <if test="settlement.resourceName != null">
+                resource_name = #{settlement.resourceName},
+            </if>
+            <if test="settlement.state != null">
+                state = #{settlement.state},
+            </if>
+        </set>
+        WHERE settlement_id = #{settlement.settlementId}
+    </update>
+</mapper>

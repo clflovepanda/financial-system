@@ -9,11 +9,10 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class ContractEntity {
-    private Integer contractId;
+public class QuotationEntity {
+    private Integer quotationId;
     private Integer projectId;
-    private String contractNo;
-    private String customerName;
+    private String quotationNo;
     private String resourceName;
     private String resourceUrl;
     private Date createDatetime;

@@ -1,8 +1,8 @@
 package com.pro.financial.management.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pro.financial.management.biz.ContractBiz;
-import com.pro.financial.management.dto.ContractDto;
+import com.pro.financial.management.biz.QuotationBiz;
+import com.pro.financial.management.dto.QuotationDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,80 +13,80 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/contract")
-public class ContractController {
+@RequestMapping("/quotation")
+public class QuotationController {
 
     @Autowired
-    private ContractBiz contractBiz;
+    private QuotationBiz quotationBiz;
 
     @RequestMapping("/list")
     public JSONObject list(HttpServletRequest request) {
         JSONObject result = new JSONObject();
-        String contractName = request.getParameter("contractName");
-        String contractNo = request.getParameter("contractNo");
+        String quotationName = request.getParameter("quotationName");
+        String quotationNo = request.getParameter("quotationNo");
         Integer limit = StringUtils.isEmpty(request.getParameter("limit")) ? null : Integer.parseInt(request.getParameter("limit"));
         Integer offset = StringUtils.isEmpty(request.getParameter("offset")) ? null : Integer.parseInt(request.getParameter("offset"));
-        List<ContractDto> contractDtos = contractBiz.getContarct(contractName, contractNo, limit, offset);
+        List<QuotationDto> quotationDtos = quotationBiz.getContarct(quotationName, quotationNo, limit, offset);
         result.put("code", 0);
         result.put("msg", "");
-        result.put("data", contractDtos);
+        result.put("data", quotationDtos);
         return result;
     }
 
     @RequestMapping("/add")
-    public JSONObject addContract(@RequestBody JSONObject jsonInfo) {
+    public JSONObject addQuotation(@RequestBody JSONObject jsonInfo) {
         JSONObject result = new JSONObject();
-        ContractDto contractDto = JSONObject.parseObject(jsonInfo.toJSONString(), ContractDto.class);
-        int count = contractBiz.addContract(contractDto);
+        QuotationDto quotationDto = JSONObject.parseObject(jsonInfo.toJSONString(), QuotationDto.class);
+        int count = quotationBiz.addQuotation(quotationDto);
         result.put("code", 0);
         result.put("msg", "");
         return result;
     }
 
     @RequestMapping("/getbyid")
-    public JSONObject getContract(HttpServletRequest request) {
+    public JSONObject getQuotation(HttpServletRequest request) {
         JSONObject result = new JSONObject();
-        int contractId = 0;
-        if (StringUtils.isNumeric(request.getParameter("contractId"))) {
-            contractId = Integer.parseInt(request.getParameter("contractId"));
+        int quotationId = 0;
+        if (StringUtils.isNumeric(request.getParameter("quotationId"))) {
+            quotationId = Integer.parseInt(request.getParameter("quotationId"));
         }
-        if (contractId < 1) {
+        if (quotationId < 1) {
             result.put("code", 1001);
             result.put("msg", "合同号有误");
             return result;
         }
-        ContractDto contractDto = contractBiz.getByContractId(contractId);
+        QuotationDto quotationDto = quotationBiz.getByQuotationId(quotationId);
         return result;
     }
 
     @RequestMapping("/update")
-    public JSONObject updateContract(@RequestBody JSONObject jsonInfo) {
+    public JSONObject updateQuotation(@RequestBody JSONObject jsonInfo) {
         JSONObject result = new JSONObject();
-        ContractDto contractDto = JSONObject.parseObject(jsonInfo.toJSONString(), ContractDto.class);
-        if (contractDto.getContractId() == null || contractDto.getContractId() < 1) {
+        QuotationDto quotationDto = JSONObject.parseObject(jsonInfo.toJSONString(), QuotationDto.class);
+        if (quotationDto.getQuotationId() == null || quotationDto.getQuotationId() < 1) {
             result.put("code", 1001);
             result.put("msg", "合同号有误");
             return result;
         }
-        int count = contractBiz.updateContract(contractDto);
+        int count = quotationBiz.updateQuotation(quotationDto);
         result.put("code", 0);
         result.put("msg", "");
         return result;
     }
 
     @RequestMapping("/del")
-    public JSONObject delContract(HttpServletRequest request) {
+    public JSONObject delQuotation(HttpServletRequest request) {
         JSONObject result = new JSONObject();
-        int contractId = 0;
-        if (StringUtils.isNumeric(request.getParameter("contractId"))) {
-            contractId = Integer.parseInt(request.getParameter("contractId"));
+        int quotationId = 0;
+        if (StringUtils.isNumeric(request.getParameter("quotationId"))) {
+            quotationId = Integer.parseInt(request.getParameter("quotationId"));
         }
-        if (contractId < 1) {
+        if (quotationId < 1) {
             result.put("code", 1001);
             result.put("msg", "合同号有误");
             return result;
         }
-        contractBiz.deleteContract(contractId);
+        quotationBiz.deleteQuotation(quotationId);
         result.put("code", 0);
         result.put("msg", "");
         return result;

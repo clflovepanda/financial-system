@@ -10,8 +10,8 @@ public class ContractEntity2Dto implements Converter<ContractEntity, ContractDto
     public static final ContractEntity2Dto instance = new ContractEntity2Dto();
     @Override
     public ContractDto convert(ContractEntity ContractEntity) {
-        ContractDto ContractDto = new ContractDto();
-        ContractDto = JSONObject.parseObject(JSONObject.toJSONString(ContractEntity), ContractDto.class);
-        return ContractDto;
+        ContractDto contractDto = new ContractDto();
+        contractDto = JSONObject.parseObject(JSONObject.toJSONString(ContractEntity), ContractDto.class);
+        return contractDto;
     }
 }

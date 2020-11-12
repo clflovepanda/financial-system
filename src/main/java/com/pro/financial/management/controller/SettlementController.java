@@ -1,8 +1,8 @@
 package com.pro.financial.management.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pro.financial.management.biz.ContractBiz;
-import com.pro.financial.management.dto.ContractDto;
+import com.pro.financial.management.biz.SettlementBiz;
+import com.pro.financial.management.dto.SettlementDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,80 +13,81 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/contract")
-public class ContractController {
+@RequestMapping("/settlement")
+public class SettlementController {
 
     @Autowired
-    private ContractBiz contractBiz;
+    private SettlementBiz settlementBiz;
 
     @RequestMapping("/list")
     public JSONObject list(HttpServletRequest request) {
         JSONObject result = new JSONObject();
-        String contractName = request.getParameter("contractName");
-        String contractNo = request.getParameter("contractNo");
+        String settlementName = request.getParameter("settlementName");
+        String settlementNo = request.getParameter("settlementNo");
         Integer limit = StringUtils.isEmpty(request.getParameter("limit")) ? null : Integer.parseInt(request.getParameter("limit"));
         Integer offset = StringUtils.isEmpty(request.getParameter("offset")) ? null : Integer.parseInt(request.getParameter("offset"));
-        List<ContractDto> contractDtos = contractBiz.getContarct(contractName, contractNo, limit, offset);
+        List<SettlementDto> settlementDtos = settlementBiz.getContarct(settlementName, settlementNo, limit, offset);
         result.put("code", 0);
         result.put("msg", "");
-        result.put("data", contractDtos);
+        result.put("data", settlementDtos);
         return result;
     }
 
     @RequestMapping("/add")
-    public JSONObject addContract(@RequestBody JSONObject jsonInfo) {
+    public JSONObject addSettlement(@RequestBody JSONObject jsonInfo) {
         JSONObject result = new JSONObject();
-        ContractDto contractDto = JSONObject.parseObject(jsonInfo.toJSONString(), ContractDto.class);
-        int count = contractBiz.addContract(contractDto);
+        SettlementDto settlementDto = JSONObject.parseObject(jsonInfo.toJSONString(), SettlementDto.class);
+        //TODO 会有条件限制
+        int count = settlementBiz.addSettlement(settlementDto);
         result.put("code", 0);
         result.put("msg", "");
         return result;
     }
 
     @RequestMapping("/getbyid")
-    public JSONObject getContract(HttpServletRequest request) {
+    public JSONObject getSettlement(HttpServletRequest request) {
         JSONObject result = new JSONObject();
-        int contractId = 0;
-        if (StringUtils.isNumeric(request.getParameter("contractId"))) {
-            contractId = Integer.parseInt(request.getParameter("contractId"));
+        int settlementId = 0;
+        if (StringUtils.isNumeric(request.getParameter("settlementId"))) {
+            settlementId = Integer.parseInt(request.getParameter("settlementId"));
         }
-        if (contractId < 1) {
+        if (settlementId < 1) {
             result.put("code", 1001);
             result.put("msg", "合同号有误");
             return result;
         }
-        ContractDto contractDto = contractBiz.getByContractId(contractId);
+        SettlementDto settlementDto = settlementBiz.getBySettlementId(settlementId);
         return result;
     }
 
     @RequestMapping("/update")
-    public JSONObject updateContract(@RequestBody JSONObject jsonInfo) {
+    public JSONObject updateSettlement(@RequestBody JSONObject jsonInfo) {
         JSONObject result = new JSONObject();
-        ContractDto contractDto = JSONObject.parseObject(jsonInfo.toJSONString(), ContractDto.class);
-        if (contractDto.getContractId() == null || contractDto.getContractId() < 1) {
+        SettlementDto settlementDto = JSONObject.parseObject(jsonInfo.toJSONString(), SettlementDto.class);
+        if (settlementDto.getSettlementId() == null || settlementDto.getSettlementId() < 1) {
             result.put("code", 1001);
             result.put("msg", "合同号有误");
             return result;
         }
-        int count = contractBiz.updateContract(contractDto);
+        int count = settlementBiz.updateSettlement(settlementDto);
         result.put("code", 0);
         result.put("msg", "");
         return result;
     }
 
     @RequestMapping("/del")
-    public JSONObject delContract(HttpServletRequest request) {
+    public JSONObject delSettlement(HttpServletRequest request) {
         JSONObject result = new JSONObject();
-        int contractId = 0;
-        if (StringUtils.isNumeric(request.getParameter("contractId"))) {
-            contractId = Integer.parseInt(request.getParameter("contractId"));
+        int settlementId = 0;
+        if (StringUtils.isNumeric(request.getParameter("settlementId"))) {
+            settlementId = Integer.parseInt(request.getParameter("settlementId"));
         }
-        if (contractId < 1) {
+        if (settlementId < 1) {
             result.put("code", 1001);
             result.put("msg", "合同号有误");
             return result;
         }
-        contractBiz.deleteContract(contractId);
+        settlementBiz.deleteSettlement(settlementId);
         result.put("code", 0);
         result.put("msg", "");
         return result;

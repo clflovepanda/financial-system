@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.financial.management.dao.QuotationDao">
+    <select id="getContarct" resultType="com.pro.financial.management.dao.entity.QuotationEntity">
+        select * from quotation
+        where 1=1
+        <if test="quotationName != null">
+            and quotation_name LIKE "%${quotationName}%"
+        </if>
+        <if test="quotationNo != null">
+            and quotation_no LIKE "%${quotationNo}%"
+        </if>
+        <if test="offset != null and limit != 0">
+            limit ${offset} , ${limit}
+        </if>
+        order by quotation_id desc
+    </select>
+
+    <update id="updateQuotationById" parameterType="map">
+        UPDATE `quotation`
+        <set>
+            <if test="quotation.projectId != null">
+                project_id = #{quotation.projectId},
+            </if>
+            <if test="quotation.quotationNo != null">
+                quotation_no = #{quotation.quotationNo},
+            </if>
+            <if test="quotation.quotationName != null">
+                quotation_name = #{quotation.quotationName},
+            </if>
+
+            <if test="quotation.resourceName != null">
+                resource_name = #{quotation.resourceName},
+            </if>
+            <if test="quotation.state != null">
+                state = #{quotation.state},
+            </if>
+        </set>
+        WHERE quotation_id = #{quotation.quotationId}
+    </update>
+</mapper>

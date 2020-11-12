@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.financial.management.dao.ContractDao">
+    <select id="getContarct" resultType="com.pro.financial.management.dao.entity.ContractEntity">
+        select * from contract
+        where 1=1
+        <if test="contractName != null">
+            and contract_name LIKE "%${contractName}%"
+        </if>
+        <if test="contractNo != null">
+            and contract_no LIKE "%${contractNo}%"
+        </if>
+        <if test="offset != null and limit != 0">
+            limit ${offset} , ${limit}
+        </if>
+        order by contract_id desc
+    </select>
+
+    <update id="updateContractById" parameterType="map">
+        UPDATE `contract`
+        <set>
+            <if test="contract.projectId != null">
+                project_id = #{contract.projectId},
+            </if>
+            <if test="contract.contractNo != null">
+                contract_no = #{contract.contractNo},
+            </if>
+            <if test="contract.contractName != null">
+                contract_name = #{contract.contractName},
+            </if>
+            <if test="contract.customerName != null">
+                customer_name = #{contract.customerName},
+            </if>
+            <if test="contract.resourceName != null">
+                resource_name = #{contract.resourceName},
+            </if>
+            <if test="contract.state != null">
+                state = #{contract.state},
+            </if>
+        </set>
+        WHERE contract_id = #{contract.contractId}
+    </update>
+</mapper>
