@@ -26,7 +26,7 @@ public class QuotationController {
         String quotationNo = request.getParameter("quotationNo");
         Integer limit = StringUtils.isEmpty(request.getParameter("limit")) ? null : Integer.parseInt(request.getParameter("limit"));
         Integer offset = StringUtils.isEmpty(request.getParameter("offset")) ? null : Integer.parseInt(request.getParameter("offset"));
-        List<QuotationDto> quotationDtos = quotationBiz.getContarct(quotationName, quotationNo, limit, offset);
+        List<QuotationDto> quotationDtos = quotationBiz.getQuotation(quotationName, quotationNo, limit, offset);
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", quotationDtos);
@@ -56,6 +56,9 @@ public class QuotationController {
             return result;
         }
         QuotationDto quotationDto = quotationBiz.getByQuotationId(quotationId);
+        result.put("code", 0);
+        result.put("msg", "");
+        result.put("data", quotationDto);
         return result;
     }
 

@@ -17,8 +17,8 @@ public class SettlementBiz {
     @Autowired
     private SettlementDao settlementDao;
 
-    public List<SettlementDto> getContarct(String settlementName, String settlementNo, Integer limit, Integer offset) {
-        List<SettlementEntity> settlementEntities = settlementDao.getContarct(settlementName, settlementNo, limit, offset);
+    public List<SettlementDto> getSettlement(String settlementName, String settlementNo, Integer limit, Integer offset) {
+        List<SettlementEntity> settlementEntities = settlementDao.getSettlement(settlementName, settlementNo, limit, offset);
         return ConvertUtil.convert(SettlementEntity2Dto.instance, settlementEntities);
     }
 

@@ -13,10 +13,10 @@ import java.util.List;
 public interface QuotationDao {
     
 
-    List<QuotationEntity> getContarct(@Param("quotationName") String quotationName, @Param("quotationNo") String quotationNo, @Param("limit") Integer limit, @Param("offset") Integer offset);
+    List<QuotationEntity> getQuotation(@Param("quotationName") String quotationName, @Param("quotationNo") String quotationNo, @Param("limit") Integer limit, @Param("offset") Integer offset);
 
     @Insert("insert into quotation (`project_id`, `quotation_no`, `quotation_name`, `resource_name`, `resource_url`) VALUES " +
-            "(#{quotation.projectId}, #{quotation.projectId}, #{quotation.quotationNo}, #{quotation.quotationName}, #{quotation.resourceName}, #{quotation.resourceUrl})")
+            "(#{quotation.projectId}, #{quotation.quotationNo}, #{quotation.quotationName}, #{quotation.resourceName}, #{quotation.resourceUrl})")
     int addQuotation(@Param("quotation") QuotationEntity quotationEntity);
 
     @Select("select * from quotation where quotation_id = #{quotationId}")

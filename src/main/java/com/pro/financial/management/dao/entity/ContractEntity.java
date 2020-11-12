@@ -13,6 +13,7 @@ public class ContractEntity {
     private Integer contractId;
     private Integer projectId;
     private String contractNo;
+    private String contractName;
     private String customerName;
     private String resourceName;
     private String resourceUrl;

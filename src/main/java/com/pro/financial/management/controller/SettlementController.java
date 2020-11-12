@@ -26,7 +26,7 @@ public class SettlementController {
         String settlementNo = request.getParameter("settlementNo");
         Integer limit = StringUtils.isEmpty(request.getParameter("limit")) ? null : Integer.parseInt(request.getParameter("limit"));
         Integer offset = StringUtils.isEmpty(request.getParameter("offset")) ? null : Integer.parseInt(request.getParameter("offset"));
-        List<SettlementDto> settlementDtos = settlementBiz.getContarct(settlementName, settlementNo, limit, offset);
+        List<SettlementDto> settlementDtos = settlementBiz.getSettlement(settlementName, settlementNo, limit, offset);
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", settlementDtos);
@@ -57,6 +57,9 @@ public class SettlementController {
             return result;
         }
         SettlementDto settlementDto = settlementBiz.getBySettlementId(settlementId);
+        result.put("code", 0);
+        result.put("msg", "");
+        result.put("data", settlementDto);
         return result;
     }
 

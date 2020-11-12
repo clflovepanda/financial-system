@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pro.financial.management.dao.QuotationDao">
-    <select id="getContarct" resultType="com.pro.financial.management.dao.entity.QuotationEntity">
+    <select id="getQuotation" resultType="com.pro.financial.management.dao.entity.QuotationEntity">
         select * from quotation
         where 1=1
         <if test="quotationName != null">

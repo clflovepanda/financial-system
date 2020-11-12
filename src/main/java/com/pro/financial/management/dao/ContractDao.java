@@ -13,7 +13,7 @@ public interface ContractDao {
     List<ContractEntity> getContarct(@Param("contractName") String contractName, @Param("contractNo") String contractNo, @Param("limit") Integer limit, @Param("offset") Integer offset);
 
     @Insert("insert into contract (`project_id`, `contract_no`, `contract_name`, `customer_name`, `resource_name`, `resource_url`) VALUES " +
-            "(#{contract.projectId}, #{contract.projectId}, #{contract.contractNo}, #{contract.contractName}, #{contract.customerName}, #{contract.resourceName}, #{contract.resourceUrl})")
+            "(#{contract.projectId}, #{contract.contractNo}, #{contract.contractName}, #{contract.customerName}, #{contract.resourceName}, #{contract.resourceUrl})")
     int addContract(@Param("contract") ContractEntity contractEntity);
 
     @Select("select * from contract where contract_id = #{contractId}")

@@ -13,10 +13,10 @@ import java.util.List;
 public interface SettlementDao {
     
 
-    List<SettlementEntity> getContarct(@Param("settlementName") String settlementName, @Param("settlementNo") String settlementNo, @Param("limit") Integer limit, @Param("offset") Integer offset);
+    List<SettlementEntity> getSettlement(@Param("settlementName") String settlementName, @Param("settlementNo") String settlementNo, @Param("limit") Integer limit, @Param("offset") Integer offset);
 
     @Insert("insert into settlement (`project_id`, `settlement_no`, `settlement_name`, `resource_name`, `resource_url`) VALUES " +
-            "(#{settlement.projectId}, #{settlement.projectId}, #{settlement.settlementNo}, #{settlement.settlementName}, #{settlement.resourceName}, #{settlement.resourceUrl})")
+            "(#{settlement.projectId}, #{settlement.settlementNo}, #{settlement.settlementName}, #{settlement.resourceName}, #{settlement.resourceUrl})")
     int addSettlement(@Param("settlement") SettlementEntity settlementEntity);
 
     @Select("select * from settlement where settlement_id = #{settlementId}")

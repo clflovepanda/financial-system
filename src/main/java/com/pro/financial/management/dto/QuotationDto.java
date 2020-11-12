@@ -12,6 +12,7 @@ import java.util.Date;
 public class QuotationDto {
     private Integer quotationId;
     private Integer projectId;
+    private String quotationName;
     private String quotationNo;
     private String resourceName;
     private String resourceUrl;

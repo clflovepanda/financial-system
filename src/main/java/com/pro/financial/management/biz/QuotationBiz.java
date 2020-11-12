@@ -17,8 +17,8 @@ public class QuotationBiz {
     @Autowired
     private QuotationDao quotationDao;
 
-    public List<QuotationDto> getContarct(String quotationName, String quotationNo, Integer limit, Integer offset) {
-        List<QuotationEntity> quotationEntities = quotationDao.getContarct(quotationName, quotationNo, limit, offset);
+    public List<QuotationDto> getQuotation(String quotationName, String quotationNo, Integer limit, Integer offset) {
+        List<QuotationEntity> quotationEntities = quotationDao.getQuotation(quotationName, quotationNo, limit, offset);
         return ConvertUtil.convert(QuotationEntity2Dto.instance, quotationEntities);
     }
 

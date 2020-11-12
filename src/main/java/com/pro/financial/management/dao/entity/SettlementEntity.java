@@ -13,9 +13,10 @@ import java.util.Date;
 public class SettlementEntity {
     private Integer settlementId;
     private Integer projectId;
+    private String settlementName;
     private String settlementNo;
     private String isLastSettlement;
-    private BigDecimal settlementIncom;
+    private BigDecimal settlementIncome;
     private String resourceName;
     private String resourceUrl;
     private Date createDatetime;

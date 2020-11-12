@@ -56,6 +56,9 @@ public class ContractController {
             return result;
         }
         ContractDto contractDto = contractBiz.getByContractId(contractId);
+        result.put("code", 0);
+        result.put("msg", "");
+        result.put("data", contractDto);
         return result;
     }
 
