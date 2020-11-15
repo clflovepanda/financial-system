@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="testTables" targetRuntime="MyBatis3">
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+        <!--数据库链接 URL，用户名、密码 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://pandadba.mysql.zhangbei.rds.aliyuncs.com:3306/financial"
+                        userId="panda" password="alkf@xpdw">
+        </jdbcConnection>
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+        <!-- 生成模型的包名和位置-->
+        <javaModelGenerator targetPackage="com.pro.financial.management.dao.entity"
+                            targetProject="src/main/java">
+            <property name="enableSubPackages" value="fasle"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <!-- 生成映射文件的包名和位置-->
+        <sqlMapGenerator targetPackage="mybatis.mapper"
+                         targetProject="src/main/resources">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+        <!-- 生成 DAO 的包名和位置-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.pro.financial.management.dao"
+                             targetProject="src/main/java">
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+        <!-- 要生成的表 tableName 是数据库中的表名或视图名 domainObjectName 是实体类名-->
+        <table tableName="project_user">
+
+        </table>
+    </context>
+</generatorConfiguration>

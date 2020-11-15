@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.financial.management.dao.ProjectCompanyDao">
+  <resultMap id="BaseResultMap" type="com.pro.financial.management.dao.entity.ProjectCompanyEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="company_id" jdbcType="INTEGER" property="companyId" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, project_id, company_id, ctime
+  </sql>
+</mapper>
