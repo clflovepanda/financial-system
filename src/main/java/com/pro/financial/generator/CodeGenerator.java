@@ -69,7 +69,7 @@ public class CodeGenerator {
         pc.setModuleName(scanner("模块名"));
         pc.setParent("com.pro.financial");
         pc.setEntity("dao.entity");
-        pc.setMapper("dao.mapper");
+        pc.setMapper("dao");
         pc.setService("biz");
         pc.setServiceImpl("biz");
         pc.setController("controller");
