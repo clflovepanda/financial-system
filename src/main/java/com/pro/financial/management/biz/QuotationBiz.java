@@ -1,11 +1,14 @@
 package com.pro.financial.management.biz;
 
+import com.pro.financial.consts.CommonConst;
 import com.pro.financial.management.converter.QuotationDto2Entity;
 import com.pro.financial.management.converter.QuotationEntity2Dto;
 import com.pro.financial.management.dao.QuotationDao;
 import com.pro.financial.management.dao.entity.QuotationEntity;
 import com.pro.financial.management.dto.QuotationDto;
+import com.pro.financial.utils.CommonUtil;
 import com.pro.financial.utils.ConvertUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,16 @@ public class QuotationBiz {
 
     public int addQuotation(QuotationDto quotationDto) {
         QuotationEntity quotationEntity = QuotationDto2Entity.instance.convert(quotationDto);
+        //生成编号
+        String quotationNo;
+        //获取最后一条数据的编号
+        String lastNo = quotationDao.selectLastNo();
+        if (StringUtils.isEmpty(lastNo)) {
+            quotationNo = "001";
+        } else  {
+            quotationNo = CommonUtil.generatorNO(CommonConst.initials_quotation, quotationDto.getDataSource(), lastNo);
+        }
+        quotationEntity.setQuotationNo(quotationNo);
         return quotationDao.addQuotation(quotationEntity);
     }
 

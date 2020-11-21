@@ -18,4 +18,5 @@ public class QuotationDto {
     private String resourceUrl;
     private Date createDatetime;
     private String state;
+    private String dataSource;
 }

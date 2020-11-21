@@ -1,11 +1,14 @@
 package com.pro.financial.management.biz;
 
+import com.pro.financial.consts.CommonConst;
 import com.pro.financial.management.converter.SettlementDto2Entity;
 import com.pro.financial.management.converter.SettlementEntity2Dto;
 import com.pro.financial.management.dao.SettlementDao;
 import com.pro.financial.management.dao.entity.SettlementEntity;
 import com.pro.financial.management.dto.SettlementDto;
+import com.pro.financial.utils.CommonUtil;
 import com.pro.financial.utils.ConvertUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,16 @@ public class SettlementBiz {
 
     public int addSettlement(SettlementDto settlementDto) {
         SettlementEntity settlementEntity = SettlementDto2Entity.instance.convert(settlementDto);
+        //生成编号
+        String settlementNo;
+        //获取最后一条数据的编号
+        String lastNo = settlementDao.selectLastNo();
+        if (StringUtils.isEmpty(lastNo)) {
+            settlementNo = "001";
+        } else  {
+            settlementNo = CommonUtil.generatorNO(CommonConst.initials_settlement, settlementDto.getDataSource(), lastNo);
+        }
+        settlementEntity.setSettlementNo(settlementNo);
         return settlementDao.addSettlement(settlementEntity);
     }
 

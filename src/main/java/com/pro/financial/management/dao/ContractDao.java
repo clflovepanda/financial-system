@@ -24,4 +24,7 @@ public interface ContractDao {
 
     @Delete("delete from contract  where contract_id = #{contractId}")
     int deleteContract(@Param("contractId") int contractId);
+
+    @Select("SELECT contract_no FROM contract ORDER BY contract_id DESC LIMIT 0,1")
+    String selectLastNo();
 }
