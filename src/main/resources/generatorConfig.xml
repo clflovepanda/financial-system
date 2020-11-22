@@ -33,8 +33,9 @@
                              targetProject="src/main/java">
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
+        <!-- mvn mybatis-generator:generate -->
         <!-- 要生成的表 tableName 是数据库中的表名或视图名 domainObjectName 是实体类名-->
-        <table tableName="project_user">
+        <table tableName="revenue">
 
         </table>
     </context>

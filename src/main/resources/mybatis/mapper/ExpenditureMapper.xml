@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.financial.management.dao.ExpenditureDao">
+  <resultMap id="BaseResultMap" type="com.pro.financial.management.dao.entity.ExpenditureEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="numbering" jdbcType="VARCHAR" property="numbering" />
+    <result column="expenditure_type" jdbcType="INTEGER" property="expenditureType" />
+    <result column="company_id" jdbcType="INTEGER" property="companyId" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="expenditure_method_id" jdbcType="INTEGER" property="expenditureMethodId" />
+    <result column="expenditure_type_id" jdbcType="INTEGER" property="expenditureTypeId" />
+    <result column="expenditure_purpose_id" jdbcType="INTEGER" property="expenditurePurposeId" />
+    <result column="expenditure_purpose_content" jdbcType="VARCHAR" property="expenditurePurposeContent" />
+    <result column="expenditure_money" jdbcType="DECIMAL" property="expenditureMoney" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="beneficiary_unit" jdbcType="VARCHAR" property="beneficiaryUnit" />
+    <result column="beneficiary_number" jdbcType="VARCHAR" property="beneficiaryNumber" />
+    <result column="province" jdbcType="INTEGER" property="province" />
+    <result column="city" jdbcType="INTEGER" property="city" />
+    <result column="beneficiary_bank" jdbcType="VARCHAR" property="beneficiaryBank" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="utime" jdbcType="TIMESTAMP" property="utime" />
+    <result column="is_effective" jdbcType="INTEGER" property="isEffective" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, numbering, expenditure_type, company_id, project_id, expenditure_method_id, expenditure_type_id, 
+    expenditure_purpose_id, expenditure_purpose_content, expenditure_money, state, remark, 
+    beneficiary_unit, beneficiary_number, province, city, beneficiary_bank, create_user, 
+    ctime, update_user, utime, is_effective
+  </sql>
+</mapper>
