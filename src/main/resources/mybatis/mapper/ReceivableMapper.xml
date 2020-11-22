@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.financial.management.dao.ReceivableDao">
+    <select id="getReceivable" resultType="com.pro.financial.management.dao.entity.ReceivableEntity">
+        select * from receivable
+        left join `user` using (user_id)
+        where 1=1
+        and `user`.state = 1
+        and receivable.state = 1
+        <if test="receivableNo != null and receivableNo != ''">
+            and receivable_no LIKE "%${receivableNo}%"
+        </if>
+        <if test="org !=  null and org != ''">
+            and org LIKE "%${org}%"
+        </if>
+        <if test="taxableServiceName !=  null and taxableServiceName != ''">
+            and taxable_service_name LIKE "%${taxableServiceName}%"
+        </if>
+        <if test="userName !=  null and userName != ''">
+            and username LIKE "%${userName}%"
+        </if>
+        <if test="startDate !=  null and endDate != null">
+            and receivable.create_datetime > #{startDate}
+            and receivable.create_datetime <![CDATA[ < ]]> #{endDate}
+        </if>
+        order by receivable_id desc
+        <if test="offset != null and limit != 0">
+            limit ${offset} , ${limit}
+        </if>
+
+    </select>
+
+</mapper>

@@ -12,4 +12,13 @@ public class CommonConst {
     public static final String cookie_datasource_head = "datasource_";
     //cookie 用户信息
     public static final String cookie_user_head = "user";
+
+    //合同首字母
+    public static final String initials_contract = "HT";
+    //报价单首字母
+    public static final String initials_quotation = "BJD";
+    //结算单首字母
+    public static final String initials_settlement = "JSD";
+    //应收单首字母
+    public static final String initials_receivable = "YSD";
 }
