@@ -74,10 +74,10 @@ public class TemplateController {
             result.put("msg", "未选择第几套模板");
             return result;
         }
-        List<TemplateDto> templateDtoList = templateBiz.getThreeLayers(layer);
+        TemplateDto template = templateBiz.getThreeLayers(layer);
         result.put("code", 0);
         result.put("msg", "");
-        result.put("data", templateDtoList);
+        result.put("data", template);
         return result;
     }
 
