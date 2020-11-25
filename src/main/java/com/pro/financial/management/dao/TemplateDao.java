@@ -1,7 +1,8 @@
 package com.pro.financial.management.dao;
 
-import com.pro.financial.management.dao.entity.TemplateEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.pro.financial.management.dao.entity.TemplateEntity;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 /**

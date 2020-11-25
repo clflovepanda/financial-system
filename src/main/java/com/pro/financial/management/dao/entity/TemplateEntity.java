@@ -108,8 +108,4 @@ public class TemplateEntity implements Serializable {
      */
     private String sets;
 
-    /**
-     * 子级别模板
-     */
-    private List<TemplateEntity> templates;
 }

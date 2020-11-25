@@ -81,4 +81,17 @@ public class TemplateController {
         return result;
     }
 
+    @RequestMapping("/getbyparentid")
+    public JSONObject getByParentId(@RequestBody JSONObject jsonInfo) {
+        JSONObject result = new JSONObject();
+        Integer parentId = jsonInfo.getInteger("parentId");
+        if (parentId == null || parentId < 1) {
+            result.put("code", 1001);
+            result.put("msg", "未传入id");
+            return result;
+        }
+        List<TemplateDto> templateDtos = templateBiz.getByParentId(parentId);
+        return result;
+    }
+
 }
