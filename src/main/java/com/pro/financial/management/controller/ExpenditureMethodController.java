@@ -31,7 +31,7 @@ public class ExpenditureMethodController {
     }
 
     /**
-     * 查看到款种类列表
+     * 查看支出方式列表
      */
     @RequestMapping("/list")
     public JSONObject getList(HttpServletRequest request) {
