@@ -19,11 +19,19 @@ public class ReceivementBiz {
         return receivementDao.insert(ReceivementDto2Entity.instance.convert(receivementDto));
     }
 
+    public int updateReceivement(ReceivementDto receivementDto) {
+        return receivementDao.update(ReceivementDto2Entity.instance.convert(receivementDto));
+    }
+
     public List<ReceivementEntity> getListById(List<Integer> ids) {
         return receivementDao.getListById(ids);
     }
 
     public ReceivementEntity getById(Integer id) {
         return receivementDao.getById(id);
+    }
+
+    public int updateReceivementState(Integer id , Integer state) {
+        return receivementDao.update(id, state);
     }
 }

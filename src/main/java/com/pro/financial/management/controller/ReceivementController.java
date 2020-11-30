@@ -13,10 +13,7 @@ import com.pro.financial.management.dto.ReceivementDto;
 import com.pro.financial.user.dao.entity.CompanyEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -40,16 +37,30 @@ public class ReceivementController {
     @Autowired
     private RemitterMethodBiz remitterMethodBiz;
 
+    /**
+     *
+     * @param jsonInfo
+     * @param userId
+     * @param flag 1 add 2 modify
+     * @return
+     */
     @RequestMapping("/add")
-    public JSONObject addReceivement(@RequestBody JSONObject jsonInfo, @CookieValue("user_id") Integer userId) {
+    public JSONObject addReceivement(
+            @RequestBody JSONObject jsonInfo,
+            @CookieValue("user_id") Integer userId,
+            @RequestParam("flag") Integer flag) {
         JSONObject result = new JSONObject();
         ReceivementDto receivementDto = JSONObject.parseObject(jsonInfo.toJSONString(), ReceivementDto.class);
-        receivementDto.setCreateUser(userId);
-        receivementDto.setCtime(new Date());
         receivementDto.setUpdateUser(userId);
         receivementDto.setUtime(new Date());
-        receivementDto.setState(0);
-        int count = receivementBiz.addReceivement(receivementDto);
+        if (flag == 1) {
+            receivementDto.setCreateUser(userId);
+            receivementDto.setCtime(new Date());
+            receivementDto.setState(0);
+            int count = receivementBiz.addReceivement(receivementDto);
+        } else {
+            int count = receivementBiz.updateReceivement(receivementDto);
+        }
         result.put("code", HttpStatus.OK.value());
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
@@ -95,5 +106,27 @@ public class ReceivementController {
         result.put("remitterMethodEntities", remitterMethodEntities);
         result.put("subscriptionLogEntities", subscriptionLogEntities);
         return result;
+    }
+
+    /**
+     * 删除  表state=5
+     * @param request
+     * @return
+     */
+    @RequestMapping("/delete")
+    public JSONObject delete(HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        Integer id = Integer.valueOf(request.getParameter("id"));
+        int count = receivementBiz.updateReceivementState(id, 5);
+        if (count == 1) {
+            result.put("code", HttpStatus.OK.value());
+            result.put("msg", HttpStatus.OK.getReasonPhrase());
+            return result;
+        }
+        result.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        result.put("msg", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+        return result;
+
+
     }
 }
