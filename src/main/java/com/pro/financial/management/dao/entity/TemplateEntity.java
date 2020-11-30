@@ -1,6 +1,7 @@
 package com.pro.financial.management.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
@@ -108,4 +109,9 @@ public class TemplateEntity implements Serializable {
      */
     private String sets;
 
+    /**
+     * 子级别模板
+     */
+    @TableField(exist = false)
+    private List<TemplateEntity> templates;
 }

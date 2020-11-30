@@ -74,7 +74,7 @@ public class TemplateController {
             result.put("msg", "未选择第几套模板");
             return result;
         }
-        TemplateDto template = templateBiz.getThreeLayers(layer);
+        List<TemplateDto> template = templateBiz.getThreeLayers(layer);
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", template);
