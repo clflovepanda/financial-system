@@ -1,14 +1,12 @@
 package com.pro.financial.management.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pro.financial.management.biz.ReceivementBiz;
-import com.pro.financial.management.biz.ReceivementTypeBiz;
-import com.pro.financial.management.biz.RemitterMethodBiz;
-import com.pro.financial.management.biz.SubscriptionLogBiz;
+import com.pro.financial.management.biz.*;
 import com.pro.financial.management.dao.entity.ReceivementEntity;
 import com.pro.financial.management.dao.entity.ReceivementTypeEntity;
 import com.pro.financial.management.dao.entity.RemitterMethodEntity;
 import com.pro.financial.management.dao.entity.SubscriptionLogEntity;
+import com.pro.financial.management.dto.AccountingLogDto;
 import com.pro.financial.management.dto.ReceivementDto;
 import com.pro.financial.user.dao.entity.CompanyEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +35,9 @@ public class ReceivementController {
 
     @Autowired
     private RemitterMethodBiz remitterMethodBiz;
+
+    @Autowired
+    private AccountingLogBiz accountingLogBiz;
 
     /**
      *
@@ -126,7 +128,45 @@ public class ReceivementController {
         result.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
         result.put("msg", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
         return result;
+    }
 
-
+    /**
+     * 删除  表state=5
+     * @param request
+     * @return
+     */
+    @RequestMapping("/accounting")
+    public JSONObject accounting(HttpServletRequest request, @CookieValue("user_id") Integer userId) {
+        JSONObject result = new JSONObject();
+        Integer receivementId = Integer.valueOf(request.getParameter("receivementId"));
+        String voucherNo = request.getParameter("voucherNo");
+        // TODO 校验是否可以做账
+        ReceivementEntity receivementEntity = receivementBiz.getById(receivementId);
+        BigDecimal diff = receivementEntity.getReceivementMoney();
+        List<SubscriptionLogEntity> subscriptionLogEntities = subscriptionLogBiz.getListByReceivementIds(new ArrayList<>(receivementId));
+        for (SubscriptionLogEntity entity : subscriptionLogEntities) {
+            diff.subtract(entity.getReceivementMoney());
+        }
+        if (diff.compareTo(BigDecimal.ZERO) != 0) {
+            result.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            result.put("msg", "账目不平，无法做账");
+            return result;
+        }
+        AccountingLogDto accountingLogDto = new AccountingLogDto();
+        accountingLogDto.setReceivementId(receivementId);
+        accountingLogDto.setVoucherNo(voucherNo);
+        accountingLogDto.setState(0);
+        accountingLogDto.setRemark("");
+        accountingLogDto.setCreateUser(userId);
+        accountingLogDto.setCtime(new Date());
+        int count = accountingLogBiz.addAccountingLog(accountingLogDto);
+        if (count == 1) {
+            result.put("code", HttpStatus.OK.value());
+            result.put("msg", HttpStatus.OK.getReasonPhrase());
+            return result;
+        }
+        result.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        result.put("msg", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+        return result;
     }
 }
