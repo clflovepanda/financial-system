@@ -1,37 +1,20 @@
-package com.pro.financial.management.dao.entity;
+package com.pro.financial.management.dto;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.time.LocalDateTime;
-import java.io.Serializable;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-/**
- * <p>
- * 工时记录表
- * </p>
- *
- * @author panda
- * @since 2020-11-25
- */
-@Data
-@EqualsAndHashCode(callSuper = false)
-@TableName("project_task")
-public class ProjectTaskEntity implements Serializable {
+@Getter
+@Setter
+@ToString
+public class ProjectTaskDto {
 
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * id
-     */
-    @TableId(value = "task_id", type = IdType.AUTO)
     private Integer taskId;
 
     /**
-     * 项目id
+     * 项目工时关系表id
      */
     private Integer taskRelationId;
 
@@ -80,11 +63,8 @@ public class ProjectTaskEntity implements Serializable {
      */
     private LocalDateTime completionTime;
 
-    @TableField(exist = false)
     private Integer projectId;
-
-    @TableField(exist = false)
-    private Integer relationTemplateId;
-
-
+    private Integer limit;
+    private Integer offset;
+    private Integer count;
 }

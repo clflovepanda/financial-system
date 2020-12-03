@@ -35,4 +35,6 @@ public class CommonConst {
     public static final String project_task_status_review = "0";
     //工时-审核通过
     public static final String project_task_status_approved = "1";
+    //工时-审核通过
+    public static final String project_task_status_template = "-1";
 }
