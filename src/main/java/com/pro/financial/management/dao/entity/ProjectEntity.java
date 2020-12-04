@@ -1,16 +1,23 @@
 package com.pro.financial.management.dao.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Data
+@EqualsAndHashCode(callSuper = false)
+@TableName("project")
 @Getter
 @Setter
 @ToString
 public class ProjectEntity {
+    private static final long serialVersionUID = 1L;
+
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     private String code;

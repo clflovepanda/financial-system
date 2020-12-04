@@ -44,4 +44,30 @@ public class ProjectDto {
     private Integer updateUser;
 
     private Date utime;
+
+    //项目经理
+    private String managerName;
+
+    //销售经理
+    private String salesName;
+
+    //花费工时
+    private BigDecimal takeTime;
+
+    //结算收入
+    private BigDecimal settlementIncome;
+    //结算支出
+    private BigDecimal settlementExpenses;
+
+    //收付款收入
+    private BigDecimal paymentIncome;
+    //收付款支出
+    private BigDecimal paymentExpenses;
+    //收付款利润
+    private Double paymentProfit;
+    //项目毛利率
+    private Double projectRate;
+
+    private Integer limit;
+    private Integer offset;
 }

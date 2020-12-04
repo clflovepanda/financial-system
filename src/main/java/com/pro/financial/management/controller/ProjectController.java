@@ -39,8 +39,8 @@ public class ProjectController {
      * 查看项目列表页
      */
     @RequestMapping("project_list")
-    public JSONObject getProjectList(HttpServletRequest request) {
-        return null;
+    public JSONObject getProjectList(HttpServletRequest request, @RequestBody ProjectDto projectDto) {
+        return projectBiz.getProjectList(projectDto);
     }
 
     /**
