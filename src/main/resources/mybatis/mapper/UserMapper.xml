@@ -93,7 +93,7 @@
             <if test="user.mobile != null">
                 mobile = #{user.mobile},
             </if>
-            <if test="user.password != null">
+            <if test="user.password != null and user.password != ''">
                 password = #{user.password},
             </if>
             <if test="user.state != null">
