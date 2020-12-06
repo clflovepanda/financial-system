@@ -88,12 +88,12 @@ public class UserController {
             result.put("msg", "未查询到用户");
             return result;
         }
-        boolean isRegist = userBiz.isRegist(user.getMobile());
+        /*boolean isRegist = userBiz.isRegist(user.getMobile());
         if (isRegist) {
             result.put("code", 1002);
             result.put("msg", "该电话已经注册!");
             return result;
-        }
+        }*/
         userBiz.update(user);
         result.put("code", 0);
         result.put("msg", "");

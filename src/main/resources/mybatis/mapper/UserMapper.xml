@@ -19,7 +19,7 @@
         </collection>
     </resultMap>
     <select id="userList" resultMap="BaseResultMap">
-        SELECT u.user_id, u.dep_id, u.username, u.email, u.mobile, u.state, u.create_datetime, u.register_time, r.role_name
+        SELECT u.user_id, u.dep_id, u.username, u.email, u.mobile, u.state, u.create_datetime, u.register_time,r.role_id, r.role_name
         FROM `user` u
         LEFT JOIN user_role_relation ur USING (user_id)
         LEFT JOIN role r USING (role_id)
