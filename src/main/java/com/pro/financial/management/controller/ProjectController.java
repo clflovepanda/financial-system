@@ -85,7 +85,7 @@ public class ProjectController {
     /**
      * 查看项目列表页
      */
-    @RequestMapping("project_list")
+    @RequestMapping("/project_list")
     public JSONObject getProjectList(HttpServletRequest request, @RequestBody ProjectDto projectDto) {
         JSONObject result = new JSONObject();
         // 权限过滤，过滤出所有可见项目ID TODO
@@ -127,7 +127,7 @@ public class ProjectController {
     /**
      * 查看项目详情/修改项目页
      */
-    @RequestMapping("project_detail")
+    @RequestMapping("/project_detail")
     public JSONObject getProjectDetail(HttpServletRequest request) {
         JSONObject result = new JSONObject();
         Integer id = Integer.valueOf(request.getParameter("id"));
@@ -168,7 +168,7 @@ public class ProjectController {
     /**
      * 开启/关闭/暂停项目
      */
-    @RequestMapping("project_state")
+    @RequestMapping("/project_state")
     public JSONObject getProjectClose(HttpServletRequest request) {
         JSONObject result = new JSONObject();
         Integer id = Integer.valueOf(request.getParameter("id"));
@@ -187,7 +187,7 @@ public class ProjectController {
     /**
      * 销售提成已发放   1  部分发放  2 全部发放
      */
-    @RequestMapping("distribute_sales_commission")
+    @RequestMapping("/distribute_sales_commission")
     public JSONObject distributeSalesCommission1(HttpServletRequest request) {
         JSONObject result = new JSONObject();
         Integer id = Integer.valueOf(request.getParameter("id"));
@@ -206,7 +206,7 @@ public class ProjectController {
     /**
      * 项目审核通过/驳回 audit_state = 1 通过   2 驳回
      */
-    @RequestMapping("project_audit")
+    @RequestMapping("/project_audit")
     public JSONObject approveProjectAudit(HttpServletRequest request, @CookieValue("userId") Integer userId) {
         JSONObject result = new JSONObject();
         Integer id = Integer.valueOf(request.getParameter("id"));
