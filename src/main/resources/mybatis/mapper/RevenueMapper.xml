@@ -6,6 +6,7 @@
     <result column="receivement_id" jdbcType="INTEGER" property="receivementId" />
     <result column="revenue_type_id" jdbcType="INTEGER" property="revenueTypeId" />
     <result column="data_source_id" jdbcType="INTEGER" property="dataSourceId" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
     <result column="cny_money" jdbcType="DECIMAL" property="cnyMoney" />
     <result column="delete" jdbcType="INTEGER" property="delete" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
@@ -15,7 +16,7 @@
     <result column="utime" jdbcType="TIMESTAMP" property="utime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, receivement_id, revenue_type_id, data_source_id, cny_money, delete, remark, create_user, 
+    id, receivement_id, revenue_type_id, data_source_id, project_id, cny_money, delete, remark, create_user,
     ctime, update_user, utime
   </sql>
 </mapper>

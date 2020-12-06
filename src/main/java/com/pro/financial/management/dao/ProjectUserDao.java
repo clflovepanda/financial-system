@@ -3,6 +3,7 @@ package com.pro.financial.management.dao;
 import com.pro.financial.management.dao.entity.ProjectUserEntity;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,4 +22,13 @@ public interface ProjectUserDao {
             "</foreach>" +
             "</script>")
     int batchInsert(@Param("entities") List<ProjectUserEntity> entities);
+
+    @Select("<script>" +
+            "select * from project_user " +
+            "where project_id in " +
+            "<foreach collection='projectIds' item='projectId' index='index' separator=',' open='(' close=')'>" +
+            "#{projectId}" +
+            "</foreach>" +
+            "</script>")
+    List<ProjectUserEntity> getPrjectUserList(@Param("projectIds") List<Integer> projectIds);
 }

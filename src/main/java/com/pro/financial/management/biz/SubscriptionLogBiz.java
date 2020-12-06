@@ -22,4 +22,8 @@ public class SubscriptionLogBiz {
     public List<SubscriptionLogEntity> getListByReceivementIds(List<Integer> receivementIds) {
         return subscriptionLogDao.getListByReceivementIds(receivementIds);
     }
+
+    public List<SubscriptionLogEntity> getListByProjectIds(List<Integer> projectIds) {
+        return subscriptionLogDao.getListByProjectIds(projectIds);
+    }
 }

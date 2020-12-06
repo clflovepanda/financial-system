@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.pro.financial.management.biz.*;
 import com.pro.financial.management.dao.ProjectCompanyDao;
 import com.pro.financial.management.dao.ProjectUserDao;
+import com.pro.financial.management.dao.entity.*;
 import com.pro.financial.management.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +34,12 @@ public class ProjectController {
     private ProjectCompanyBiz projectCompanyBiz;
     @Autowired
     private ProjectUserBiz projectUserBiz;
+    @Autowired
+    private RevenueBiz revenueBiz;
+    @Autowired
+    private ExpenditureBiz expenditureBiz;
+    @Autowired
+    private SubscriptionLogBiz subscriptionLogBiz;
 
     @RequestMapping("/add")
     public JSONObject addProject(@RequestBody JSONObject jsonInfo) {
@@ -62,8 +70,6 @@ public class ProjectController {
         projectUserBiz.batchAddProjectUser(projectUserDtos);
         // 处理项目关联工时 TODO
 
-
-
         result.put("code", HttpStatus.OK.value());
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
@@ -74,7 +80,28 @@ public class ProjectController {
      */
     @RequestMapping("project_list")
     public JSONObject getProjectList(HttpServletRequest request, @RequestBody ProjectDto projectDto) {
-        return projectBiz.getProjectList(projectDto);
+        JSONObject result = new JSONObject();
+        // 权限过滤，过滤出所有可见项目ID TODO
+        List<Integer> projectIds = new ArrayList<>();
+        // 项目表
+        List<ProjectEntity> projectEntities = projectBiz.getProjectList(projectIds);
+        // 项目人员表
+        List<ProjectUserEntity> projectUserEntities = projectUserBiz.getProjectUserList(projectIds);
+        // 项目收入表
+        List<RevenueEntity> revenueEntities = revenueBiz.getRevenueList(projectIds);
+        // 项目支出表
+        List<ExpenditureEntity> expenditureEntities = expenditureBiz.getExpenditureList(projectIds);
+        // 认款记录表
+        List<SubscriptionLogEntity> subscriptionLogEntities = subscriptionLogBiz.getListByProjectIds(projectIds);
+        // 项目工时表 TODO
+        result.put("code", HttpStatus.OK.value());
+        result.put("msg", HttpStatus.OK.getReasonPhrase());
+        result.put("projectEntities", projectEntities);
+        result.put("projectUserEntities", projectUserEntities);
+        result.put("revenueEntities", revenueEntities);
+        result.put("expenditureEntities", expenditureEntities);
+        result.put("subscriptionLogEntities", subscriptionLogEntities);
+        return result;
     }
 
     /**
@@ -82,7 +109,28 @@ public class ProjectController {
      */
     @RequestMapping("project_detail")
     public JSONObject getProjectDetail(HttpServletRequest request) {
-        return null;
+        JSONObject result = new JSONObject();
+        Integer id = Integer.valueOf(request.getParameter("id"));
+        List<Integer> projectIds = new ArrayList<>(id);
+        // 项目表
+        List<ProjectEntity> projectEntities = projectBiz.getProjectList(projectIds);
+        // 项目人员表
+        List<ProjectUserEntity> projectUserEntities = projectUserBiz.getProjectUserList(projectIds);
+        // 项目收入表
+        List<RevenueEntity> revenueEntities = revenueBiz.getRevenueList(projectIds);
+        // 项目支出表
+        List<ExpenditureEntity> expenditureEntities = expenditureBiz.getExpenditureList(projectIds);
+        // 认款记录表
+        List<SubscriptionLogEntity> subscriptionLogEntities = subscriptionLogBiz.getListByProjectIds(projectIds);
+        // 项目工时表 TODO
+        result.put("code", HttpStatus.OK.value());
+        result.put("msg", HttpStatus.OK.getReasonPhrase());
+        result.put("projectEntities", projectEntities);
+        result.put("projectUserEntities", projectUserEntities);
+        result.put("revenueEntities", revenueEntities);
+        result.put("expenditureEntities", expenditureEntities);
+        result.put("subscriptionLogEntities", subscriptionLogEntities);
+        return result;
     }
 
     /**

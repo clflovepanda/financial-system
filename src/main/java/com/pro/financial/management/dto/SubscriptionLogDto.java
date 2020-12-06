@@ -13,6 +13,8 @@ public class SubscriptionLogDto {
 
     private Integer revenueTypeId;
 
+    private Integer projectId;
+
     private BigDecimal receivementMoney;
 
     private Date subscriptionDate;
@@ -47,6 +49,14 @@ public class SubscriptionLogDto {
 
     public void setRevenueTypeId(Integer revenueTypeId) {
         this.revenueTypeId = revenueTypeId;
+    }
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
     }
 
     public BigDecimal getReceivementMoney() {

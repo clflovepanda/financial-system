@@ -15,6 +15,8 @@ public class RevenueEntity {
 
     private Integer dataSourceId;
 
+    private Integer projectId;
+
     private BigDecimal cnyMoney;
 
     private Integer delete;
@@ -59,6 +61,14 @@ public class RevenueEntity {
 
     public void setDataSourceId(Integer dataSourceId) {
         this.dataSourceId = dataSourceId;
+    }
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
     }
 
     public BigDecimal getCnyMoney() {

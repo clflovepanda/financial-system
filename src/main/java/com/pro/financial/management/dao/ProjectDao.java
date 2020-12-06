@@ -6,6 +6,7 @@ import com.pro.financial.management.dao.entity.ProjectEntity;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
@@ -26,7 +27,12 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
     @Update("update project set state = #{state} where id = #{id}")
     int updateState(@Param("id") Integer id, @Param("state") Integer state);
 
-    List<ProjectEntity> getProjectList(ProjectEntity convert);
-
-    int getProjectListCount(ProjectEntity convert);
+    @Select("<script>" +
+            "select * from project " +
+            "where id in " +
+            "<foreach collection='ids' item='id' index='index' separator=',' open='(' close=')'>" +
+            "#{id}" +
+            "</foreach>" +
+            "</script>")
+    List<ProjectEntity> getProjectList(@Param("ids") List<Integer> ids);
 }

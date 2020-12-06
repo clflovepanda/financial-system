@@ -31,4 +31,8 @@ public class ProjectUserBiz {
         int count = projectUserDao.batchInsert(projectUserEntities);
         return count;
     }
+
+    public List<ProjectUserEntity> getProjectUserList(List<Integer> projectIds) {
+        return projectUserDao.getPrjectUserList(projectIds);
+    }
 }
