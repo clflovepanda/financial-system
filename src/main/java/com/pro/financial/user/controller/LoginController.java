@@ -3,6 +3,8 @@ package com.pro.financial.user.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.pro.financial.consts.ValidateCodeConst;
 import com.pro.financial.user.biz.LoginBiz;
+import com.pro.financial.user.biz.ValidateBiz;
+import com.pro.financial.user.dto.ValidateDto;
 import com.pro.financial.utils.ImageUtil;
 import com.pro.financial.utils.VerifyCodeUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -19,13 +21,17 @@ public class LoginController {
 
     @Autowired
     private LoginBiz loginBiz;
+    @Autowired
+    private ValidateBiz validateBiz;
 
     @RequestMapping("/check")
     public JSONObject check(@RequestBody JSONObject jsonInfo, HttpServletRequest request, HttpServletResponse response) {
         JSONObject result = new JSONObject();
         String userName = jsonInfo.getString("userName");
         String password = jsonInfo.getString("password");
-        return loginBiz.login(userName, password, request, response);
+        Integer validateCode = jsonInfo.getInteger("validate");
+        String code = jsonInfo.getString("code");
+        return loginBiz.login(userName, password, validateCode, code, request, response);
     }
     /**
      * 响应图形验证码页面
@@ -37,19 +43,12 @@ public class LoginController {
         // 设置响应的类型格式为图片格式
         response.setContentType("image/jpeg");
         VerifyCodeUtils vCode = new VerifyCodeUtils(120,40,4,100);
-        byte[] buff = ImageUtil.imageToBytes(vCode.getBuffImg(), "png");
-        //生成图片验证码并将其放入缓存中
-        //TODO
-//        String uuid = IdGen.uuid();
-//        JedisUtils.set(uuid, vCode.getCode(), 10*60);
-        //将图片转换陈字符串给前端
-//        Base64 base64 = new Base64();
-//        String encode = base64.encodeAsString(buff);
-        String encode = Base64.getEncoder().encodeToString(buff);
+        ValidateDto validateDto = validateBiz.addValidate(vCode);
+
         //封装数据
         result.put("code", 0);
         result.put("msg", "");
-        result.put("data", "data:image/png;base64,"+encode);
+        result.put("data", validateDto);
         return result;
     }
 

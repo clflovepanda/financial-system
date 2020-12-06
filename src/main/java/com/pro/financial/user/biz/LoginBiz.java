@@ -2,17 +2,13 @@ package com.pro.financial.user.biz;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pro.financial.consts.CommonConst;
-import com.pro.financial.user.converter.PermissionEntity2Dto;
 import com.pro.financial.user.converter.UserEntity2Dto;
 import com.pro.financial.user.dao.DataSourceDao;
 import com.pro.financial.user.dao.PermissionDao;
 import com.pro.financial.user.dao.UserDao;
-import com.pro.financial.user.dao.entity.DataSourceEntity;
-import com.pro.financial.user.dao.entity.PermissionEntity;
-import com.pro.financial.user.dao.entity.RoleEntity;
-import com.pro.financial.user.dao.entity.UserEntity;
+import com.pro.financial.user.dao.ValidateDao;
+import com.pro.financial.user.dao.entity.*;
 import com.pro.financial.user.dto.UserDto;
-import com.pro.financial.utils.ConvertUtil;
 import com.pro.financial.utils.CookieUtil;
 import com.pro.financial.utils.MD5Util;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
@@ -37,6 +32,8 @@ public class LoginBiz {
     private PermissionDao permissionDao;
     @Autowired
     private DataSourceDao dataSourceDao;
+    @Autowired
+    private ValidateDao validateDao;
 
     /**
      *
@@ -44,8 +41,19 @@ public class LoginBiz {
      * @param password
      * @return
      */
-    public JSONObject login(String userName, String password, HttpServletRequest request, HttpServletResponse response) {
+    public JSONObject login(String userName, String password, Integer validateCode, String code, HttpServletRequest request, HttpServletResponse response) {
         JSONObject result = new JSONObject();
+        if (validateCode == null || validateCode < 1 || StringUtils.isEmpty(code)) {
+            result.put("code", 1002);
+            result.put("msg", "验证码错误1");
+            return result;
+        }
+        ValidateEntity validateEntity = validateDao.selectById(validateCode);
+        if (validateEntity == null || !StringUtils.equals(code, validateEntity.getValidateCode())) {
+            result.put("code", 1002);
+            result.put("msg", "验证码错误2");
+            return result;
+        }
         //获取用户信息
         List<UserEntity> userEntities = userDao.userRealInfo(userName);
         String md5Password = MD5Util.getMD5(password);
