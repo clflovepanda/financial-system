@@ -59,4 +59,8 @@ public class QuotationBiz {
         quotationEntity.setState("0");
         return quotationDao.updateQuotationById(quotationEntity);
     }
+
+    public List<QuotationEntity> getListByProjectIds(List<Integer> projectIds) {
+        return quotationDao.getListByProjectIds(projectIds);
+    }
 }

@@ -45,6 +45,8 @@ public class ProjectController {
     private SettlementBiz settlementBiz;
     @Autowired
     private ContractBiz contractBiz;
+    @Autowired
+    private QuotationBiz quotationBiz;
 
     @RequestMapping("/add")
     public JSONObject addProject(@RequestBody JSONObject jsonInfo) {
@@ -103,6 +105,8 @@ public class ProjectController {
         // 项目合同
         List<ContractEntity> contractEntities = contractBiz.getListByProjectIds(projectIds);
         // 报价单
+        List<QuotationEntity> quotationEntities = quotationBiz.getListByProjectIds(projectIds);
+        // 应收单
         List<ReceivableEntity> receivableEntities = receivableBiz.getListByProjectIds(projectIds);
 
         // 项目工时表 TODO
@@ -115,6 +119,7 @@ public class ProjectController {
         result.put("subscriptionLogEntities", subscriptionLogEntities);
         result.put("settlementEntities", settlementEntities);
         result.put("contractEntities", contractEntities);
+        result.put("quotationEntities", quotationEntities);
         result.put("receivableEntities", receivableEntities);
         return result;
     }
@@ -142,6 +147,8 @@ public class ProjectController {
         // 项目合同
         List<ContractEntity> contractEntities = contractBiz.getListByProjectIds(projectIds);
         // 报价单
+        List<QuotationEntity> quotationEntities = quotationBiz.getListByProjectIds(projectIds);
+        // 应收单
         List<ReceivableEntity> receivableEntities = receivableBiz.getListByProjectIds(projectIds);
         // 项目工时表 TODO
         result.put("code", HttpStatus.OK.value());
@@ -153,6 +160,7 @@ public class ProjectController {
         result.put("subscriptionLogEntities", subscriptionLogEntities);
         result.put("settlementEntities", settlementEntities);
         result.put("contractEntities", contractEntities);
+        result.put("quotationEntities", quotationEntities);
         result.put("receivableEntities", receivableEntities);
         return result;
     }
