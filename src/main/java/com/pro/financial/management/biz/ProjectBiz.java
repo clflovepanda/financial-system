@@ -20,7 +20,10 @@ public class ProjectBiz extends ServiceImpl<ProjectDao, ProjectEntity> {
     private ProjectDao projectDao;
 
     public int addProject(ProjectDto projectDto) {
-        return projectDao.insert(ProjectDto2Entity.instance.convert(projectDto));
+        ProjectEntity projectEntity = ProjectDto2Entity.instance.convert(projectDto);
+        int count = projectDao.insert(projectEntity);
+        projectDto.setId(projectEntity.getId());
+        return count;
     }
 
     public int updateAuditState(Integer id, Integer auditState) {

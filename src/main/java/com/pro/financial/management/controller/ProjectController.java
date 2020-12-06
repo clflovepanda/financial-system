@@ -1,11 +1,11 @@
 package com.pro.financial.management.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.pro.financial.management.biz.ProjectAuditLogBiz;
-import com.pro.financial.management.biz.ProjectBiz;
-import com.pro.financial.management.dto.ContractDto;
-import com.pro.financial.management.dto.ProjectAuditLogDto;
-import com.pro.financial.management.dto.ProjectDto;
+import com.pro.financial.management.biz.*;
+import com.pro.financial.management.dao.ProjectCompanyDao;
+import com.pro.financial.management.dao.ProjectUserDao;
+import com.pro.financial.management.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/project")
@@ -25,11 +26,44 @@ public class ProjectController {
     @Autowired
     private ProjectAuditLogBiz projectAuditLogBiz;
 
+    @Autowired
+    private ProjectDataSourceBiz projectDataSourceBiz;
+    @Autowired
+    private ProjectCompanyBiz projectCompanyBiz;
+    @Autowired
+    private ProjectUserBiz projectUserBiz;
+
     @RequestMapping("/add")
     public JSONObject addProject(@RequestBody JSONObject jsonInfo) {
         JSONObject result = new JSONObject();
+        // 解析项目关联类目
+        ProjectDataSourceDto projectDataSourceDto = JSONObject.parseObject(JSONObject.toJSON(jsonInfo.get("projectDataSourceDto")).toString(), ProjectDataSourceDto.class);
+        // 解析项目关联公司
+        ProjectCompanyDto projectCompanyDto = JSONObject.parseObject(JSONObject.toJSON(jsonInfo.get("projectCompanyDto")).toString(), ProjectCompanyDto.class);
+        // 解析项目关联人员
+        List<ProjectUserDto> projectUserDtos = JSON.parseArray(JSONObject.toJSON(jsonInfo.get("projectUserDto")).toString(), ProjectUserDto.class);
+        // 解析关联工时
         ProjectDto projectDto = JSONObject.parseObject(jsonInfo.toJSONString(), ProjectDto.class);
         int count = projectBiz.addProject(projectDto);
+        int projectId = projectDto.getId();
+        // 处理项目关联类目表
+        projectDataSourceDto.setProjectId(projectId + "");
+        projectDataSourceDto.setCtime(new Date());
+        projectDataSourceBiz.addProjectDataSource(projectDataSourceDto);
+        // 处理项目关联公司表
+        projectCompanyDto.setProjectId(projectId);
+        projectCompanyDto.setCtime(new Date());
+        projectCompanyBiz.addProjectCompany(projectCompanyDto);
+        // 处理项目关联人员
+        for (ProjectUserDto projectUserDto : projectUserDtos) {
+            projectUserDto.setProjectId(projectId);
+            projectUserDto.setCtime(new Date());
+        }
+        projectUserBiz.batchAddProjectUser(projectUserDtos);
+        // 处理项目关联工时 TODO
+
+
+
         result.put("code", HttpStatus.OK.value());
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
