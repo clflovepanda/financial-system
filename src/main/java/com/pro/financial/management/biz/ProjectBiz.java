@@ -10,6 +10,7 @@ import com.pro.financial.management.dto.ProjectDto;
 import com.pro.financial.utils.ConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -39,6 +40,10 @@ public class ProjectBiz extends ServiceImpl<ProjectDao, ProjectEntity> {
     }
 
     public List<ProjectEntity> getProjectList(List<Integer> ids) {
-        return projectDao.getProjectList(ids);
+        if (CollectionUtils.isEmpty(ids)) {
+            return projectDao.getAllProjectList();
+        } else {
+            return projectDao.getProjectList(ids);
+        }
     }
 }

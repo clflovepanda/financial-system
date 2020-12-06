@@ -35,4 +35,7 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
             "</foreach>" +
             "</script>")
     List<ProjectEntity> getProjectList(@Param("ids") List<Integer> ids);
+
+    @Select("select * from project")
+    List<ProjectEntity> getAllProjectList();
 }
