@@ -34,12 +34,6 @@ public class LoginController {
     @RequestMapping(value="/createValidateCode", method = RequestMethod.GET)
     public JSONObject createValidateCode(HttpServletRequest request, HttpServletResponse response){
         JSONObject result = new JSONObject();
-        int userId = Integer.parseInt(request.getParameter("userId"));
-        if (userId < 1) {
-            result.put("code", 1001);
-            result.put("msg", "未获取到用户ID");
-            return result;
-        }
         // 设置响应的类型格式为图片格式
         response.setContentType("image/jpeg");
         VerifyCodeUtils vCode = new VerifyCodeUtils(120,40,4,100);
@@ -48,7 +42,6 @@ public class LoginController {
         //TODO
 //        String uuid = IdGen.uuid();
 //        JedisUtils.set(uuid, vCode.getCode(), 10*60);
-        ValidateCodeConst.vCode.put(userId, vCode.getCode());
         //将图片转换陈字符串给前端
 //        Base64 base64 = new Base64();
 //        String encode = base64.encodeAsString(buff);

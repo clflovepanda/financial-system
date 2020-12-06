@@ -27,4 +27,16 @@ public interface SettlementDao {
 
     @Delete("delete from settlement  where settlement_id = #{settlementId}")
     int deleteSettlement(@Param("settlementId") int settlementId);
+
+    @Select("SELECT settlement_no FROM settlement ORDER BY settlement_id DESC LIMIT 0,1")
+    String selectLastNo();
+
+    @Select("<script>" +
+            "select * from settlement " +
+            "where id project_id " +
+            "<foreach collection='projectIds' item='projectId' index='index' separator=',' open='(' close=')'>" +
+            "#{projectId}" +
+            "</foreach>" +
+            "</script>")
+    List<SettlementEntity> getListByProjectIds(@Param("projectIds") List<Integer> projectIds);
 }

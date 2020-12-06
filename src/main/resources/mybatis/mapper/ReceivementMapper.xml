@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.financial.management.dao.ReceivementDao">
+  <resultMap id="BaseResultMap" type="com.pro.financial.management.dao.entity.ReceivementEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="company_id" jdbcType="INTEGER" property="companyId" />
+    <result column="receivement_type_id" jdbcType="INTEGER" property="receivementTypeId" />
+    <result column="receivement_money" jdbcType="DECIMAL" property="receivementMoney" />
+    <result column="remitter_method_id" jdbcType="CHAR" property="remitterMethodId" />
+    <result column="remitter" jdbcType="VARCHAR" property="remitter" />
+    <result column="receive_date" jdbcType="TIMESTAMP" property="receiveDate" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="utime" jdbcType="TIMESTAMP" property="utime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, company_id, receivement_type_id, receivement_money, remitter_method_id, remitter, 
+    receive_date, state, remark, create_user, ctime, update_user, utime
+  </sql>
+</mapper>

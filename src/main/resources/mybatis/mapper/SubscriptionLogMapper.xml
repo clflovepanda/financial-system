@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.financial.management.dao.SubscriptionLogDao">
+  <resultMap id="BaseResultMap" type="com.pro.financial.management.dao.entity.SubscriptionLogEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="receivement_id" jdbcType="INTEGER" property="receivementId" />
+    <result column="revenue_type_id" jdbcType="INTEGER" property="revenueTypeId" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="receivement_money" jdbcType="DECIMAL" property="receivementMoney" />
+    <result column="subscription_date" jdbcType="TIMESTAMP" property="subscriptionDate" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, receivement_id, revenue_type_id, project_id, receivement_money, subscription_date, state,
+    remark, create_user, ctime
+  </sql>
+</mapper>

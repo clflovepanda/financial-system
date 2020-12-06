@@ -21,4 +21,5 @@ public class SettlementDto {
     private String resourceUrl;
     private Date createDatetime;
     private String state;
+    private String DataSource;
 }

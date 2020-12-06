@@ -1,5 +1,6 @@
 package com.pro.financial.user.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pro.financial.user.dao.entity.UserEntity;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
@@ -8,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface UserDao {
+public interface UserDao extends BaseMapper<UserEntity> {
 
     @Insert("insert into user (username, dep_id, email, mobile, password, state, register_time, create_datetime) " +
             "values (#{username}, #{depId}, #{email}, #{mobile}, #{password}, #{state}, #{registerTime}, #{createDatetime}) ")
@@ -28,7 +29,7 @@ public interface UserDao {
 
     UserEntity getUserById(@Param("userId") int userId);
 
-    List<UserEntity> getUserInfo(@Param("username") String userName);
+    List<UserEntity> userRealInfo(@Param("username") String userName);
 
     @Update("update `user` set state = #{state} where user_id = #{userId}")
     int changeUserState(@Param("userId") int userId, @Param("state") String state);

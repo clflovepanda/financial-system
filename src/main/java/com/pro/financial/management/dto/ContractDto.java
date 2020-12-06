@@ -19,4 +19,5 @@ public class ContractDto {
     private String resourceUrl;
     private Date createDatetime;
     private String state;
+    private String dataSource;
 }

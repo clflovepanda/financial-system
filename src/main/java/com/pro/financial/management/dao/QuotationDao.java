@@ -27,4 +27,16 @@ public interface QuotationDao {
 
     @Delete("delete from quotation  where quotation_id = #{quotationId}")
     int deleteQuotation(@Param("quotationId") int quotationId);
+
+    @Select("SELECT quotation_no FROM quotation ORDER BY quotation_id DESC LIMIT 0,1")
+    String selectLastNo();
+
+    @Select("<script>" +
+            "select * from quotation " +
+            "where id project_id " +
+            "<foreach collection='projectIds' item='projectId' index='index' separator=',' open='(' close=')'>" +
+            "#{projectId}" +
+            "</foreach>" +
+            "</script>")
+    List<QuotationEntity> getListByProjectIds(@Param("projectIds") List<Integer> projectIds);
 }

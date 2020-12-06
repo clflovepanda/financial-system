@@ -147,7 +147,7 @@ public class VerifyCodeUtils {
     public static void main(String[] args) {
         VerifyCodeUtils vCode = new VerifyCodeUtils(160,40,5,150);
         try {
-            String path="/Users/yupeng/Desktop/"+ System.currentTimeMillis() +".png";
+            String path="/Users/../Desktop/"+ System.currentTimeMillis() +".png";
             System.out.println(vCode.getCode()+" >"+path);
             vCode.write(path);
         } catch (IOException e) {

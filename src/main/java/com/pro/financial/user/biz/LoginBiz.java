@@ -47,7 +47,7 @@ public class LoginBiz {
     public JSONObject login(String userName, String password, HttpServletRequest request, HttpServletResponse response) {
         JSONObject result = new JSONObject();
         //获取用户信息
-        List<UserEntity> userEntities = userDao.getUserInfo(userName);
+        List<UserEntity> userEntities = userDao.userRealInfo(userName);
         String md5Password = MD5Util.getMD5(password);
         if (CollectionUtils.isEmpty(userEntities)) {
             result.put("code", 1002);

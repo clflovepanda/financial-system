@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.financial.management.dao.ProjectTaskDao">
+
+    <select id="taskList" parameterType="com.pro.financial.management.dao.entity.ProjectTaskEntity" resultType="com.pro.financial.management.dao.entity.ProjectTaskEntity">
+        select * from project_task pt
+        left join project_task_relation ptr
+        using (task_relation_id)
+        where 1=1
+        <if test="projectTaskEntity.projectId != null">
+            ptr.project_id = #{projectTaskEntity.projectId}
+        </if>
+        <if test="projectTaskEntity.relationTemplateId != null">
+            ptr.template_id = #{projectTaskEntity.relationTemplateId}
+        </if>
+        <if test="projectTaskEntity.userId != null">
+            pt.user_id = #{projectTaskEntity.userId}
+        </if>
+        <if test="projectTaskEntity.status != null">
+            pt.status = #{projectTaskEntity.status}
+        </if>
+        <if test="projectTaskEntity.taskStatus != null">
+            pt.task_status = #{projectTaskEntity.taskStatus}
+        </if>
+        <if test="offset != null and limit != 0">
+            limit ${offset} , ${limit}
+        </if>
+    </select>
+
+</mapper>
