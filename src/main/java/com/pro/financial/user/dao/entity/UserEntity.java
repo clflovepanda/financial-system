@@ -29,4 +29,5 @@ public class UserEntity {
     private Date registerTime;
     private Date createDatetime;
     private List<RoleEntity> roles;
+    private String roleName;
 }

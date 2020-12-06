@@ -8,6 +8,7 @@ import com.pro.financial.user.dao.CompanyDao;
 import com.pro.financial.user.dao.RoleDao;
 import com.pro.financial.user.dao.UserDao;
 import com.pro.financial.user.dao.entity.CompanyEntity;
+import com.pro.financial.user.dao.entity.RoleEntity;
 import com.pro.financial.user.dao.entity.UserEntity;
 import com.pro.financial.user.dto.CompanyDto;
 import com.pro.financial.user.dto.RoleDto;
@@ -73,6 +74,14 @@ public class UserBiz {
 
         }
         List<UserEntity> userList = userDao.userList(username, mobile, role, state, depId, startDate, endDate, limit, offset);
+        if (userList != null) {
+            for (UserEntity userEntity : userList) {
+                if (userEntity.getRoles() != null && userEntity.getRoles().size() > 0) {
+                    userEntity.setRoleName(userEntity.getRoles().get(0).getRoleName());
+                    continue;
+                }
+            }
+        }
         return ConvertUtil.convert(UserEntity2Dto.instance, userList);
     }
 

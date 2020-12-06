@@ -22,7 +22,7 @@ public class UserDto {
     private Date registerTime;
     private Date createDatetime;
     private List<Integer> roleId;
-    private List<String> roleName;
+    private String roleName;
     private List<RoleEntity> roles;
     private List<PermissionDto> permissions;
 }
