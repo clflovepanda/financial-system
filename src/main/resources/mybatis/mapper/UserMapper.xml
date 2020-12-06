@@ -110,7 +110,7 @@
         WHERE user_id = #{userId}
     </select>
 
-    <select id="getUserInfo" resultMap="BaseResultMap">
+    <select id="userRealInfo" resultMap="BaseResultMap">
         SELECT *
          FROM `user` u
         LEFT JOIN user_role_relation ur USING (user_id)
