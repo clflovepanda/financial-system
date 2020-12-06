@@ -27,7 +27,6 @@ public class ProjectController {
     private ProjectBiz projectBiz;
     @Autowired
     private ProjectAuditLogBiz projectAuditLogBiz;
-
     @Autowired
     private ProjectDataSourceBiz projectDataSourceBiz;
     @Autowired
@@ -40,6 +39,12 @@ public class ProjectController {
     private ExpenditureBiz expenditureBiz;
     @Autowired
     private SubscriptionLogBiz subscriptionLogBiz;
+    @Autowired
+    private ReceivableBiz receivableBiz;
+    @Autowired
+    private SettlementBiz settlementBiz;
+    @Autowired
+    private ContractBiz contractBiz;
 
     @RequestMapping("/add")
     public JSONObject addProject(@RequestBody JSONObject jsonInfo) {
@@ -93,6 +98,13 @@ public class ProjectController {
         List<ExpenditureEntity> expenditureEntities = expenditureBiz.getExpenditureList(projectIds);
         // 认款记录表
         List<SubscriptionLogEntity> subscriptionLogEntities = subscriptionLogBiz.getListByProjectIds(projectIds);
+        // 结算单
+        List<SettlementEntity> settlementEntities = settlementBiz.getListByProjectIds(projectIds);
+        // 项目合同
+        List<ContractEntity> contractEntities = contractBiz.getListByProjectIds(projectIds);
+        // 报价单
+        List<ReceivableEntity> receivableEntities = receivableBiz.getListByProjectIds(projectIds);
+
         // 项目工时表 TODO
         result.put("code", HttpStatus.OK.value());
         result.put("msg", HttpStatus.OK.getReasonPhrase());
@@ -101,6 +113,9 @@ public class ProjectController {
         result.put("revenueEntities", revenueEntities);
         result.put("expenditureEntities", expenditureEntities);
         result.put("subscriptionLogEntities", subscriptionLogEntities);
+        result.put("settlementEntities", settlementEntities);
+        result.put("contractEntities", contractEntities);
+        result.put("receivableEntities", receivableEntities);
         return result;
     }
 
@@ -122,6 +137,12 @@ public class ProjectController {
         List<ExpenditureEntity> expenditureEntities = expenditureBiz.getExpenditureList(projectIds);
         // 认款记录表
         List<SubscriptionLogEntity> subscriptionLogEntities = subscriptionLogBiz.getListByProjectIds(projectIds);
+        // 结算单
+        List<SettlementEntity> settlementEntities = settlementBiz.getListByProjectIds(projectIds);
+        // 项目合同
+        List<ContractEntity> contractEntities = contractBiz.getListByProjectIds(projectIds);
+        // 报价单
+        List<ReceivableEntity> receivableEntities = receivableBiz.getListByProjectIds(projectIds);
         // 项目工时表 TODO
         result.put("code", HttpStatus.OK.value());
         result.put("msg", HttpStatus.OK.getReasonPhrase());
@@ -130,6 +151,9 @@ public class ProjectController {
         result.put("revenueEntities", revenueEntities);
         result.put("expenditureEntities", expenditureEntities);
         result.put("subscriptionLogEntities", subscriptionLogEntities);
+        result.put("settlementEntities", settlementEntities);
+        result.put("contractEntities", contractEntities);
+        result.put("receivableEntities", receivableEntities);
         return result;
     }
 

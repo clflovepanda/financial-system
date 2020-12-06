@@ -59,4 +59,8 @@ public class SettlementBiz {
         settlementEntity.setState("0");
         return settlementDao.updateSettlementById(settlementEntity);
     }
+
+    public List<SettlementEntity> getListByProjectIds(List<Integer> projectIds) {
+        return settlementDao.getListByProjectIds(projectIds);
+    }
 }

@@ -59,4 +59,8 @@ public class ReceivableBiz extends ServiceImpl<ReceivableDao, ReceivableEntity> 
         receivableEntity.setState("0");
         return receivableDao.updateById(receivableEntity);
     }
+
+    public List<ReceivableEntity> getListByProjectIds(List<Integer> projectIds) {
+        return receivableDao.getListByProjectIds(projectIds);
+    }
 }

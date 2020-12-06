@@ -24,4 +24,13 @@ public interface ReceivableDao extends BaseMapper<ReceivableEntity> {
 
     @Select("SELECT receivable_no FROM receivable ORDER BY receivable_id DESC LIMIT 0,1")
     String selectLastNo();
+
+    @Select("<script>" +
+            "select * from receivable " +
+            "where id project_id " +
+            "<foreach collection='projectIds' item='projectId' index='index' separator=',' open='(' close=')'>" +
+            "#{projectId}" +
+            "</foreach>" +
+            "</script>")
+    List<ReceivableEntity> getListByProjectIds(@Param("projectIds") List<Integer> projectIds);
 }

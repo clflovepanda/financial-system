@@ -27,4 +27,13 @@ public interface ContractDao {
 
     @Select("SELECT contract_no FROM contract ORDER BY contract_id DESC LIMIT 0,1")
     String selectLastNo();
+
+    @Select("<script>" +
+            "select * from contract " +
+            "where id project_id " +
+            "<foreach collection='projectIds' item='projectId' index='index' separator=',' open='(' close=')'>" +
+            "#{projectId}" +
+            "</foreach>" +
+            "</script>")
+    List<ContractEntity> getListByProjectIds(@Param("projectIds") List<Integer> projectIds);
 }

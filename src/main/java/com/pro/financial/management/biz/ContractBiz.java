@@ -59,4 +59,8 @@ public class ContractBiz {
         contractEntity.setState("0");
         return contractDao.updateContractById(contractEntity);
     }
+
+    public List<ContractEntity> getListByProjectIds(List<Integer> projectIds) {
+        return contractDao.getListByProjectIds(projectIds);
+    }
 }
