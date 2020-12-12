@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/quotation")
+@RequestMapping("/api/quotation")
 public class QuotationController {
 
     @Autowired

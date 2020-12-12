@@ -21,7 +21,7 @@ import java.util.List;
  * @since 2020-11-25
  */
 @RestController
-@RequestMapping("/task")
+@RequestMapping("/api/task")
 public class ProjectTaskController {
 
     @Autowired

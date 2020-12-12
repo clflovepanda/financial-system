@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/receivement_type")
+@RequestMapping("/api/receivement_type")
 public class ReceivementTypeController {
 
     @Autowired

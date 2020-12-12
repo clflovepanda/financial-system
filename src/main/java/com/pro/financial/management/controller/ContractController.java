@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/contract")
+@RequestMapping("/api/contract")
 public class ContractController {
 
     @Autowired
