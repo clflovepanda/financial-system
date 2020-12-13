@@ -91,6 +91,8 @@ public class UserBiz {
     public int update(UserDto user) {
         UserEntity userEntity = JSONObject.parseObject(JSONObject.toJSONString(user), UserEntity.class);
         userEntity.setRegisterTime(new Date());
+        String md5Password = MD5Util.getMD5(userEntity.getPassword());
+        userEntity.setPassword(md5Password);
         int count = userDao.update(userEntity);
         userDao.deleteRole(userEntity.getUserId());
         roleDao.addUserRoleRelation(userEntity.getUserId(), user.getRoleId());
