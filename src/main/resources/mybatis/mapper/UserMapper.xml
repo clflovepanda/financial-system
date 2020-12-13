@@ -76,6 +76,7 @@
         </if>
         ) uid
         )
+        ORDER BY u.user_id DESC
 
     </select>
     <update id="update" parameterType="map">

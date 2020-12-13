@@ -14,6 +14,7 @@ import com.pro.financial.user.dto.CompanyDto;
 import com.pro.financial.user.dto.RoleDto;
 import com.pro.financial.user.dto.UserDto;
 import com.pro.financial.utils.ConvertUtil;
+import com.pro.financial.utils.MD5Util;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,8 @@ public class UserBiz {
         UserEntity userEntity = JSONObject.parseObject(JSONObject.toJSONString(user), UserEntity.class);
         userEntity.setCreateDatetime(new Date());
         userEntity.setRegisterTime(new Date());
+        String md5Password = MD5Util.getMD5(userEntity.getPassword());
+        userEntity.setPassword(md5Password);
         int result = userDao.add(userEntity);
         //添加角色
         if (userEntity.getUserId() == null) {
