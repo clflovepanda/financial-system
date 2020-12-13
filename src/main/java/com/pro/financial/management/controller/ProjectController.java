@@ -49,7 +49,7 @@ public class ProjectController {
     private QuotationBiz quotationBiz;
 
     @RequestMapping("/add")
-    public JSONObject addProject(@RequestBody JSONObject jsonInfo) {
+    public JSONObject addProject(@RequestBody JSONObject jsonInfo, @CookieValue("userId") Integer userId) {
         JSONObject result = new JSONObject();
         // 解析项目关联类目
         ProjectDataSourceDto projectDataSourceDto = JSONObject.parseObject(JSONObject.toJSON(jsonInfo.get("projectDataSourceDto")).toString(), ProjectDataSourceDto.class);
@@ -58,7 +58,7 @@ public class ProjectController {
         // 解析项目关联人员
         List<ProjectUserDto> projectUserDtos = JSON.parseArray(JSONObject.toJSON(jsonInfo.get("projectUserDto")).toString(), ProjectUserDto.class);
         // 解析关联工时
-        ProjectDto projectDto = JSONObject.parseObject(jsonInfo.toJSONString(), ProjectDto.class);
+        ProjectDto projectDto = JSONObject.parseObject(JSONObject.toJSON(jsonInfo.get("projectDto")).toString(), ProjectDto.class);
         int count = projectBiz.addProject(projectDto);
         int projectId = projectDto.getId();
         // 处理项目关联类目表
@@ -86,7 +86,7 @@ public class ProjectController {
      * 查看项目列表页
      */
     @RequestMapping("/project_list")
-    public JSONObject getProjectList(HttpServletRequest request, @RequestBody ProjectDto projectDto) {
+    public JSONObject getProjectList(HttpServletRequest request, @CookieValue("userId") Integer userId) {
         JSONObject result = new JSONObject();
         // 权限过滤，过滤出所有可见项目ID TODO
         List<Integer> projectIds = new ArrayList<>();
@@ -128,7 +128,7 @@ public class ProjectController {
      * 查看项目详情/修改项目页
      */
     @RequestMapping("/project_detail")
-    public JSONObject getProjectDetail(HttpServletRequest request) {
+    public JSONObject getProjectDetail(HttpServletRequest request, @CookieValue("userId") Integer userId) {
         JSONObject result = new JSONObject();
         Integer id = Integer.valueOf(request.getParameter("id"));
         List<Integer> projectIds = new ArrayList<>(id);
@@ -169,7 +169,7 @@ public class ProjectController {
      * 开启/关闭/暂停项目
      */
     @RequestMapping("/project_state")
-    public JSONObject getProjectClose(HttpServletRequest request) {
+    public JSONObject getProjectClose(HttpServletRequest request, @CookieValue("userId") Integer userId) {
         JSONObject result = new JSONObject();
         Integer id = Integer.valueOf(request.getParameter("id"));
         Integer state = Integer.valueOf(request.getParameter("project_state"));
@@ -188,7 +188,7 @@ public class ProjectController {
      * 销售提成已发放   1  部分发放  2 全部发放
      */
     @RequestMapping("/distribute_sales_commission")
-    public JSONObject distributeSalesCommission1(HttpServletRequest request) {
+    public JSONObject distributeSalesCommission1(HttpServletRequest request, @CookieValue("userId") Integer userId) {
         JSONObject result = new JSONObject();
         Integer id = Integer.valueOf(request.getParameter("id"));
         Integer saleCommisState = Integer.valueOf(request.getParameter("sale_commis_state"));
