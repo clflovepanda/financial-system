@@ -86,7 +86,7 @@ public class ProjectController {
      * 查看项目列表页
      */
     @RequestMapping("/project_list")
-    public JSONObject getProjectList(HttpServletRequest request, @RequestBody ProjectDto projectDto) {
+    public JSONObject getProjectList(HttpServletRequest request) {
         JSONObject result = new JSONObject();
         // 权限过滤，过滤出所有可见项目ID TODO
         List<Integer> projectIds = new ArrayList<>();
