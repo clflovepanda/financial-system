@@ -30,7 +30,7 @@ public interface ContractDao {
 
     @Select("<script>" +
             "select * from contract " +
-            "where id project_id " +
+            "where project_id in " +
             "<foreach collection='projectIds' item='projectId' index='index' separator=',' open='(' close=')'>" +
             "#{projectId}" +
             "</foreach>" +

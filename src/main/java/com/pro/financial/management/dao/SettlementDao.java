@@ -33,7 +33,7 @@ public interface SettlementDao {
 
     @Select("<script>" +
             "select * from settlement " +
-            "where id project_id " +
+            "where project_id in " +
             "<foreach collection='projectIds' item='projectId' index='index' separator=',' open='(' close=')'>" +
             "#{projectId}" +
             "</foreach>" +

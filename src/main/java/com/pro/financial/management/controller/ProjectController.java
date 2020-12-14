@@ -1,14 +1,19 @@
 package com.pro.financial.management.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.pro.financial.management.biz.*;
 import com.pro.financial.management.dao.ProjectCompanyDao;
 import com.pro.financial.management.dao.ProjectUserDao;
 import com.pro.financial.management.dao.entity.*;
 import com.pro.financial.management.dto.*;
+import com.pro.financial.user.dto.DataSourceDto;
+import com.pro.financial.user.dto.PermissionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +52,7 @@ public class ProjectController {
     private ContractBiz contractBiz;
     @Autowired
     private QuotationBiz quotationBiz;
+
 
     @RequestMapping("/add")
     public JSONObject addProject(@RequestBody JSONObject jsonInfo) {
@@ -88,8 +94,19 @@ public class ProjectController {
     @RequestMapping("/project_list")
     public JSONObject getProjectList(HttpServletRequest request) {
         JSONObject result = new JSONObject();
-        // 权限过滤，过滤出所有可见项目ID TODO
+        // 权限过滤，过滤出所有可见项目ID
+        String datasourceJsonStr = request.getSession().getAttribute("datasource").toString();
+        if (StringUtils.isEmpty(datasourceJsonStr)) {
+            result.put("code", 1001);
+            result.put("msg", "无项目权限");
+        }
+        List<DataSourceDto> sourceDtos = JSONArray.parseArray(datasourceJsonStr, DataSourceDto.class);
         List<Integer> projectIds = new ArrayList<>();
+        projectIds = projectDataSourceBiz.getProjectIdsByCookie(sourceDtos);
+        if (CollectionUtils.isEmpty(projectIds)) {
+            result.put("code", 1001);
+            result.put("msg", "无项目权限");
+        }
         // 项目表
         List<ProjectEntity> projectEntities = projectBiz.getProjectList(projectIds);
         // 项目人员表
@@ -97,7 +114,7 @@ public class ProjectController {
         // 项目收入表
         List<RevenueEntity> revenueEntities = revenueBiz.getRevenueList(projectIds);
         // 项目支出表
-        List<ExpenditureEntity> expenditureEntities = expenditureBiz.getExpenditureList(projectIds);
+//        List<ExpenditureEntity> expenditureEntities = expenditureBiz.getExpenditureList(projectIds);
         // 认款记录表
         List<SubscriptionLogEntity> subscriptionLogEntities = subscriptionLogBiz.getListByProjectIds(projectIds);
         // 结算单
@@ -115,7 +132,7 @@ public class ProjectController {
         result.put("projectEntities", projectEntities);
         result.put("projectUserEntities", projectUserEntities);
         result.put("revenueEntities", revenueEntities);
-        result.put("expenditureEntities", expenditureEntities);
+//        result.put("expenditureEntities", expenditureEntities);
         result.put("subscriptionLogEntities", subscriptionLogEntities);
         result.put("settlementEntities", settlementEntities);
         result.put("contractEntities", contractEntities);

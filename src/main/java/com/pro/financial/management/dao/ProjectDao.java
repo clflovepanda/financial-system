@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pro.financial.management.dao.entity.ProjectEntity;
 
+import com.pro.financial.user.dto.DataSourceDto;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -38,4 +39,5 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
 
     @Select("select * from project")
     List<ProjectEntity> getAllProjectList();
+
 }

@@ -27,7 +27,7 @@ public interface ReceivableDao extends BaseMapper<ReceivableEntity> {
 
     @Select("<script>" +
             "select * from receivable " +
-            "where id project_id " +
+            "where project_id in " +
             "<foreach collection='projectIds' item='projectId' index='index' separator=',' open='(' close=')'>" +
             "#{projectId}" +
             "</foreach>" +

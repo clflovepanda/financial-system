@@ -22,5 +22,5 @@ public interface RevenueDao {
             "#{projectId}" +
             "</foreach>" +
             "</script>")
-    List<RevenueEntity> getRevenueList(@Param("ids") List<Integer> projectIds);
+    List<RevenueEntity> getRevenueList(@Param("projectIds") List<Integer> projectIds);
 }

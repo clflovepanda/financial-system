@@ -1,12 +1,15 @@
 package com.pro.financial.management.biz;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pro.financial.management.converter.ProjectDto2Entity;
 import com.pro.financial.management.converter.ProjectEntity2Dto;
 import com.pro.financial.management.dao.ProjectDao;
 import com.pro.financial.management.dao.entity.ProjectEntity;
 import com.pro.financial.management.dto.ProjectDto;
+import com.pro.financial.user.dto.DataSourceDto;
+import com.pro.financial.user.filter.LoginFilter;
 import com.pro.financial.utils.ConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,8 @@ import java.util.List;
 public class ProjectBiz extends ServiceImpl<ProjectDao, ProjectEntity> {
     @Autowired
     private ProjectDao projectDao;
+    @Autowired
+    private LoginFilter loginFilter;
 
     public int addProject(ProjectDto projectDto) {
         ProjectEntity projectEntity = ProjectDto2Entity.instance.convert(projectDto);
@@ -46,4 +51,5 @@ public class ProjectBiz extends ServiceImpl<ProjectDao, ProjectEntity> {
             return projectDao.getProjectList(ids);
         }
     }
+
 }

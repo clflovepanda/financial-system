@@ -4,8 +4,10 @@ package com.pro.financial.user.filter;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.pro.financial.consts.CommonConst;
+import com.pro.financial.user.dto.DataSourceDto;
 import com.pro.financial.user.dto.PermissionDto;
 import com.pro.financial.user.dto.UserDto;
+import lombok.Getter;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,7 @@ import java.util.List;
 
 @Component
 public class LoginFilter implements Filter {
+
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -40,8 +43,8 @@ public class LoginFilter implements Filter {
         String datasourceJsonStr = null;
         String urlPath = request.getServletPath();
         //登录等不拦截
-//        if (urlPath.indexOf("/login") != -1) {
-        if (true) {
+        if (urlPath.indexOf("/login") != -1) {
+//        if (true) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -52,8 +55,9 @@ public class LoginFilter implements Filter {
                 //有cookies
                 for (Cookie cookie : cookies) {
                     if (StringUtils.equals(cookie.getName(), CommonConst.cookie_user_head)) {
+                        String userJsonStr = URLDecoder.decode(cookie.getValue(), "utf-8");
                         //获取用户信息
-                        userDto = JSONObject.parseObject(cookie.getValue(), UserDto.class);
+                        userDto = JSONObject.parseObject(userJsonStr, UserDto.class);
                     }
                 }
             }
@@ -76,12 +80,16 @@ public class LoginFilter implements Filter {
         if (permissionJsonStr != null) {
             List<PermissionDto> permissionDtos = JSONArray.parseArray(permissionJsonStr, PermissionDto.class);
             for (PermissionDto permissionDto : permissionDtos) {
-                if (StringUtils.equals(urlPath, permissionDto.getUri())) {
+                if (StringUtils.equalsIgnoreCase(urlPath, permissionDto.getUri())) {
+                    if (datasourceJsonStr != null) {
+                        request.getSession().setAttribute("datasource", datasourceJsonStr);
+                    }
                     filterChain.doFilter(request, servletResponse);
                     return;
                 }
             }
         }
+
         response.setCharacterEncoding("utf-8");
         response.setContentType("application/json; charset=utf-8");
         Writer writer = response.getWriter();
