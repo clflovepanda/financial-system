@@ -49,7 +49,8 @@ public class LoginBiz {
             return result;
         }
         ValidateEntity validateEntity = validateDao.selectById(validateCode);
-        if (validateEntity == null || !StringUtils.equals(code, validateEntity.getValidateCode())) {
+        //无视大小写
+        if (validateEntity == null || !StringUtils.equalsIgnoreCase(code, validateEntity.getValidateCode())) {
             result.put("code", 1002);
             result.put("msg", "验证码错误2");
             return result;
@@ -82,11 +83,30 @@ public class LoginBiz {
                 String datasourceCookieName = CommonConst.cookie_datasource_head + userDto.getUserId();
                 String datasourceJsonStr = JSONObject.toJSONString(dataSourceEntities);
                 String userJsonStr = JSONObject.toJSONString(userDto);
+                String permissionCookieEncode = null;
+                String datasourceCookieEncode = null;
+                String userCookieEncode = null;
+                try {
+                    permissionCookieEncode = URLEncoder.encode(permissionJsonStr, "utf-8");
+                    datasourceCookieEncode = URLEncoder.encode(datasourceJsonStr, "utf-8");
+                    userCookieEncode = URLEncoder.encode(userJsonStr, "utf-8");
+
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                    result.put("code", 9000);
+                    result.put("msg", "保存cookie失败");
+                    return result;
+                }
+                if (StringUtils.isEmpty(permissionCookieEncode) || StringUtils.isEmpty(datasourceCookieEncode) || StringUtils.isEmpty(userCookieEncode)) {
+                    result.put("code", 9000);
+                    result.put("msg", "保存cookie失败");
+                    return result;
+                }
                 //菜单权限存入cookie
-                CookieUtil.addCookie(response, permissionCookieName, permissionJsonStr, 3600);
+                CookieUtil.addCookie(response, permissionCookieName, permissionCookieEncode, 3600);
                 // 数据权限存入cookie
-                CookieUtil.addCookie(response, datasourceCookieName, datasourceJsonStr, 3600);
-                CookieUtil.addCookie(response, CommonConst.cookie_user_head, userJsonStr, 3600);
+                CookieUtil.addCookie(response, datasourceCookieName, datasourceCookieEncode, 3600);
+                CookieUtil.addCookie(response, CommonConst.cookie_user_head, userCookieEncode, 3600);
                 request.getSession().setAttribute(permissionCookieName, permissionJsonStr);
                 request.getSession().setAttribute(datasourceCookieName, datasourceJsonStr);
                 result.put("code", 0);
