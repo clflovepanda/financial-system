@@ -1,13 +1,18 @@
 package com.pro.financial.management.dao.entity;
 
+import com.pro.financial.user.dao.entity.DataSourceEntity;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 @ToString
+@Getter
+@Setter
 public class ExpenditureEntity {
-    private Integer id;
+    private Integer expenditureId;
 
     private String numbering;
 
@@ -51,179 +56,10 @@ public class ExpenditureEntity {
 
     private Integer isEffective;
 
-    public Integer getId() {
-        return id;
-    }
+    private ProjectEntity project;
+    private DataSourceEntity dataSource;
+    private ExpenditureMethodEntity expenditureMethod;
+    private ExpenditureTypeEntity expenditureTypeEntity;
+    private ExpenditurePurposeEntity expenditurePurpose;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getNumbering() {
-        return numbering;
-    }
-
-    public void setNumbering(String numbering) {
-        this.numbering = numbering == null ? null : numbering.trim();
-    }
-
-    public Integer getExpenditureType() {
-        return expenditureType;
-    }
-
-    public void setExpenditureType(Integer expenditureType) {
-        this.expenditureType = expenditureType;
-    }
-
-    public Integer getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Integer companyId) {
-        this.companyId = companyId;
-    }
-
-    public Integer getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
-    }
-
-    public Integer getExpenditureMethodId() {
-        return expenditureMethodId;
-    }
-
-    public void setExpenditureMethodId(Integer expenditureMethodId) {
-        this.expenditureMethodId = expenditureMethodId;
-    }
-
-    public Integer getExpenditureTypeId() {
-        return expenditureTypeId;
-    }
-
-    public void setExpenditureTypeId(Integer expenditureTypeId) {
-        this.expenditureTypeId = expenditureTypeId;
-    }
-
-    public Integer getExpenditurePurposeId() {
-        return expenditurePurposeId;
-    }
-
-    public void setExpenditurePurposeId(Integer expenditurePurposeId) {
-        this.expenditurePurposeId = expenditurePurposeId;
-    }
-
-    public String getExpenditurePurposeContent() {
-        return expenditurePurposeContent;
-    }
-
-    public void setExpenditurePurposeContent(String expenditurePurposeContent) {
-        this.expenditurePurposeContent = expenditurePurposeContent == null ? null : expenditurePurposeContent.trim();
-    }
-
-    public BigDecimal getExpenditureMoney() {
-        return expenditureMoney;
-    }
-
-    public void setExpenditureMoney(BigDecimal expenditureMoney) {
-        this.expenditureMoney = expenditureMoney;
-    }
-
-    public Integer getState() {
-        return state;
-    }
-
-    public void setState(Integer state) {
-        this.state = state;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
-
-    public String getBeneficiaryUnit() {
-        return beneficiaryUnit;
-    }
-
-    public void setBeneficiaryUnit(String beneficiaryUnit) {
-        this.beneficiaryUnit = beneficiaryUnit == null ? null : beneficiaryUnit.trim();
-    }
-
-    public String getBeneficiaryNumber() {
-        return beneficiaryNumber;
-    }
-
-    public void setBeneficiaryNumber(String beneficiaryNumber) {
-        this.beneficiaryNumber = beneficiaryNumber == null ? null : beneficiaryNumber.trim();
-    }
-
-    public Integer getProvince() {
-        return province;
-    }
-
-    public void setProvince(Integer province) {
-        this.province = province;
-    }
-
-    public Integer getCity() {
-        return city;
-    }
-
-    public void setCity(Integer city) {
-        this.city = city;
-    }
-
-    public String getBeneficiaryBank() {
-        return beneficiaryBank;
-    }
-
-    public void setBeneficiaryBank(String beneficiaryBank) {
-        this.beneficiaryBank = beneficiaryBank == null ? null : beneficiaryBank.trim();
-    }
-
-    public Integer getCreateUser() {
-        return createUser;
-    }
-
-    public void setCreateUser(Integer createUser) {
-        this.createUser = createUser;
-    }
-
-    public Date getCtime() {
-        return ctime;
-    }
-
-    public void setCtime(Date ctime) {
-        this.ctime = ctime;
-    }
-
-    public Integer getUpdateUser() {
-        return updateUser;
-    }
-
-    public void setUpdateUser(Integer updateUser) {
-        this.updateUser = updateUser;
-    }
-
-    public Date getUtime() {
-        return utime;
-    }
-
-    public void setUtime(Date utime) {
-        this.utime = utime;
-    }
-
-    public Integer getIsEffective() {
-        return isEffective;
-    }
-
-    public void setIsEffective(Integer isEffective) {
-        this.isEffective = isEffective;
-    }
 }

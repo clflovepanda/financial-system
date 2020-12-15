@@ -11,7 +11,7 @@ import java.util.Date;
 @Setter
 @ToString
 public class ProjectDto {
-    private Integer id;
+    private Integer projectId;
 
     private String code;
 

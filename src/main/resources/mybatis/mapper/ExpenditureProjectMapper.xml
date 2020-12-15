@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pro.financial.management.dao.ExpenditureProjectDao">
   <resultMap id="BaseResultMap" type="com.pro.financial.management.dao.entity.ExpenditureProjectEntity">
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="expenditure_project_id" jdbcType="INTEGER" property="expenditureProjectId" />
     <result column="expenditure_id" jdbcType="INTEGER" property="expenditureId" />
     <result column="project_id" jdbcType="INTEGER" property="projectId" />
     <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, expenditure_id, project_id, ctime
+    expenditure_project_id, expenditure_id, project_id, ctime
   </sql>
 </mapper>

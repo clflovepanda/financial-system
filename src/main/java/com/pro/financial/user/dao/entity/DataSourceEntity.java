@@ -12,6 +12,6 @@ import java.util.Date;
 public class DataSourceEntity {
     private Integer dataSourceId;
     private Integer parentId;
-    private String name;
+    private String dateSourceName;
     private Date createDatetime;
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pro.financial.management.dao.ExpenditureDao">
   <resultMap id="BaseResultMap" type="com.pro.financial.management.dao.entity.ExpenditureEntity">
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="expenditure_id" jdbcType="INTEGER" property="expenditureId" />
     <result column="numbering" jdbcType="VARCHAR" property="numbering" />
     <result column="expenditure_type" jdbcType="INTEGER" property="expenditureType" />
     <result column="company_id" jdbcType="INTEGER" property="companyId" />
@@ -24,11 +24,60 @@
     <result column="update_user" jdbcType="INTEGER" property="updateUser" />
     <result column="utime" jdbcType="TIMESTAMP" property="utime" />
     <result column="is_effective" jdbcType="INTEGER" property="isEffective" />
+    <association property="dataSource" resultMap="com.pro.financial.user.dao.DataSourceDao.BaseResultMap"/>
+    <association property="project" resultMap="com.pro.financial.management.dao.ProjectDao.BaseResultMap"/>
+    <association property="expenditureMethod" resultMap="com.pro.financial.management.dao.ExpenditureMethodDao.BaseResultMap"/>
+    <association property="expenditurePurpose" resultMap="com.pro.financial.management.dao.ExpenditurePurposeDao.BaseResultMap"/>
+    <association property="expenditureTypeEntity" resultMap="com.pro.financial.management.dao.ExpenditureTypeDao.BaseResultMap"/>
   </resultMap>
   <sql id="Base_Column_List">
-    id, numbering, expenditure_type, company_id, project_id, expenditure_method_id, expenditure_type_id, 
+    expenditure_id, numbering, expenditure_type, company_id, project_id, expenditure_method_id, expenditure_type_id,
     expenditure_purpose_id, expenditure_purpose_content, expenditure_money, state, remark, 
     beneficiary_unit, beneficiary_number, province, city, beneficiary_bank, create_user, 
     ctime, update_user, utime, is_effective
   </sql>
+  <select id="statistics" resultMap="BaseResultMap">
+    select * from expenditure e
+    left join expenditure_method em
+    using (expenditure_method_id)
+    left join expenditure_project ep
+    using (expenditure_id)
+    left join expenditure_purpose epu
+    using (expenditure_purpose_id)
+    left join expenditure_type pt
+    using (expenditure_type_id)
+    left join project p
+    on p.project_id = ep.project_id
+    left join project_data_source pds
+    on p.project_id = pds.project_id
+    left join data_source dt
+    using (data_source_id)
+    where 1=1
+    <if test="applyUser != null and applyUser != ''">
+        AND e.create_user LIKE "%${applyUser}%"
+    </if>
+    <if test="attribute != null and attribute != ''">
+      AND dt.data_source_name = #{attribute}
+    </if>
+    <if test="company != null and company != ''">
+      AND e.company_id = #{company}
+    </if>
+    <if test="projectNo != null and projectNo != ''">
+      AND e.numbering = #{projectNo}
+    </if>
+    <if test="purpose != null and purpose != ''">
+      AND epu.expenditure_purpose_name = #{purpose}
+    </if>
+    <if test="state != null and state != ''">
+      AND e.state = #{state}
+    </if>
+    <if test="beneficiaryUnit != null and beneficiaryUnit != ''">
+      AND e.beneficiary_unit = #{beneficiaryUnit}
+    </if>
+    <if test="startDt != null  and endDt != null">
+      AND e.ctime > #{startDt}
+      AND e.ctime <![CDATA[ < ]]> #{endDt}
+    </if>
+    order by expenditure_id desc
+  </select>
 </mapper>

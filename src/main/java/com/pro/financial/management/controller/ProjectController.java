@@ -68,7 +68,7 @@ public class ProjectController {
         // 解析关联工时
         ProjectDto projectDto = JSONObject.parseObject(jsonInfo.toJSONString(), ProjectDto.class);
         int count = projectBiz.addProject(projectDto);
-        int projectId = projectDto.getId();
+        int projectId = projectDto.getProjectId();
         // 处理项目关联类目表
         projectDataSourceDto.setProjectId(projectId + "");
         projectDataSourceDto.setCtime(new Date());

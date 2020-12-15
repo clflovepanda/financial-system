@@ -28,7 +28,7 @@ public class ProjectBiz extends ServiceImpl<ProjectDao, ProjectEntity> {
     public int addProject(ProjectDto projectDto) {
         ProjectEntity projectEntity = ProjectDto2Entity.instance.convert(projectDto);
         int count = projectDao.insert(projectEntity);
-        projectDto.setId(projectEntity.getId());
+        projectDto.setProjectId(projectEntity.getProjectId());
         return count;
     }
 

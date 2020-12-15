@@ -1,46 +1,19 @@
 package com.pro.financial.management.dto;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @ToString
+@Getter
+@Setter
 public class ExpenditurePurposeDto {
-    private Integer id;
+    private Integer expenditurePurposeId;
 
     private Integer expenditureMethodId;
 
-    private String name;
+    private String expenditurePurposeName;
 
     private String remark;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getExpenditureMethodId() {
-        return expenditureMethodId;
-    }
-
-    public void setExpenditureMethodId(Integer expenditureMethodId) {
-        this.expenditureMethodId = expenditureMethodId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
 }

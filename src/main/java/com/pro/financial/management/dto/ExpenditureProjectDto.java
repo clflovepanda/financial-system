@@ -1,12 +1,16 @@
 package com.pro.financial.management.dto;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Date;
 
 @ToString
+@Getter
+@Setter
 public class ExpenditureProjectDto {
-    private Integer id;
+    private Integer expenditureProjectid;
 
     private Integer expenditureId;
 
@@ -14,35 +18,4 @@ public class ExpenditureProjectDto {
 
     private Date ctime;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getExpenditureId() {
-        return expenditureId;
-    }
-
-    public void setExpenditureId(Integer expenditureId) {
-        this.expenditureId = expenditureId;
-    }
-
-    public Integer getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
-    }
-
-    public Date getCtime() {
-        return ctime;
-    }
-
-    public void setCtime(Date ctime) {
-        this.ctime = ctime;
-    }
 }

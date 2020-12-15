@@ -17,8 +17,8 @@ import java.util.Date;
 public class ProjectEntity {
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    @TableId(value = "project_id", type = IdType.AUTO)
+    private Integer projectId;
 
     private String code;
 

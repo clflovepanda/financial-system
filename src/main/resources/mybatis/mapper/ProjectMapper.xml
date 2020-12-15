@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pro.financial.management.dao.ProjectDao">
     <resultMap id="BaseResultMap" type="com.pro.financial.management.dao.entity.ProjectEntity">
-        <id column="id" jdbcType="INTEGER" property="id"/>
+        <id column="project_id" jdbcType="INTEGER" property="projectId"/>
         <result column="code" jdbcType="VARCHAR" property="code"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="fullname" jdbcType="VARCHAR" property="fullname"/>
@@ -21,7 +21,7 @@
         <result column="utime" jdbcType="TIMESTAMP" property="utime"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, code, name, fullname, start_date, end_date, estincome, budget, description, state, auditing_state,
+    project_id, code, name, fullname, start_date, end_date, estincome, budget, description, state, auditing_state,
     sale_commis_state, settlement_state, create_user, ctime, update_user, utime
   </sql>
 <!--TODO sql未完成-->
@@ -37,20 +37,16 @@
 		expenditure
 		LEFT JOIN expenditure_project USING ( expenditure_id )
 	WHERE
-		expenditure_project.project_id = p.id
+		expenditure_project.project_id = p.project_id
 	) payment_expenses
 FROM
 	project p
-	LEFT JOIN project_user pu1 ON p.id = pu1.project_id
+	LEFT JOIN project_user pu1 ON p.project_id = pu1.project_id
 	AND pu1.type = 1
 	LEFT JOIN `user` u1 ON pu1.user_id = u1.user_id
-	LEFT JOIN project_user pu2 ON p.id = pu2.project_id
+	LEFT JOIN project_user pu2 ON p.project_id = pu2.project_id
 	AND pu2.type = 2
 	LEFT JOIN `user` u2 ON pu2.user_id = u2.user_id
   </select>
 
-    <select id="getProjectListCount" parameterType="com.pro.financial.management.dao.entity.ProjectEntity"
-            resultType="int">
-
-    </select>
 </mapper>
