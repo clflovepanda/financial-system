@@ -25,6 +25,7 @@ public interface ProjectUserDao {
 
     @Select("<script>" +
             "select * from project_user " +
+            "left join user using(user_id) " +
             "where project_id in " +
             "<foreach collection='projectIds' item='projectId' index='index' separator=',' open='(' close=')'>" +
             "#{projectId}" +

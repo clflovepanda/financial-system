@@ -1,5 +1,6 @@
 package com.pro.financial.management.dao.entity;
 
+import com.pro.financial.user.dao.entity.UserEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,4 +20,10 @@ public class ProjectUserEntity {
     private Integer type;
 
     private Date ctime;
+
+    private String username;
+
+    private String mobile;
+
+    private String email;
 }

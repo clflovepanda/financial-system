@@ -52,6 +52,8 @@ public class ProjectController {
     private ContractBiz contractBiz;
     @Autowired
     private QuotationBiz quotationBiz;
+    @Autowired
+    private ProjectTaskBiz projectTaskBiz;
 
 
     @RequestMapping("/add")
@@ -127,6 +129,8 @@ public class ProjectController {
         List<ReceivableEntity> receivableEntities = receivableBiz.getListByProjectIds(projectIds);
 
         // 项目工时表 TODO
+        List<ProjectTaskEntity> projectTaskEntities = projectTaskBiz.getListByProjectIds(projectIds);
+
         result.put("code", HttpStatus.OK.value());
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         result.put("projectEntities", projectEntities);
@@ -138,6 +142,7 @@ public class ProjectController {
         result.put("contractEntities", contractEntities);
         result.put("quotationEntities", quotationEntities);
         result.put("receivableEntities", receivableEntities);
+        result.put("projectTaskEntities", projectTaskEntities);
         return result;
     }
 

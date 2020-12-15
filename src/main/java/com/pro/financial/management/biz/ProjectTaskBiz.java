@@ -178,4 +178,8 @@ public class ProjectTaskBiz extends ServiceImpl<ProjectTaskDao, ProjectTaskEntit
         result.put("msg", "");
         return result;
     }
+
+    public List<ProjectTaskEntity> getListByProjectIds(List<Integer> projectIds) {
+        return projectTaskDao.getListByProjectIds(projectIds);
+    }
 }
