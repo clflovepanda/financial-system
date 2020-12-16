@@ -1,5 +1,6 @@
 package com.pro.financial.management.biz;
 
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pro.financial.management.converter.ProjectDataSourceDto2Entity;
@@ -10,7 +11,9 @@ import com.pro.financial.user.dto.DataSourceDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +33,15 @@ public class ProjectDataSourceBiz extends ServiceImpl<ProjectDataSourceDao, Proj
 
     /**
      * 根绝数据源获取项目id
-     * @param sourceDtos
+     * @param request
      * @return
      */
-    public List<Integer> getProjectIdsByCookie(List<DataSourceDto> sourceDtos) {
+    public List<Integer> getProjectIdsByCookie(HttpServletRequest request) {
+        String datasourceJsonStr = request.getSession().getAttribute("datasource").toString();
+        if (StringUtils.isEmpty(datasourceJsonStr)) {
+            return null;
+        }
+        List<DataSourceDto> sourceDtos = JSONArray.parseArray(datasourceJsonStr, DataSourceDto.class);
         if (CollectionUtils.isEmpty(sourceDtos)) {
             return null;
         }

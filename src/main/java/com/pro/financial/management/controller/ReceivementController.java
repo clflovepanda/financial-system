@@ -38,6 +38,8 @@ public class ReceivementController {
 
     @Autowired
     private AccountingLogBiz accountingLogBiz;
+    @Autowired
+    private ProjectDataSourceBiz projectDataSourceBiz;
 
     /**
      *
@@ -71,8 +73,8 @@ public class ReceivementController {
     @RequestMapping("/list")
     public JSONObject getList(HttpServletRequest request) {
         JSONObject result = new JSONObject();
-        // TODO 根据用户权限获取到能看到的到款id列表
-        List<Integer> ids = new ArrayList<>();
+        //根据用户权限获取到能看到的到款id列表
+        List<Integer> ids = projectDataSourceBiz.getProjectIdsByCookie(request);
         List<ReceivementEntity> receivementEntities = receivementBiz.getListById(ids);
         List<Integer> receivementIds = receivementEntities.stream().map(ReceivementEntity::getId).collect(Collectors.toList());
         // TODO 公司列表查询

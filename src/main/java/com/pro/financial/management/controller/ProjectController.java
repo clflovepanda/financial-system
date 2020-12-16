@@ -97,14 +97,8 @@ public class ProjectController {
     public JSONObject getProjectList(HttpServletRequest request) {
         JSONObject result = new JSONObject();
         // 权限过滤，过滤出所有可见项目ID
-        String datasourceJsonStr = request.getSession().getAttribute("datasource").toString();
-        if (StringUtils.isEmpty(datasourceJsonStr)) {
-            result.put("code", 1001);
-            result.put("msg", "无项目权限");
-        }
-        List<DataSourceDto> sourceDtos = JSONArray.parseArray(datasourceJsonStr, DataSourceDto.class);
-        List<Integer> projectIds = new ArrayList<>();
-        projectIds = projectDataSourceBiz.getProjectIdsByCookie(sourceDtos);
+
+        List<Integer> projectIds = projectDataSourceBiz.getProjectIdsByCookie(request);
         if (CollectionUtils.isEmpty(projectIds)) {
             result.put("code", 1001);
             result.put("msg", "无项目权限");
