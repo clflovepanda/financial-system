@@ -78,6 +78,7 @@ public class ReceivementController {
     public JSONObject getList(HttpServletRequest request) {
         JSONObject result = new JSONObject();
         //根据用户权限获取到能看到的到款id列表
+        List<ReceivementView> receivementViewList = new ArrayList<>();
         List<Integer> ids = projectDataSourceBiz.getProjectIdsByCookie(request);
         List<ReceivementEntity> receivementEntities = receivementBiz.getListById(ids);
         if (CollectionUtils.isEmpty(receivementEntities)) {
