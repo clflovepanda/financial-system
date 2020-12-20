@@ -23,7 +23,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/receivement")
+@RequestMapping("/receivement")
 public class ReceivementController {
 
     @Autowired

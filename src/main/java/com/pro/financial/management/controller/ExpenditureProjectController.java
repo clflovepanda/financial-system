@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/expenditure_project")
+@RequestMapping("/expenditure_project")
 public class ExpenditureProjectController {
 
     @Autowired

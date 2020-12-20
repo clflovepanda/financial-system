@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/expenditure")
+@RequestMapping("/expenditure")
 public class ExpenditureController {
 
     @Autowired
