@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/subscription_log")
+@RequestMapping("/subscription_log")
 public class SubscriptionLogController {
 
     @Autowired

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/expenditure_purpose")
+@RequestMapping("/expenditure_purpose")
 public class ExpenditurePurposeController {
 
     @Autowired
