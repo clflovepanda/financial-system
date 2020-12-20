@@ -221,14 +221,4 @@ public class ReceivementController {
         result.put("msg", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
         return result;
     }
-
-    public static void main(String[] args) {
-        Date date1 = new Date("1970/01/01 00:00:00");
-        Date date2 = new Date();
-        if (date1.compareTo(date2) < 0) {
-            System.out.println(1);
-        } else {
-            System.out.println(2);
-        }
-    }
 }
