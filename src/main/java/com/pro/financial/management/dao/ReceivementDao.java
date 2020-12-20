@@ -29,4 +29,7 @@ public interface ReceivementDao {
 
     @Update("update receivement set state = #{state} where id = #{state}")
     int update(@Param("id") Integer id, @Param("state") Integer state);
+
+    @Select("select * from receivement order by id asc")
+    List<ReceivementEntity> getAllList();
 }

@@ -22,7 +22,7 @@ import java.util.List;
  * @since 2020-11-23
  */
 @RestController
-@RequestMapping("/template")
+@RequestMapping("/api/template")
 public class TemplateController {
 
     @Autowired

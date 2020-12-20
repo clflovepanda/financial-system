@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @RestController
-@RequestMapping("/project")
+@RequestMapping("/api/project")
 public class ProjectController {
 
     @Autowired
@@ -55,7 +55,7 @@ public class ProjectController {
 
 
     @RequestMapping("/add")
-    public JSONObject addProject(@RequestBody JSONObject jsonInfo) {
+    public JSONObject addProject(@RequestBody JSONObject jsonInfo, @CookieValue("userId") Integer userId) {
         JSONObject result = new JSONObject();
         // 解析项目关联类目
         ProjectDataSourceDto projectDataSourceDto = JSONObject.parseObject(JSONObject.toJSON(jsonInfo.get("projectDataSourceDto")).toString(), ProjectDataSourceDto.class);
@@ -64,7 +64,7 @@ public class ProjectController {
         // 解析项目关联人员
         List<ProjectUserDto> projectUserDtos = JSON.parseArray(JSONObject.toJSON(jsonInfo.get("projectUserDto")).toString(), ProjectUserDto.class);
         // 解析关联工时
-        ProjectDto projectDto = JSONObject.parseObject(jsonInfo.toJSONString(), ProjectDto.class);
+        ProjectDto projectDto = JSONObject.parseObject(JSONObject.toJSON(jsonInfo.get("projectDto")).toString(), ProjectDto.class);
         int count = projectBiz.addProject(projectDto);
         int projectId = projectDto.getProjectId();
         // 处理项目关联类目表

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/settlement")
+@RequestMapping("/api/settlement")
 public class SettlementController {
 
     @Autowired

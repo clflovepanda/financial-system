@@ -25,7 +25,7 @@ import java.util.List;
  * @since 2020-11-21
  */
 @RestController
-@RequestMapping("/receivable")
+@RequestMapping("/api/receivable")
 public class ReceivableController {
 
     @Autowired

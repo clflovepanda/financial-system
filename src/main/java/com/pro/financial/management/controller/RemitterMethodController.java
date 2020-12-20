@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/remitter_method")
+@RequestMapping("/api/remitter_method")
 public class RemitterMethodController {
 
     @Autowired

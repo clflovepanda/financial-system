@@ -34,4 +34,8 @@ public class ReceivementBiz {
     public int updateReceivementState(Integer id , Integer state) {
         return receivementDao.update(id, state);
     }
+
+    public List<ReceivementEntity> getAllList() {
+        return receivementDao.getAllList();
+    }
 }
