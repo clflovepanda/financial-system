@@ -114,10 +114,10 @@ public class ReceivementController {
             view.setReceiveDate(entity.getReceiveDate());
             if (!CollectionUtils.isEmpty(idAndSubscriptionLogEntitysMap) && !CollectionUtils.isEmpty(idAndSubscriptionLogEntitysMap.get(entity.getId()))) {
                 BigDecimal hadSubscriptionTotalMoney = BigDecimal.ZERO;
-                Date latestSubscriptionTime = new Date("1970-01-01 00:00:00");
+                Date latestSubscriptionTime = new Date("1970/01/01 00:00:00");
                 List<SubscriptionLogEntity> sentities = idAndSubscriptionLogEntitysMap.get(entity.getId());
                 for (SubscriptionLogEntity sentity : sentities) {
-                    hadSubscriptionTotalMoney.add(sentity.getReceivementMoney());
+                    hadSubscriptionTotalMoney = hadSubscriptionTotalMoney.add(sentity.getReceivementMoney());
                     if (latestSubscriptionTime.compareTo(sentity.getCtime()) < 0) {
                         latestSubscriptionTime = sentity.getCtime();
                     }
@@ -140,7 +140,7 @@ public class ReceivementController {
 
         result.put("code", HttpStatus.OK.value());
         result.put("msg", HttpStatus.OK.getReasonPhrase());
-        result.put("data", receivementEntities);
+        result.put("data", receivementViewList);
         return result;
     }
 
