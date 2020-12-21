@@ -1,6 +1,7 @@
 package com.pro.financial.management.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
@@ -51,4 +52,13 @@ public class ProjectEntity {
     private Integer updateUser;
 
     private Date utime;
+
+    //项目经理
+    @TableField(exist = false)
+    private String managerName;
+
+    //销售经理
+    @TableField(exist = false)
+    private String salesName;
+
 }

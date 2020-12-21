@@ -24,29 +24,56 @@
     project_id, code, name, fullname, start_date, end_date, estincome, budget, description, state, auditing_state,
     sale_commis_state, settlement_state, create_user, ctime, update_user, utime
   </sql>
-<!--TODO sql未完成-->
-    <select id="getProjectList" parameterType="com.pro.financial.management.dao.entity.ProjectEntity"
-            resultType="com.pro.financial.management.dao.entity.ProjectEntity">
-    SELECT
-	p.*,
-	u1.username managerName,
-	u2.username salesName,(
-	SELECT
-		SUM( expenditure_money )
-	FROM
-		expenditure
-		LEFT JOIN expenditure_project USING ( expenditure_id )
-	WHERE
-		expenditure_project.project_id = p.project_id
-	) payment_expenses
-FROM
-	project p
-	LEFT JOIN project_user pu1 ON p.project_id = pu1.project_id
-	AND pu1.type = 1
-	LEFT JOIN `user` u1 ON pu1.user_id = u1.user_id
-	LEFT JOIN project_user pu2 ON p.project_id = pu2.project_id
-	AND pu2.type = 2
-	LEFT JOIN `user` u2 ON pu2.user_id = u2.user_id
+
+    <select id="getList" resultType="com.pro.financial.management.dao.entity.ProjectEntity">
+        SELECT
+        p.*,
+        u.username salesName,
+        u1.username managerName,
+        (
+        SELECT
+        GROUP_CONCAT( u.username )
+        FROM
+        project_user pu
+        LEFT JOIN `user` u ON pu.user_id = u.user_id
+        WHERE
+        pu.type = 3
+        AND pu.project_id = p.project_id
+        ) userNames
+        FROM
+        project p
+        LEFT JOIN project_user pu ON p.project_id = pu.project_id
+        AND pu.type = 1
+        LEFT JOIN `user` u ON pu.user_id = u.user_id
+        LEFT JOIN project_user pu1 ON p.project_id = pu1.project_id
+        AND pu1.type = 2
+        LEFT JOIN `user` u1 ON pu1.user_id = u1.user_id
+        where 1=1
+        <if test="projectNo !=  null and projectNo != ''">
+            and p.code LIKE "%${projectNo}%"
+        </if>
+        <if test="projectName !=  null and projectName != ''">
+            and p.name LIKE "%${projectName}%"
+        </if>
+        <if test="state !=  null and state != ''">
+            and p.state =#{state}
+        </if>
+        <if test="saleCommisState !=  null and saleCommisState != ''">
+            and p.sale_commis_state =#{saleCommisState}
+        </if>
+        <if test="settlementState !=  null and settlementState != ''">
+            and p.settlement_state =#{settlementState}
+        </if>
+        <if test="managerName !=  null and managerName != ''">
+            and u1.username LIKE "%${managerName}%"
+        </if>
+        <if test="salesName !=  null and managerName != ''">
+            and u.username LIKE "%${salesName}%"
+        </if>
+        <if test="startDate !=  null and endDate != null">
+            and p.ctime > #{startDate}
+            and p.ctime <![CDATA[ < ]]> #{endDate}
+        </if>
   </select>
 
 </mapper>

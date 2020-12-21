@@ -4,22 +4,28 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.pro.financial.management.biz.*;
+import com.pro.financial.management.converter.ExpenditureEntity2Dto;
+import com.pro.financial.management.converter.ProjectEntity2Dto;
+import com.pro.financial.management.converter.RevenueEntity2Dto;
 import com.pro.financial.management.dao.ProjectCompanyDao;
 import com.pro.financial.management.dao.ProjectUserDao;
 import com.pro.financial.management.dao.entity.*;
 import com.pro.financial.management.dto.*;
 import com.pro.financial.user.dto.DataSourceDto;
 import com.pro.financial.user.dto.PermissionDto;
+import com.pro.financial.utils.ConvertUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -95,7 +101,6 @@ public class ProjectController {
     public JSONObject getProjectList(HttpServletRequest request) {
         JSONObject result = new JSONObject();
         // 权限过滤，过滤出所有可见项目ID
-
         List<Integer> projectIds = projectDataSourceBiz.getProjectIdsByCookie(request);
         if (CollectionUtils.isEmpty(projectIds)) {
             result.put("code", 1001);
@@ -249,6 +254,97 @@ public class ProjectController {
         result.put("msg", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
         return result;
 
+    }
+
+    /**
+     * 查看项目列表页
+     */
+    @RequestMapping("/list")
+    public JSONObject getList(HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        // 权限过滤，过滤出所有可见项目ID
+        List<Integer> projectIds = projectDataSourceBiz.getProjectIdsByCookie(request);
+        if (CollectionUtils.isEmpty(projectIds)) {
+            result.put("code", 1001);
+            result.put("msg", "无项目权限");
+        }
+        String projectNo = request.getParameter("projectNo");
+        String projectName = request.getParameter("projectName");
+        //项目经理
+        String managerName = request.getParameter("managerName");
+        //销售经理
+        String salesName = request.getParameter("salesName");
+        //结算单状态
+        String settlementState = request.getParameter("settlementState");
+        //项目状态
+        String state = request.getParameter("state");
+        //销售提成发放状态
+        String saleCommisState = request.getParameter("saleCommisState");
+        //项目时间
+        String startDt = request.getParameter("startDt");
+        String endDt = request.getParameter("endDt");
+        Date startDate = null;
+        Date endDate = null;
+        if (StringUtils.isNotEmpty(startDt) && StringUtils.isNotEmpty(endDt)) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                startDate = simpleDateFormat.parse(startDt);
+                endDate = simpleDateFormat.parse(endDt);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        List<ProjectEntity> projectEntities = projectBiz.getList(projectIds, projectNo, projectName, managerName, salesName, settlementState, state, saleCommisState, startDate, endDate);
+        // 项目人员表
+        List<ProjectUserEntity> projectUserEntities = projectUserBiz.getProjectUserList(projectIds);
+        // 项目收入表
+        List<RevenueEntity> revenueEntities = revenueBiz.getRevenueList(projectIds);
+        // 项目支出表
+        List<ExpenditureEntity> expenditureEntities = expenditureBiz.getExpenditureList(projectIds);
+        // 认款记录表
+        List<SubscriptionLogEntity> subscriptionLogEntities = subscriptionLogBiz.getListByProjectIds(projectIds);
+        List<ProjectDto> projectDtos = ConvertUtil.convert(ProjectEntity2Dto.instance, projectEntities);
+        List<ProjectDto> projectResult = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(projectDtos)) {
+            for (ProjectDto projectDto : projectDtos) {
+                //设置人员
+                Integer projectId = projectDto.getProjectId();
+                StringBuilder userNames = new StringBuilder();
+                BigDecimal paymentIncome = new BigDecimal(0);
+                BigDecimal paymentExpenses = new BigDecimal(0);
+                for (ProjectUserEntity projectUserEntity : projectUserEntities) {
+                    if (projectUserEntity.getProjectId() - projectId == 0) {
+                        if (projectUserEntity.getType() - 2 == 0) {
+                            projectDto.setManagerName(projectUserEntity.getUsername());
+                        } else if (projectUserEntity.getType() - 1 == 0) {
+                            projectDto.setSalesName(projectUserEntity.getUsername());
+                        } else {
+                            userNames.append(projectUserEntity.getUsername() + ",");
+                        }
+                    }
+                }
+                projectDto.setUserNames(userNames.toString().substring(0, userNames.toString().length() -1));
+                for (RevenueEntity revenueEntity : revenueEntities) {
+                    if (revenueEntity.getProjectId() - projectId == 0) {
+                        paymentIncome.add(revenueEntity.getCnyMoney());
+                    }
+                }
+                for (ExpenditureEntity expenditureEntity : expenditureEntities) {
+                    if (expenditureEntity.getProjectId() - projectId == 0) {
+                        paymentExpenses.add(expenditureEntity.getExpenditureMoney());
+                    }
+                }
+                projectDto.setPaymentIncome(paymentIncome);
+                projectDto.setPaymentExpenses(paymentExpenses);
+            }
+        }
+
+
+        result.put("code", HttpStatus.OK.value());
+        result.put("msg", HttpStatus.OK.getReasonPhrase());
+        result.put("data", projectDtos);
+        return result;
     }
 
 }

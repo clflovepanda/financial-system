@@ -11,26 +11,27 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
 public interface ProjectDao extends BaseMapper<ProjectEntity> {
-    @Insert("insert into project (`id`, `code`, `name`, `fullname`, `start_date`, `end_date`, `estincome`, `budget`, `description`, `state`, `auditing_state`, `sale_commis_state`, `settlement_state`, `create_user`, `ctime`, `update_user`, `utime`) VALUES " +
+    @Insert("insert into project (`project_id`, `code`, `name`, `fullname`, `start_date`, `end_date`, `estincome`, `budget`, `description`, `state`, `auditing_state`, `sale_commis_state`, `settlement_state`, `create_user`, `ctime`, `update_user`, `utime`) VALUES " +
             "(#{entity.id}, #{entity.code}, #{entity.name}, #{entity.fullname}, #{entity.startDate}, #{entity.endDate}, #{entity.estincome}, #{entity.budget}, #{entity.description}, #{entity.state}, #{entity.auditingState}, #{entity.saleCommisState}, #{entity.settlementState}, #{entity.createUser}, #{entity.ctime}, #{entity.update_user}, #{entity.utime})")
     int insert(@Param("entity") ProjectEntity entity);
 
-    @Update("update project set auditing_state = #{auditstate} where id = #{id}")
+    @Update("update project set auditing_state = #{auditstate} where project_id = #{id}")
     int updateAuditState(@Param("id") Integer id, @Param("auditState") Integer auditState);
 
-    @Update("update project set sale_commis_state = #{saleCommisState} where id = #{id}")
+    @Update("update project set sale_commis_state = #{saleCommisState} where project_id = #{id}")
     int updateSaleCommisState(@Param("id") Integer id, @Param("saleCommisState") Integer saleCommisState);
 
-    @Update("update project set state = #{state} where id = #{id}")
+    @Update("update project set state = #{state} where project_id = #{id}")
     int updateState(@Param("id") Integer id, @Param("state") Integer state);
 
     @Select("<script>" +
             "select * from project " +
-            "where id in " +
+            "where project_id in " +
             "<foreach collection='ids' item='id' index='index' separator=',' open='(' close=')'>" +
             "#{id}" +
             "</foreach>" +
@@ -40,4 +41,7 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
     @Select("select * from project")
     List<ProjectEntity> getAllProjectList();
 
+    List<ProjectEntity> getList(@Param("ids") List<Integer> projectIds, @Param("projectNo") String projectNo, @Param("projectName") String projectName,
+                                @Param("managerName") String managerName, @Param("salesName") String salesName, @Param("settlementState") String settlementState,
+                                @Param("state") String state, @Param("saleCommisState") String saleCommisState, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

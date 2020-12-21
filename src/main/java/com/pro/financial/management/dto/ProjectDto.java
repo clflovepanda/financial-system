@@ -1,5 +1,7 @@
 package com.pro.financial.management.dto;
 
+import com.pro.financial.management.dao.entity.ExpenditureEntity;
+import com.pro.financial.management.dao.entity.RevenueEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -51,6 +53,8 @@ public class ProjectDto {
     //销售经理
     private String salesName;
 
+    private String userNames;
+
     //花费工时
     private BigDecimal takeTime;
 
@@ -67,6 +71,14 @@ public class ProjectDto {
     private Double paymentProfit;
     //项目毛利率
     private Double projectRate;
+
+    //收入
+    private RevenueDto revenue;
+
+    //支出
+    private ExpenditureDto expenditure;
+
+
 
     private Integer limit;
     private Integer offset;

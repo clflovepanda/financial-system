@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -52,4 +53,8 @@ public class ProjectBiz extends ServiceImpl<ProjectDao, ProjectEntity> {
         }
     }
 
+    public List<ProjectEntity> getList(List<Integer> projectIds, String projectNo, String projectName, String managerName, String salesName, String settlementState, String state, String saleCommisState, Date startDate, Date endDate) {
+        return projectDao.getList(projectIds, projectNo, projectName, managerName, salesName,
+                settlementState, state, saleCommisState, startDate, endDate);
+    }
 }
