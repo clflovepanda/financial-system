@@ -306,7 +306,6 @@ public class ProjectController {
         // 认款记录表
         List<SubscriptionLogEntity> subscriptionLogEntities = subscriptionLogBiz.getListByProjectIds(projectIds);
         List<ProjectDto> projectDtos = ConvertUtil.convert(ProjectEntity2Dto.instance, projectEntities);
-        List<ProjectDto> projectResult = new ArrayList<>();
         if (!CollectionUtils.isEmpty(projectDtos)) {
             for (ProjectDto projectDto : projectDtos) {
                 //设置总支出和收入

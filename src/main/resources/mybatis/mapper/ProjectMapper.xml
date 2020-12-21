@@ -48,7 +48,14 @@
         LEFT JOIN `user` u ON pu.user_id = u.user_id
         LEFT JOIN project_user pu1 ON p.project_id = pu1.project_id
         AND pu1.type = 2
-        LEFT JOIN `user` u1 ON pu1.user_id = u1.user_id) a
+        LEFT JOIN `user` u1 ON pu1.user_id = u1.user_id
+        <if test="ids != null">
+            where p.project_id in
+            <foreach collection='ids' item='id' index='index' separator=',' open='(' close=')'>
+                #{id}
+            </foreach>
+        </if>
+        ) a
         where 1=1
         <if test="projectNo !=  null and projectNo != ''">
             and a.code LIKE "%${projectNo}%"
@@ -79,6 +86,6 @@
             and a.ctime <![CDATA[ < ]]> #{endDate}
         </if>
         order by a.project_id desc
-  </select>
+    </select>
 
 </mapper>
