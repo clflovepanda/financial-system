@@ -171,15 +171,18 @@ public class ProjectController {
         // 项目工时表 TODO
         result.put("code", HttpStatus.OK.value());
         result.put("msg", HttpStatus.OK.getReasonPhrase());
-        result.put("projectEntities", projectEntities);
-        result.put("projectUserEntities", projectUserEntities);
-        result.put("revenueEntities", revenueEntities);
-        result.put("expenditureEntities", expenditureEntities);
-        result.put("subscriptionLogEntities", subscriptionLogEntities);
-        result.put("settlementEntities", settlementEntities);
-        result.put("contractEntities", contractEntities);
-        result.put("quotationEntities", quotationEntities);
-        result.put("receivableEntities", receivableEntities);
+        //封装参数到data
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("projectEntities", projectEntities);
+        resultMap.put("projectUserEntities", projectUserEntities);
+        resultMap.put("revenueEntities", revenueEntities);
+        resultMap.put("expenditureEntities", expenditureEntities);
+        resultMap.put("subscriptionLogEntities", subscriptionLogEntities);
+        resultMap.put("settlementEntities", settlementEntities);
+        resultMap.put("contractEntities", contractEntities);
+        resultMap.put("quotationEntities", quotationEntities);
+        resultMap.put("receivableEntities", receivableEntities);
+        result.put("data", resultMap);
         return result;
     }
 
