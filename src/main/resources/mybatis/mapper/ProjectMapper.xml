@@ -26,6 +26,7 @@
   </sql>
 
     <select id="getList" resultType="com.pro.financial.management.dao.entity.ProjectEntity">
+        select * from (
         SELECT
         p.*,
         u.username salesName,
@@ -47,33 +48,37 @@
         LEFT JOIN `user` u ON pu.user_id = u.user_id
         LEFT JOIN project_user pu1 ON p.project_id = pu1.project_id
         AND pu1.type = 2
-        LEFT JOIN `user` u1 ON pu1.user_id = u1.user_id
+        LEFT JOIN `user` u1 ON pu1.user_id = u1.user_id) a
         where 1=1
         <if test="projectNo !=  null and projectNo != ''">
-            and p.code LIKE "%${projectNo}%"
+            and a.code LIKE "%${projectNo}%"
         </if>
         <if test="projectName !=  null and projectName != ''">
-            and p.name LIKE "%${projectName}%"
+            and a.name LIKE "%${projectName}%"
         </if>
         <if test="state !=  null and state != ''">
-            and p.state =#{state}
+            and a.state =#{state}
         </if>
         <if test="saleCommisState !=  null and saleCommisState != ''">
-            and p.sale_commis_state =#{saleCommisState}
+            and a.sale_commis_state =#{saleCommisState}
         </if>
         <if test="settlementState !=  null and settlementState != ''">
-            and p.settlement_state =#{settlementState}
+            and a.settlement_state =#{settlementState}
         </if>
         <if test="managerName !=  null and managerName != ''">
-            and u1.username LIKE "%${managerName}%"
+            and a.managerName LIKE "%${managerName}%"
         </if>
         <if test="salesName !=  null and managerName != ''">
-            and u.username LIKE "%${salesName}%"
+            and a.salesName LIKE "%${salesName}%"
+        </if>
+        <if test="userNames !=  null and userNames != ''">
+            and a.userNames LIKE "%${userNames}%"
         </if>
         <if test="startDate !=  null and endDate != null">
-            and p.ctime > #{startDate}
-            and p.ctime <![CDATA[ < ]]> #{endDate}
+            and a.ctime > #{startDate}
+            and a.ctime <![CDATA[ < ]]> #{endDate}
         </if>
+        order by a.project_id desc
   </select>
 
 </mapper>

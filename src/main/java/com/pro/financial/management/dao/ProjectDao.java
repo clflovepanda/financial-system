@@ -42,6 +42,7 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
     List<ProjectEntity> getAllProjectList();
 
     List<ProjectEntity> getList(@Param("ids") List<Integer> projectIds, @Param("projectNo") String projectNo, @Param("projectName") String projectName,
-                                @Param("managerName") String managerName, @Param("salesName") String salesName, @Param("settlementState") String settlementState,
+                                @Param("managerName") String managerName, @Param("salesName") String salesName,
+                                @Param("userNames") String userNames, @Param("settlementState") String settlementState,
                                 @Param("state") String state, @Param("saleCommisState") String saleCommisState, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

@@ -280,6 +280,7 @@ public class ProjectController {
         String state = request.getParameter("state");
         //销售提成发放状态
         String saleCommisState = request.getParameter("saleCommisState");
+        String userNames = request.getParameter("userNames");
         //项目时间
         String startDt = request.getParameter("startDt");
         String endDt = request.getParameter("endDt");
@@ -295,7 +296,7 @@ public class ProjectController {
             }
 
         }
-        List<ProjectEntity> projectEntities = projectBiz.getList(projectIds, projectNo, projectName, managerName, salesName, settlementState, state, saleCommisState, startDate, endDate);
+        List<ProjectEntity> projectEntities = projectBiz.getList(projectIds, projectNo, projectName, managerName, salesName, userNames, settlementState, state, saleCommisState, startDate, endDate);
         // 项目人员表
         List<ProjectUserEntity> projectUserEntities = projectUserBiz.getProjectUserList(projectIds);
         // 项目收入表
@@ -308,23 +309,10 @@ public class ProjectController {
         List<ProjectDto> projectResult = new ArrayList<>();
         if (!CollectionUtils.isEmpty(projectDtos)) {
             for (ProjectDto projectDto : projectDtos) {
-                //设置人员
+                //设置总支出和收入
                 Integer projectId = projectDto.getProjectId();
-                StringBuilder userNames = new StringBuilder();
                 BigDecimal paymentIncome = new BigDecimal(0);
                 BigDecimal paymentExpenses = new BigDecimal(0);
-                for (ProjectUserEntity projectUserEntity : projectUserEntities) {
-                    if (projectUserEntity.getProjectId() - projectId == 0) {
-                        if (projectUserEntity.getType() - 2 == 0) {
-                            projectDto.setManagerName(projectUserEntity.getUsername());
-                        } else if (projectUserEntity.getType() - 1 == 0) {
-                            projectDto.setSalesName(projectUserEntity.getUsername());
-                        } else {
-                            userNames.append(projectUserEntity.getUsername() + ",");
-                        }
-                    }
-                }
-                projectDto.setUserNames(userNames.toString().substring(0, userNames.toString().length() -1));
                 for (RevenueEntity revenueEntity : revenueEntities) {
                     if (revenueEntity.getProjectId() - projectId == 0) {
                         paymentIncome.add(revenueEntity.getCnyMoney());

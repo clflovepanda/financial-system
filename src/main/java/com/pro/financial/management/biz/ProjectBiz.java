@@ -53,8 +53,8 @@ public class ProjectBiz extends ServiceImpl<ProjectDao, ProjectEntity> {
         }
     }
 
-    public List<ProjectEntity> getList(List<Integer> projectIds, String projectNo, String projectName, String managerName, String salesName, String settlementState, String state, String saleCommisState, Date startDate, Date endDate) {
-        return projectDao.getList(projectIds, projectNo, projectName, managerName, salesName,
+    public List<ProjectEntity> getList(List<Integer> projectIds, String projectNo, String projectName, String managerName, String salesName, String userNames, String settlementState, String state, String saleCommisState, Date startDate, Date endDate) {
+        return projectDao.getList(projectIds, projectNo, projectName, managerName, salesName, userNames,
                 settlementState, state, saleCommisState, startDate, endDate);
     }
 }
