@@ -10,15 +10,15 @@ public class ReceivementStatisticsView {
     // 年
     private int year;
     // 到款数量
-    private int count;
+    private int count = 0;
     // 到款金额
-    private BigDecimal money;
+    private BigDecimal money = BigDecimal.ZERO;
     // 认款收入
-    private BigDecimal revenue;
+    private BigDecimal revenue = BigDecimal.ZERO;
     // 认款押金
-    private BigDecimal deposit;
+    private BigDecimal deposit = BigDecimal.ZERO;
     // 环比金额
-    private BigDecimal chainMoney;
+    private BigDecimal chainMoney = BigDecimal.ZERO;
     // 环比增长速度
     private Integer chainGrowth;
     // 环比发展速度

@@ -8,10 +8,12 @@ import com.pro.financial.management.dao.entity.ReceivementEntity;
 import com.pro.financial.management.dao.entity.SubscriptionLogEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -52,10 +54,47 @@ public class StatisticsController {
         for (ReceivementEntity entity : receivementEntities) {
             int y = entity.getReceiveDate().getYear();
             if (map.containsKey(y)) {
-
+                ReceivementStatisticsView viewTemp = map.get(y);
+                viewTemp.setMoney(viewTemp.getMoney().add(entity.getReceivementMoney()));
+                viewTemp.setCount(viewTemp.getCount() + 1);
             } else {
-
+                ReceivementStatisticsView view = new ReceivementStatisticsView();
+                view.setMoney(entity.getReceivementMoney());
+                view.setCount(view.getCount() + 1);
+                map.put(y, view);
             }
+        }
+        if (!CollectionUtils.isEmpty(subscriptionLogEntities)) {
+            for (SubscriptionLogEntity entity : subscriptionLogEntities) {
+                int y = entity.getSubscriptionDate().getYear();
+                if (!map.containsKey(y)) {
+                    continue;
+                }
+                ReceivementStatisticsView viewTemp = map.get(y);
+                // 押金
+                if (entity.getRevenueTypeId() == 6) {
+                    viewTemp.setDeposit(viewTemp.getDeposit().add(entity.getReceivementMoney()));
+                } else if (entity.getRevenueTypeId() != 5){
+                    viewTemp.setRevenue(viewTemp.getRevenue().add(entity.getReceivementMoney()));
+                }
+            }
+        }
+
+        Iterator iterator = map.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Integer, ReceivementStatisticsView> entry = (Map.Entry<Integer, ReceivementStatisticsView>)iterator.next();
+            int y = entry.getKey();
+            ReceivementStatisticsView view = entry.getValue();
+            int ytemp = y - 1;
+            ReceivementStatisticsView viewTemp = map.get(ytemp);
+            if (viewTemp == null) {
+                continue;
+            }
+            view.setChainMoney(view.getMoney().subtract(viewTemp.getMoney()));
+            view.setChainGrowth(view.getChainMoney().divide(viewTemp.getMoney(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("10000")).intValue());
+            view.setChainDevelopment(view.getChainGrowth() + 10000);
+            view.setPercentYear(10000);
+            view.setPercentTotal(view.getChainMoney().divide(view.getMoney(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("10000")).intValue());
         }
 
         result.put("code", HttpStatus.OK.value());
