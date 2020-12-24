@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,4 +19,6 @@ public class PermissionDto {
     private String uri;
     private Date createDatetime;
     private String state;
+
+    private List<PermissionDto> permissionSons;
 }

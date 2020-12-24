@@ -185,7 +185,7 @@ public class ReceivementController {
     }
 
     /**
-     * 删除  表state=5
+     * 做账
      * @param request
      * @return
      */

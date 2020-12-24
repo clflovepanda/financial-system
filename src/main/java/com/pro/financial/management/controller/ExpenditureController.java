@@ -31,32 +31,13 @@ public class ExpenditureController {
         return result;
     }
 
-    @RequestMapping("/statistics")
-    public JSONObject statistics(HttpServletRequest request) {
+    @RequestMapping("/update")
+    public JSONObject updateExpenditure(@RequestBody JSONObject jsonInfo) {
         JSONObject result = new JSONObject();
-        //属性
-        String attribute = request.getParameter("attribute");
-        String company = request.getParameter("company");
-        String projectNo = request.getParameter("projectNo");
-        String applyUser = request.getParameter("applyUser");
-        //用途
-        String purpose = request.getParameter("purpose");
-        String state = request.getParameter("state");
-        //收款单位
-        String beneficiaryUnit = request.getParameter("beneficiaryUnit");
-        String startDt = request.getParameter("startDt");
-        String entDt = request.getParameter("entDt");
-        Date startDate = null;
-        Date endDate = null;
-        if (StringUtils.isNotEmpty(startDt) && StringUtils.isNotEmpty(entDt)) {
-            startDate = new Date(Long.parseLong(startDt));
-            endDate = new Date(Long.parseLong(entDt));
-        }
-
-        List<ExpenditureDto> expenditureDtos = expenditureBiz.statistics(attribute, company, projectNo, applyUser, purpose, state, beneficiaryUnit, startDate, endDate);
-        result.put("code", 0);
-        result.put("msg", "");
-        result.put("data", expenditureDtos);
+        ExpenditureDto expenditureDto = JSONObject.parseObject(jsonInfo.toJSONString(), ExpenditureDto.class);
+        int count = expenditureBiz.updateExpenditure(expenditureDto);
+        result.put("code", HttpStatus.OK.value());
+        result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
     }
 }

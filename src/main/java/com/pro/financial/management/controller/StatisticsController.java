@@ -1,11 +1,14 @@
 package com.pro.financial.management.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pro.financial.management.biz.ExpenditureBiz;
 import com.pro.financial.management.biz.ReceivementBiz;
 import com.pro.financial.management.biz.SubscriptionLogBiz;
 import com.pro.financial.management.controller.view.ReceivementStatisticsView;
 import com.pro.financial.management.dao.entity.ReceivementEntity;
 import com.pro.financial.management.dao.entity.SubscriptionLogEntity;
+import com.pro.financial.management.dto.ExpenditureDto;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
@@ -27,6 +30,14 @@ public class StatisticsController {
     @Autowired
     private SubscriptionLogBiz subscriptionLogBiz;
 
+    @Autowired
+    private ExpenditureBiz expenditureBiz;
+
+    /**
+     * 收款统计
+     * @param request
+     * @return
+     */
     @RequestMapping("/receivement")
     public JSONObject receivement(HttpServletRequest request) {
         JSONObject result = new JSONObject();
@@ -124,5 +135,40 @@ public class StatisticsController {
                 return 4;
         }
         return 0;
+    }
+
+    /**
+     * 支出统计
+     * @param request
+     * @return
+     */
+    @RequestMapping("/expenditure")
+    public JSONObject statistics(HttpServletRequest request) {
+        //todo 接口未完成
+        JSONObject result = new JSONObject();
+        //属性
+        String attribute = request.getParameter("attribute");
+        String company = request.getParameter("company");
+        String projectNo = request.getParameter("projectNo");
+        String applyUser = request.getParameter("applyUser");
+        //用途
+        String purpose = request.getParameter("purpose");
+        String state = request.getParameter("state");
+        //收款单位
+        String beneficiaryUnit = request.getParameter("beneficiaryUnit");
+        String startDt = request.getParameter("startDt");
+        String entDt = request.getParameter("entDt");
+        Date startDate = null;
+        Date endDate = null;
+        if (StringUtils.isNotEmpty(startDt) && StringUtils.isNotEmpty(entDt)) {
+            startDate = new Date(Long.parseLong(startDt));
+            endDate = new Date(Long.parseLong(entDt));
+        }
+
+        List<ExpenditureDto> expenditureDtos = expenditureBiz.statistics(attribute, company, projectNo, applyUser, purpose, state, beneficiaryUnit, startDate, endDate);
+        result.put("code", 0);
+        result.put("msg", "");
+        result.put("data", expenditureDtos);
+        return result;
     }
 }

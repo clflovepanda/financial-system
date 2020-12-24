@@ -20,4 +20,13 @@ public class PermissionBiz {
         List<PermissionEntity> permissionEntities = permissionDao.selectPermission(keyWords);
         return ConvertUtil.convert(PermissionEntity2Dto.instance, permissionEntities);
     }
+
+    public List<PermissionDto> getFirstPermissionList() {
+        List<PermissionEntity> permissionEntities = permissionDao.selectFristPermission();
+        return ConvertUtil.convert(PermissionEntity2Dto.instance, permissionEntities);
+    }
+    public List<PermissionDto> getOtherPermissionList() {
+        List<PermissionEntity> permissionEntities = permissionDao.selectOtherPermission();
+        return ConvertUtil.convert(PermissionEntity2Dto.instance, permissionEntities);
+    }
 }

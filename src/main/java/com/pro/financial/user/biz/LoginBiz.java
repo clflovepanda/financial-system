@@ -76,9 +76,10 @@ public class LoginBiz {
                     roleIds.add(roleEntity.getRoleId());
                 }
                 List<PermissionEntity> permissionEntities = permissionDao.getPermissionByRoleIds(roleIds);
+                List<String> uriList = permissionDao.getPermissionUriByRoleIds(roleIds);
                 List<DataSourceEntity> dataSourceEntities = dataSourceDao.getDatasourceByRoleIds(roleIds);
                 UserDto userDto = UserEntity2Dto.instance.convert(userEntities.get(0));
-                String permissionJsonStr = JSONObject.toJSONString(permissionEntities);
+                String permissionJsonStr = JSONObject.toJSONString(uriList);
                 String permissionCookieName = CommonConst.cookie_permission_head + userDto.getUserId();
                 String datasourceCookieName = CommonConst.cookie_datasource_head + userDto.getUserId();
                 String datasourceJsonStr = JSONObject.toJSONString(dataSourceEntities);
@@ -134,9 +135,10 @@ public class LoginBiz {
                         roleIds.add(roleEntity.getRoleId());
                     }
                     List<PermissionEntity> permissionEntities = permissionDao.getPermissionByRoleIds(roleIds);
+                    List<String> uriList = permissionDao.getPermissionUriByRoleIds(roleIds);
                     List<DataSourceEntity> dataSourceEntities = dataSourceDao.getDatasourceByRoleIds(roleIds);
                     UserDto userDto = UserEntity2Dto.instance.convert(userEntity);
-                    String permissionJsonStr = JSONObject.toJSONString(permissionEntities);
+                    String permissionJsonStr = JSONObject.toJSONString(uriList);
                     String permissionCookieName = CommonConst.cookie_permission_head + userDto.getUserId();
                     String datasourceCookieName = CommonConst.cookie_datasource_head + userDto.getUserId();
                     String datasourceJsonStr = JSONObject.toJSONString(dataSourceEntities);

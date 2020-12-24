@@ -284,6 +284,11 @@ public class ProjectController {
         //项目时间
         String startDt = request.getParameter("startDt");
         String endDt = request.getParameter("endDt");
+        //审核状态
+        String auditingState = request.getParameter("auditing_state");
+        if (StringUtils.isEmpty(auditingState)) {
+            auditingState = "1";
+        }
         Date startDate = null;
         Date endDate = null;
         if (StringUtils.isNotEmpty(startDt) && StringUtils.isNotEmpty(endDt)) {
@@ -296,7 +301,7 @@ public class ProjectController {
             }
 
         }
-        List<ProjectEntity> projectEntities = projectBiz.getList(projectIds, projectNo, projectName, managerName, salesName, userNames, settlementState, state, saleCommisState, startDate, endDate);
+        List<ProjectEntity> projectEntities = projectBiz.getList(projectIds, projectNo, projectName, managerName, salesName, userNames, settlementState, state, saleCommisState, startDate, endDate, auditingState);
         // 项目人员表
         List<ProjectUserEntity> projectUserEntities = projectUserBiz.getProjectUserList(projectIds);
         // 项目收入表

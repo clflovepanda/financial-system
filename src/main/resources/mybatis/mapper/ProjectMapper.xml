@@ -63,6 +63,9 @@
         <if test="projectName !=  null and projectName != ''">
             and a.name LIKE "%${projectName}%"
         </if>
+        <if test="auditingState !=  null and auditingState != ''">
+            and a.auditing_state = #{auditingState}
+        </if>
         <if test="state !=  null and state != ''">
             and a.state =#{state}
         </if>

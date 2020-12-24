@@ -4,6 +4,7 @@ import com.pro.financial.management.dao.entity.ExpenditureEntity;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -28,4 +29,7 @@ public interface ExpenditureDao {
     List<ExpenditureEntity> statistics(@Param("attribute") String attribute, @Param("company") String company, @Param("projectNo") String projectNo,
                                        @Param("applyUser") String applyUser, @Param("purpose") String purpose, @Param("state") String state,
                                        @Param("beneficiaryUnit") String beneficiaryUnit, @Param("startDt") Date startDate, @Param("endDt") Date endDate);
+
+    @Update("update set company_id = #{entity.companyId}, expenditure_type = #{expenditureType},")
+    int update(@Param("entity") ExpenditureEntity entity);
 }

@@ -78,9 +78,9 @@ public class LoginFilter implements Filter {
             }
         }
         if (permissionJsonStr != null) {
-            List<PermissionDto> permissionDtos = JSONArray.parseArray(permissionJsonStr, PermissionDto.class);
-            for (PermissionDto permissionDto : permissionDtos) {
-                if (StringUtils.equalsIgnoreCase(urlPath, permissionDto.getUri())) {
+            List<String> uriList = JSONArray.parseArray(permissionJsonStr).toJavaList(String.class);
+            for (String uri : uriList) {
+                if (StringUtils.equalsIgnoreCase(urlPath, uri)) {
                     if (datasourceJsonStr != null) {
                         request.getSession().setAttribute("datasource", datasourceJsonStr);
                     }

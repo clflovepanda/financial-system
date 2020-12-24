@@ -31,6 +31,22 @@ public interface PermissionDao {
             "</script>"})
     List<PermissionEntity> getPermissionByRoleIds(@Param("list") List<Integer> roleIds);
 
+    @Select({"<script>" +
+            "SELECT uri FROM permission " +
+            "LEFT JOIN role_permission_relation USING (permission_id) " +
+            "WHERE role_id in " +
+            "<foreach collection='list' item='item' index='index' separator=',' open='(' close=')'>" +
+            "#{item}" +
+            "</foreach>" +
+            "</script>"})
+    List<String> getPermissionUriByRoleIds(@Param("list") List<Integer> roleIds);
+
     @Select("SELECT * FROM permission where name like '%${keyWords}%' or uri like '%${keyWords}%' ")
     List<PermissionEntity> selectPermission(@Param("keyWords") String keyWords);
+
+    @Select("SELECT * FROM permission where parent_id = 0 and state = 1")
+    List<PermissionEntity> selectFristPermission();
+
+    @Select("SELECT * FROM permission where parent_id <> 0 and state = 1")
+    List<PermissionEntity> selectOtherPermission();
 }

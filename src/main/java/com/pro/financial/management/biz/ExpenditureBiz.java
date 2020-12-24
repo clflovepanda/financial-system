@@ -20,6 +20,7 @@ public class ExpenditureBiz {
     private ExpenditureDao expenditureDao;
 
     public int addExpenditure(ExpenditureDto expenditureDto) {
+        //添加支出编号
         return expenditureDao.insert(ExpenditureDto2Entity.instance.convert(expenditureDto));
     }
 
@@ -30,5 +31,9 @@ public class ExpenditureBiz {
     public List<ExpenditureDto> statistics(String attribute, String company, String projectNo, String applyUser, String purpose, String state, String beneficiaryUnit, Date startDate, Date endDate) {
         List<ExpenditureEntity> expenditureEntities = expenditureDao.statistics(attribute, company, projectNo, applyUser, purpose, state, beneficiaryUnit, startDate, endDate);
         return ConvertUtil.convert(ExpenditureEntity2Dto.instance, expenditureEntities);
+    }
+
+    public int updateExpenditure(ExpenditureDto expenditureDto) {
+        return expenditureDao.update(ExpenditureDto2Entity.instance.convert(expenditureDto));
     }
 }
