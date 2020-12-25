@@ -60,7 +60,6 @@ public class ExpenditureController {
         String expenditureAuditLog = request.getParameter("expenditureAuditLog");
         //用途
         String expenditurePurposeId = request.getParameter("expenditurePurposeId");
-
         String startDt = request.getParameter("startDt");
         String endDt = request.getParameter("endDt");
         Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
@@ -70,6 +69,7 @@ public class ExpenditureController {
 
         result.put("code", 0);
         result.put("msg", "");
+        result.put("data", expenditureDtos);
         return result;
     }
 }
