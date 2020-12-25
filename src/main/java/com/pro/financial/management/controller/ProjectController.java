@@ -309,6 +309,8 @@ public class ProjectController {
         List<RevenueEntity> revenueEntities = revenueBiz.getRevenueList(projectIds);
         // 项目支出表
         List<ExpenditureEntity> expenditureEntities = expenditureBiz.getExpenditureList(projectIds);
+        //结算单
+        List<SettlementEntity> settlementEntities = settlementBiz.getListByProjectIds(projectIds);
         // 认款记录表
         List<SubscriptionLogEntity> subscriptionLogEntities = subscriptionLogBiz.getListByProjectIds(projectIds);
         List<ProjectDto> projectDtos = ConvertUtil.convert(ProjectEntity2Dto.instance, projectEntities);
@@ -318,18 +320,28 @@ public class ProjectController {
                 Integer projectId = projectDto.getProjectId();
                 BigDecimal paymentIncome = new BigDecimal(0);
                 BigDecimal paymentExpenses = new BigDecimal(0);
+                BigDecimal settlementIncome = new BigDecimal(0);
+                BigDecimal settlementExpenses = new BigDecimal(0);
                 for (RevenueEntity revenueEntity : revenueEntities) {
                     if (revenueEntity.getProjectId() - projectId == 0) {
-                        paymentIncome.add(revenueEntity.getCnyMoney());
+                        paymentIncome = paymentIncome.add(revenueEntity.getCnyMoney() == null ? new BigDecimal(0) : revenueEntity.getCnyMoney());
                     }
                 }
                 for (ExpenditureEntity expenditureEntity : expenditureEntities) {
                     if (expenditureEntity.getProjectId() - projectId == 0) {
-                        paymentExpenses.add(expenditureEntity.getExpenditureMoney());
+                        paymentExpenses = paymentExpenses.add(expenditureEntity.getExpenditureMoney() == null ? new BigDecimal(0) : expenditureEntity.getExpenditureMoney());
+                    }
+                }
+                for (SettlementEntity settlementEntity : settlementEntities) {
+                    if (settlementEntity.getProjectId() - projectId == 0) {
+                        settlementIncome = settlementIncome.add(settlementEntity.getSettlementIncome() == null ? new BigDecimal(0) : settlementEntity.getSettlementIncome());
+                        settlementExpenses = settlementExpenses.add(settlementEntity.getSettlementExpenses() == null ? new BigDecimal(0) : settlementEntity.getSettlementExpenses());
                     }
                 }
                 projectDto.setPaymentIncome(paymentIncome);
                 projectDto.setPaymentExpenses(paymentExpenses);
+                projectDto.setSettlementIncome(settlementIncome);
+                projectDto.setSettlementExpenses(settlementExpenses);
             }
         }
 

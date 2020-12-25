@@ -61,4 +61,8 @@ public class ProjectEntity {
     @TableField(exist = false)
     private String salesName;
 
+    //项目成员
+    @TableField(exist = false)
+    private String userNames;
+
 }

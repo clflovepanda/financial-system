@@ -17,6 +17,7 @@ public class SettlementEntity {
     private String settlementNo;
     private String isLastSettlement;
     private BigDecimal settlementIncome;
+    private BigDecimal settlementExpenses;
     private String resourceName;
     private String resourceUrl;
     private Date createDatetime;
