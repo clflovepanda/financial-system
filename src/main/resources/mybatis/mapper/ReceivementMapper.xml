@@ -25,9 +25,11 @@
         left join company using(company_id)
         left join receivement_type using(receivement_type_id)
         left join remitter_method using(remitter_method_id)
-        where id
-        in
-        <foreach item='item' index='index' collection='ids' open='(' separator=',' close=')'>#{item}</foreach>
+        where 1=1
+        <if test="ids != null and ids !=''">
+            id in
+            <foreach item='item' index='index' collection='ids' open='(' separator=',' close=')'>#{item}</foreach>
+        </if>
         <if test="companyId != null and companyId != ''">
           AND company_id = #{companyId}
         </if>

@@ -85,7 +85,7 @@ public class ReceivementController {
         JSONObject result = new JSONObject();
         //根据用户权限获取到能看到的到款id列表
         List<ReceivementView> receivementViewList = new ArrayList<>();
-        List<Integer> ids = projectDataSourceBiz.getProjectIdsByCookie(request);
+//        List<Integer> ids = projectDataSourceBiz.getProjectIdsByCookie(request);
         String companyId = request.getParameter("companyId");
         String receivementTypeId = request.getParameter("receivementTypeId");
         String remitterMethodId = request.getParameter("remitterMethodId");
@@ -94,7 +94,7 @@ public class ReceivementController {
         String endDt = request.getParameter("endDt");
         Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
         Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
-        List<ReceivementEntity> receivementEntities = receivementBiz.getList(ids, companyId, receivementTypeId, remitterMethodId, remitter, startDate, endDate);
+        List<ReceivementEntity> receivementEntities = receivementBiz.getList(null, companyId, receivementTypeId, remitterMethodId, remitter, startDate, endDate);
         if (CollectionUtils.isEmpty(receivementEntities)) {
             result.put("code", HttpStatus.OK.value());
             result.put("msg", HttpStatus.OK.getReasonPhrase());
