@@ -13,7 +13,7 @@ import java.util.List;
 public interface QuotationDao {
     
 
-    List<QuotationEntity> getQuotation(@Param("quotationName") String quotationName, @Param("quotationNo") String quotationNo, @Param("limit") Integer limit, @Param("offset") Integer offset);
+    List<QuotationEntity> getQuotation(@Param("projectId") String projectId, @Param("quotationName") String quotationName, @Param("quotationNo") String quotationNo, @Param("limit") Integer limit, @Param("offset") Integer offset);
 
     @Insert("insert into quotation (`project_id`, `quotation_no`, `quotation_name`, `resource_name`, `resource_url`) VALUES " +
             "(#{quotation.projectId}, #{quotation.quotationNo}, #{quotation.quotationName}, #{quotation.resourceName}, #{quotation.resourceUrl})")

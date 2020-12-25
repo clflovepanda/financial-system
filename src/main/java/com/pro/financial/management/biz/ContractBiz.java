@@ -20,8 +20,8 @@ public class ContractBiz {
     @Autowired
     private ContractDao contractDao;
 
-    public List<ContractDto> getContarct(String contractName, String contractNo, Integer limit, Integer offset) {
-        List<ContractEntity> contractEntities = contractDao.getContarct(contractName, contractNo, limit, offset);
+    public List<ContractDto> getContarct(String projectId, String contractName, String contractNo, Integer limit, Integer offset) {
+        List<ContractEntity> contractEntities = contractDao.getContarct(projectId, contractName, contractNo, limit, offset);
         return ConvertUtil.convert(ContractEntity2Dto.instance, contractEntities);
     }
 

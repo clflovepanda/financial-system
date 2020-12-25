@@ -10,7 +10,7 @@ import java.util.List;
 public interface ContractDao {
     
 
-    List<ContractEntity> getContarct(@Param("contractName") String contractName, @Param("contractNo") String contractNo, @Param("limit") Integer limit, @Param("offset") Integer offset);
+    List<ContractEntity> getContarct(@Param("projectId") String projectId, @Param("contractName") String contractName, @Param("contractNo") String contractNo, @Param("limit") Integer limit, @Param("offset") Integer offset);
 
     @Insert("insert into contract (`project_id`, `contract_no`, `contract_name`, `customer_name`, `resource_name`, `resource_url`) VALUES " +
             "(#{contract.projectId}, #{contract.contractNo}, #{contract.contractName}, #{contract.customerName}, #{contract.resourceName}, #{contract.resourceUrl})")

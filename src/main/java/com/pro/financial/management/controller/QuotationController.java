@@ -24,9 +24,10 @@ public class QuotationController {
         JSONObject result = new JSONObject();
         String quotationName = request.getParameter("quotationName");
         String quotationNo = request.getParameter("quotationNo");
+        String projectId = request.getParameter("projectId");
         Integer limit = StringUtils.isEmpty(request.getParameter("limit")) ? null : Integer.parseInt(request.getParameter("limit"));
         Integer offset = StringUtils.isEmpty(request.getParameter("offset")) ? null : Integer.parseInt(request.getParameter("offset"));
-        List<QuotationDto> quotationDtos = quotationBiz.getQuotation(quotationName, quotationNo, limit, offset);
+        List<QuotationDto> quotationDtos = quotationBiz.getQuotation(projectId, quotationName, quotationNo, limit, offset);
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", quotationDtos);

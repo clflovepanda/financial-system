@@ -24,9 +24,10 @@ public class SettlementController {
         JSONObject result = new JSONObject();
         String settlementName = request.getParameter("settlementName");
         String settlementNo = request.getParameter("settlementNo");
+        String projectId = request.getParameter("projectId");
         Integer limit = StringUtils.isEmpty(request.getParameter("limit")) ? null : Integer.parseInt(request.getParameter("limit"));
         Integer offset = StringUtils.isEmpty(request.getParameter("offset")) ? null : Integer.parseInt(request.getParameter("offset"));
-        List<SettlementDto> settlementDtos = settlementBiz.getSettlement(settlementName, settlementNo, limit, offset);
+        List<SettlementDto> settlementDtos = settlementBiz.getSettlement(projectId, settlementName, settlementNo, limit, offset);
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", settlementDtos);

@@ -24,9 +24,10 @@ public class ContractController {
         JSONObject result = new JSONObject();
         String contractName = request.getParameter("contractName");
         String contractNo = request.getParameter("contractNo");
+        String projectId = request.getParameter("projectId");
         Integer limit = StringUtils.isEmpty(request.getParameter("limit")) ? null : Integer.parseInt(request.getParameter("limit"));
         Integer offset = StringUtils.isEmpty(request.getParameter("offset")) ? null : Integer.parseInt(request.getParameter("offset"));
-        List<ContractDto> contractDtos = contractBiz.getContarct(contractName, contractNo, limit, offset);
+        List<ContractDto> contractDtos = contractBiz.getContarct(projectId, contractName, contractNo, limit, offset);
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", contractDtos);

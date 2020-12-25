@@ -6,6 +6,9 @@
     <select id="getContarct" resultType="com.pro.financial.management.dao.entity.ContractEntity">
         select * from contract
         where 1=1
+        <if test="projectId != null">
+            and project_id = #{projectId}
+        </if>
         <if test="contractName != null">
             and contract_name LIKE "%${contractName}%"
         </if>

@@ -20,8 +20,8 @@ public class QuotationBiz {
     @Autowired
     private QuotationDao quotationDao;
 
-    public List<QuotationDto> getQuotation(String quotationName, String quotationNo, Integer limit, Integer offset) {
-        List<QuotationEntity> quotationEntities = quotationDao.getQuotation(quotationName, quotationNo, limit, offset);
+    public List<QuotationDto> getQuotation(String projectId, String quotationName, String quotationNo, Integer limit, Integer offset) {
+        List<QuotationEntity> quotationEntities = quotationDao.getQuotation(projectId, quotationName, quotationNo, limit, offset);
         return ConvertUtil.convert(QuotationEntity2Dto.instance, quotationEntities);
     }
 
