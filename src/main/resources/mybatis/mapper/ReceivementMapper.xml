@@ -44,6 +44,7 @@
         and receive_date > #{startDate}
         and receive_date <![CDATA[ < ]]> #{endDate}
       </if>
+      and receivement.state <![CDATA[ <> ]]> 5
         order by id desc
     </select>
 </mapper>

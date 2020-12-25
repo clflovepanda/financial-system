@@ -107,7 +107,7 @@ public class LoginBiz {
                 CookieUtil.addCookie(response, permissionCookieName, permissionCookieEncode, 3600);
                 // 数据权限存入cookie
                 CookieUtil.addCookie(response, datasourceCookieName, datasourceCookieEncode, 3600);
-                CookieUtil.addCookie(response, CommonConst.cookie_user_head, userCookieEncode, 3600);
+                CookieUtil.addCookie(response, CommonConst.cookie_user_head, userDto.getUserId() + "", 3600);
                 request.getSession().setAttribute(permissionCookieName, permissionJsonStr);
                 request.getSession().setAttribute(datasourceCookieName, datasourceJsonStr);
                 result.put("code", 0);
@@ -166,8 +166,7 @@ public class LoginBiz {
                     CookieUtil.addCookie(response, permissionCookieName, permissionCookieEncode, 3600);
                     // 数据权限存入cookie
                     CookieUtil.addCookie(response, datasourceCookieName, datasourceCookieEncode, 3600);
-                    CookieUtil.addCookie(response, CommonConst.cookie_user_head, userCookieEncode, 3600);
-                    request.getSession().setAttribute(CommonConst.cookie_user_head, userJsonStr);
+                    CookieUtil.addCookie(response, CommonConst.cookie_user_head, userDto.getUserId() + "", 3600);
                     result.put("code", 0);
                     result.put("msg", "");
                     result.put("data", userDto);

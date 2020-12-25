@@ -57,6 +57,11 @@ public class ReceivementController {
             @CookieValue("user_id") Integer userId,
             @RequestParam("flag") Integer flag) {
         JSONObject result = new JSONObject();
+        if (userId < 1) {
+            result.put("code", 1001);
+            result.put("msg", "未获取到用户");
+            return result;
+        }
         ReceivementDto receivementDto = JSONObject.parseObject(jsonInfo.toJSONString(), ReceivementDto.class);
         receivementDto.setCreateUser(userId);
         receivementDto.setCtime(new Date());
