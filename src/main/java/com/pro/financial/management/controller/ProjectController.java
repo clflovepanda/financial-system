@@ -77,6 +77,8 @@ public class ProjectController {
 
         projectDto.setCreateUser(userId);
         projectDto.setCtime(new Date());
+        projectDto.setUpdateUser(userId);
+        projectDto.setUtime(new Date());
         int count = projectBiz.addProject(projectDto);
         int projectId = projectDto.getProjectId();
         // 处理项目关联类目表
