@@ -45,10 +45,9 @@ public class RevenueBiz {
         String revenueNo;
         String lastNo = revenueDao.selectLastNo();
         if (StringUtils.isEmpty(lastNo)) {
-            revenueNo = "001";
-        } else  {
-            revenueNo = CommonUtil.generatorNO(CommonConst.initials_revenue, projectEntity.getDataSourceName(), lastNo);
+            lastNo = "001";
         }
+        revenueNo = CommonUtil.generatorNO(CommonConst.initials_revenue, projectEntity.getDataSourceName(), lastNo);
         RevenueEntity revenueEntity = new RevenueEntity();
         revenueEntity.setRevenueNo(revenueNo);
         revenueEntity.setCnyMoney(subscriptionLogDto.getReceivementMoney());

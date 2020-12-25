@@ -22,7 +22,7 @@ public class CommonConst {
     //应收单首字母
     public static final String initials_receivable = "YSD";
     //收入标号
-    public static final String initials_revenue = "YSD";
+    public static final String initials_revenue = "SR";
 
     //对应projecttask task_status
     //工时状态-初始化
