@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -81,7 +82,10 @@ public class ProjectDto {
     private String dataSourceName;
     private String dataSourceId;
 
-
+    private Integer companyId;
+    private Integer managerId;
+    private Integer salesId;
+    private List<Integer> userIds;
 
     private Integer limit;
     private Integer offset;

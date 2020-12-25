@@ -59,14 +59,22 @@ public class ProjectController {
     @RequestMapping("/add")
     public JSONObject addProject(@RequestBody JSONObject jsonInfo, @CookieValue("user_id") Integer userId) {
         JSONObject result = new JSONObject();
+        ProjectDto projectDto = JSONObject.parseObject(JSONObject.toJSON(jsonInfo.get("project")).toString(), ProjectDto.class);
+        if (projectDto.getDataSourceId() == null) {
+            result.put("code", 1001);
+            result.put("msg", "参数有误");
+            return result;
+        }
         // 解析项目关联类目
-        ProjectDataSourceDto projectDataSourceDto = JSONObject.parseObject(JSONObject.toJSON(jsonInfo.get("projectDataSourceDto")).toString(), ProjectDataSourceDto.class);
+        ProjectDataSourceDto projectDataSourceDto = new ProjectDataSourceDto();
+        projectDataSourceDto.setDataSourceId(projectDto.getDataSourceId());
         // 解析项目关联公司
-        ProjectCompanyDto projectCompanyDto = JSONObject.parseObject(JSONObject.toJSON(jsonInfo.get("projectCompanyDto")).toString(), ProjectCompanyDto.class);
+        ProjectCompanyDto projectCompanyDto = new ProjectCompanyDto();
+        projectCompanyDto.setCompanyId(projectDto.getCompanyId());
         // 解析项目关联人员
-        List<ProjectUserDto> projectUserDtos = JSON.parseArray(JSONObject.toJSON(jsonInfo.get("projectUserDto")).toString(), ProjectUserDto.class);
+        List<ProjectUserDto> projectUserDtos = new ArrayList<>();
         // 解析关联工时
-        ProjectDto projectDto = JSONObject.parseObject(JSONObject.toJSON(jsonInfo.get("projectDto")).toString(), ProjectDto.class);
+
         int count = projectBiz.addProject(projectDto);
         int projectId = projectDto.getProjectId();
         // 处理项目关联类目表
@@ -77,10 +85,29 @@ public class ProjectController {
         projectCompanyDto.setProjectId(projectId);
         projectCompanyDto.setCtime(new Date());
         projectCompanyBiz.addProjectCompany(projectCompanyDto);
+
+        //项目经理
+        ProjectUserDto manage = new ProjectUserDto();
+        manage.setProjectId(projectId);
+        manage.setUserId(projectDto.getManagerId());
+        manage.setType(2);
+        manage.setCtime(new Date());
+        projectUserDtos.add(manage);
+        //销售经理
+        ProjectUserDto sales = new ProjectUserDto();
+        sales.setProjectId(projectId);
+        sales.setUserId(projectDto.getSalesId());
+        sales.setType(1);
+        sales.setCtime(new Date());
+        projectUserDtos.add(sales);
         // 处理项目关联人员
-        for (ProjectUserDto projectUserDto : projectUserDtos) {
+        for (Integer otherUserId : projectDto.getUserIds()) {
+            ProjectUserDto projectUserDto = new ProjectUserDto();
             projectUserDto.setProjectId(projectId);
+            projectUserDto.setUserId(otherUserId);
+            projectUserDto.setType(3);
             projectUserDto.setCtime(new Date());
+            projectUserDtos.add(projectUserDto);
         }
         projectUserBiz.batchAddProjectUser(projectUserDtos);
         // 处理项目关联工时 TODO
