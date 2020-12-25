@@ -268,6 +268,7 @@ public class ReceivementController {
             result.put("msg", "未传入认款类型");
             return result;
         }
+        subscriptionLogDto.setState(1);
         int count = subscriptionLogBiz.addSubscriptionLog(subscriptionLogDto);
         // TODO 这里需要处理 如果是收入类型为预收押金，则自动进入到押金列表。收入类型为收回押金，则自动进入到支出管理-押金支出列表。
         // TODO 或者在收入支出押金列表中区别类型处理
