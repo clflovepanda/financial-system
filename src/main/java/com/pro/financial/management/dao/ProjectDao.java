@@ -70,4 +70,7 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
             "using(data_source_id) " +
             "where name like #{keyWords}" )
     List<ProjectEntity> getProjectByKeywords(@Param("keyWords") String keyWords);
+
+    @Select("SELECT code FROM project ORDER BY project_id DESC LIMIT 0,1")
+    String selectLastNo();
 }

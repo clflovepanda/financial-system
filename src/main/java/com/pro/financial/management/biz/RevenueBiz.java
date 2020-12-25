@@ -49,7 +49,7 @@ public class RevenueBiz {
         }
         revenueNo = CommonUtil.generatorNO(CommonConst.initials_revenue, projectEntity.getDataSourceName(), lastNo);
         RevenueEntity revenueEntity = new RevenueEntity();
-        revenueEntity.setSubscriptionLogId(subscriptionLogDto.getId());
+        revenueEntity.setSubscriptionLogId(subscriptionLogDto.getId() == null ? 0 : subscriptionLogDto.getId());
         revenueEntity.setRevenueNo(revenueNo);
         revenueEntity.setCnyMoney(subscriptionLogDto.getReceivementMoney());
         revenueEntity.setReceivementId(subscriptionLogDto.getReceivementId());

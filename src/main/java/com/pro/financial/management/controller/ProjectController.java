@@ -2,11 +2,13 @@ package com.pro.financial.management.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.pro.financial.consts.CommonConst;
 import com.pro.financial.management.biz.*;
 import com.pro.financial.management.converter.ProjectEntity2Dto;
 import com.pro.financial.management.dao.entity.*;
 import com.pro.financial.management.dto.*;
 import com.pro.financial.user.dao.UserDao;
+import com.pro.financial.utils.CommonUtil;
 import com.pro.financial.utils.ConvertUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +77,15 @@ public class ProjectController {
         List<ProjectUserDto> projectUserDtos = new ArrayList<>();
         // 解析关联工时
 
+        //生成编号
+        String projectNo;
+        //获取最后一条数据的编号
+        String lastNo = projectBiz.selectLastNo();
+        if (StringUtils.isEmpty(lastNo)) {
+            lastNo = "001";
+        }
+        projectNo = CommonUtil.generatorNO(CommonConst.initials_project, projectDto.getDataSourceName(), lastNo);
+        projectDto.setCode(projectNo);
         projectDto.setCreateUser(userId);
         projectDto.setCtime(new Date());
         projectDto.setUpdateUser(userId);

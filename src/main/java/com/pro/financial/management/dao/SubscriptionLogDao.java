@@ -13,10 +13,10 @@ import java.util.List;
 @Repository
 public interface SubscriptionLogDao {
 
-    @Options(useGeneratedKeys = true, keyProperty = "id" , keyColumn = "id")
-    @Insert("insert into subscription_log (`id`, `receivement_id`, `revenue_type_id`, project_id, `receivement_money`, `subscription_date`, `state`, `remark`, `create_user`, `ctime`) VALUES " +
-            "(#{entity.id}, #{entity.receivementId}, #{entity.revenueTypeId}, #{entity.projectId}, #{entity.receivementMoney}, #{entity.subscriptionDate}, #{entity.state}, #{entity.remark}, #{entity.createUser}, #{entity.ctime})")
-    int insert(@Param("entity") SubscriptionLogEntity entity);
+//    @Options(useGeneratedKeys = true, keyProperty = "id" , keyColumn = "id")
+//    @Insert("insert into subscription_log (`receivement_id`, `revenue_type_id`, project_id, `receivement_money`, `subscription_date`, `state`, `remark`, `create_user`, `ctime`) VALUES " +
+//            "(#{entity.receivementId}, #{entity.revenueTypeId}, #{entity.projectId}, #{entity.receivementMoney}, #{entity.subscriptionDate}, #{entity.state}, #{entity.remark}, #{entity.createUser}, #{entity.ctime})")
+    int insert(SubscriptionLogEntity entity);
 
     @Select("<script> " +
             "select * from subscription_log where receivement_id " +

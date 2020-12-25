@@ -23,6 +23,8 @@ public class CommonConst {
     public static final String initials_receivable = "YSD";
     //收入标号
     public static final String initials_revenue = "SR";
+    public static final String initials_project = "PRO";
+
 
     //对应projecttask task_status
     //工时状态-初始化

@@ -67,4 +67,8 @@ public class ProjectBiz extends ServiceImpl<ProjectDao, ProjectEntity> {
         }
         return ConvertUtil.convert(ProjectEntity2Dto.instance, projectDao.getAllProjectList());
     }
+
+    public String selectLastNo() {
+        return projectDao.selectLastNo();
+    }
 }
