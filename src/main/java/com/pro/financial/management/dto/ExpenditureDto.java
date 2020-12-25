@@ -11,6 +11,7 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @ToString
 @Getter
@@ -73,4 +74,6 @@ public class ExpenditureDto {
     private String coName;
 
     private String auditType;
+
+    private List<ExpenditureAuditLogDto> expenditureAuditLogs;
 }

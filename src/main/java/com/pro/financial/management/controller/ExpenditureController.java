@@ -72,6 +72,7 @@ public class ExpenditureController {
                 beneficiaryUnit, createUser, state, expenditureAuditLog, expenditurePurposeId, startDate, endDate);
         for (ExpenditureDto expenditureDto : expenditureDtos) {
             expenditureDto.setAuditType(expenditureAuditLogBiz.getLastLog(expenditureDto.getExpenditureId()));
+            expenditureDto.setExpenditureAuditLogs(expenditureAuditLogBiz.getLogByEId(expenditureDto.getExpenditureId()));
         }
 
         result.put("code", 0);

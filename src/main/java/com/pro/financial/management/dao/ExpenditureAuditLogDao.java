@@ -1,10 +1,13 @@
 package com.pro.financial.management.dao;
 
 import com.pro.financial.management.dao.entity.ExpenditureAuditLogEntity;
+import com.pro.financial.management.dto.ExpenditureAuditLogDto;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface ExpenditureAuditLogDao {
@@ -14,4 +17,7 @@ public interface ExpenditureAuditLogDao {
 
     @Select("select audit_type from expenditure_audit_log where expenditure_id = #{expenditureId} and state = 1 order by ctime desc limit 1")
     String getLastLog(@Param("expenditureId") Integer expenditureId);
+
+    @Select("select * from expenditure_audit_log where expenditure_id = #{expenditureId} and state = 1 order by ctime desc")
+    List<ExpenditureAuditLogEntity> getLogByEId(Integer expenditureId);
 }
