@@ -211,12 +211,14 @@ public class ReceivementController {
     public JSONObject accounting(HttpServletRequest request, @CookieValue("user_id") Integer userId) {
         JSONObject result = new JSONObject();
         Integer receivementId = Integer.valueOf(request.getParameter("receivementId"));
+        Integer state = Integer.valueOf(request.getParameter("state"));
         String voucherNo = request.getParameter("voucherNo");
         // TODO 校验是否可以做账
         ReceivementEntity receivementEntity = receivementBiz.getById(receivementId);
         BigDecimal diff = receivementEntity.getReceivementMoney();
-        List<SubscriptionLogEntity> subscriptionLogEntities = subscriptionLogBiz.getListByReceivementIds(new ArrayList<>(receivementId));
-        for (SubscriptionLogEntity entity : subscriptionLogEntities) {
+        List<Integer> receivementIds = new ArrayList<>();
+        List<SubscriptionLogDto> subscriptionLogEntities = subscriptionLogBiz.getListByReceivementId(receivementId);
+        for (SubscriptionLogDto entity : subscriptionLogEntities) {
             diff.subtract(entity.getReceivementMoney());
         }
         if (diff.compareTo(BigDecimal.ZERO) != 0) {
@@ -227,7 +229,7 @@ public class ReceivementController {
         AccountingLogDto accountingLogDto = new AccountingLogDto();
         accountingLogDto.setReceivementId(receivementId);
         accountingLogDto.setVoucherNo(voucherNo);
-        accountingLogDto.setState(1);
+        accountingLogDto.setState(state);
         accountingLogDto.setRemark("");
         accountingLogDto.setCreateUser(userId);
         accountingLogDto.setCtime(new Date());
