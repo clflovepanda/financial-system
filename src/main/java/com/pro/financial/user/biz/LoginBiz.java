@@ -104,10 +104,10 @@ public class LoginBiz {
                     return result;
                 }
                 //菜单权限存入cookie
-                CookieUtil.addCookie(response, permissionCookieName, permissionCookieEncode, 3600);
+                CookieUtil.addCookie(response, permissionCookieName, permissionCookieEncode, 36000);
                 // 数据权限存入cookie
-                CookieUtil.addCookie(response, datasourceCookieName, datasourceCookieEncode, 3600);
-                CookieUtil.addCookie(response, CommonConst.cookie_user_head, userDto.getUserId() + "", 3600);
+                CookieUtil.addCookie(response, datasourceCookieName, datasourceCookieEncode, 36000);
+                CookieUtil.addCookie(response, CommonConst.cookie_user_head, userDto.getUserId() + "", 36000);
                 request.getSession().setAttribute(permissionCookieName, permissionJsonStr);
                 request.getSession().setAttribute(datasourceCookieName, datasourceJsonStr);
                 result.put("code", 0);
@@ -163,10 +163,10 @@ public class LoginBiz {
                         return result;
                     }
                     //菜单权限存入cookie
-                    CookieUtil.addCookie(response, permissionCookieName, permissionCookieEncode, 3600);
+                    CookieUtil.addCookie(response, permissionCookieName, permissionCookieEncode, 36000);
                     // 数据权限存入cookie
-                    CookieUtil.addCookie(response, datasourceCookieName, datasourceCookieEncode, 3600);
-                    CookieUtil.addCookie(response, CommonConst.cookie_user_head, userDto.getUserId() + "", 3600);
+                    CookieUtil.addCookie(response, datasourceCookieName, datasourceCookieEncode, 36000);
+                    CookieUtil.addCookie(response, CommonConst.cookie_user_head, userDto.getUserId() + "", 36000);
                     result.put("code", 0);
                     result.put("msg", "");
                     result.put("data", userDto);
