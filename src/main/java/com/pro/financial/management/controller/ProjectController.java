@@ -75,6 +75,8 @@ public class ProjectController {
         List<ProjectUserDto> projectUserDtos = new ArrayList<>();
         // 解析关联工时
 
+        projectDto.setCreateUser(userId);
+        projectDto.setCtime(new Date());
         int count = projectBiz.addProject(projectDto);
         int projectId = projectDto.getProjectId();
         // 处理项目关联类目表
