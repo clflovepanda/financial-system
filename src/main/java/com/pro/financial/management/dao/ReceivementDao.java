@@ -19,7 +19,11 @@ public interface ReceivementDao {
     int update(@Param("entity") ReceivementEntity entity);
 
     @Select("<script> " +
-            "select * from receivement where id " +
+            "select * from receivement " +
+            "left join company using(company_id) " +
+            "left join receivement_type using(receivement_type_id) " +
+            "left join remitter_method using(remitter_method_id) " +
+            "where id " +
             "in <foreach item='item' index='index' collection='ids' open='(' separator=',' close=')'> #{item} </foreach> " +
             "</script>")
     List<ReceivementEntity> getListById(@Param("ids") List<Integer> ids);

@@ -8,9 +8,9 @@ import lombok.ToString;
 @Setter
 @ToString
 public class RemitterMethodEntity {
-    private Integer id;
+    private Integer remitterMethodId;
 
-    private String name;
+    private String remitterMethodName;
 
     private String remark;
 }

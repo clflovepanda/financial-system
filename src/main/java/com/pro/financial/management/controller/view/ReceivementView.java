@@ -11,15 +11,18 @@ public class ReceivementView {
 
     // 到款账户
     private Integer companyId;
+    private String companyName;
 
     // 到款种类
     private Integer receivementTypeId;
+    private String receivementTypeName;
 
     // 到款金额/元
     private BigDecimal receivementMoney;
 
     // 汇款方类型
     private String remitterMethodId;
+    private String remitterMethodName;
 
     // 汇款方
     private String remitter;

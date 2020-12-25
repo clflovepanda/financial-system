@@ -107,9 +107,12 @@ public class ReceivementController {
             ReceivementView view = new ReceivementView();
             view.setId(entity.getId());
             view.setCompanyId(entity.getCompanyId());
+            view.setCompanyName(entity.getCoName());
             view.setReceivementTypeId(entity.getReceivementTypeId());
+            view.setReceivementTypeName(entity.getReceivementTypeName());
             view.setReceivementMoney(entity.getReceivementMoney());
             view.setRemitterMethodId(entity.getRemitterMethodId());
+            view.setRemitterMethodName(entity.getRemitterMethodName());
             view.setRemitter(entity.getRemitter());
             view.setReceiveDate(entity.getReceiveDate());
             if (!CollectionUtils.isEmpty(idAndSubscriptionLogEntitysMap) && !CollectionUtils.isEmpty(idAndSubscriptionLogEntitysMap.get(entity.getId()))) {
