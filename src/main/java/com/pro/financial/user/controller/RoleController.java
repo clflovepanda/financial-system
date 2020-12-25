@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 import java.util.List;
 
 @RestController
@@ -122,6 +123,9 @@ public class RoleController {
     public JSONObject getDataSource() {
         JSONObject result = new JSONObject();
         List<DataSourceDto> dataSourceDtos = roleBiz.getParentDataSource();
+        for (DataSourceDto dataSourceDto : dataSourceDtos) {
+            dataSourceDto.setSon(roleBiz.getDataSourceByParentId(dataSourceDto.getDataSourceId()));
+        }
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", dataSourceDtos);

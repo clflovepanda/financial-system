@@ -2,6 +2,7 @@ package com.pro.financial.user.dao;
 
 import com.pro.financial.user.dao.entity.DataSourceEntity;
 import com.pro.financial.user.dto.DataSourceDto;
+import jdk.nashorn.internal.objects.annotations.Setter;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -23,4 +24,7 @@ public interface DataSourceDao {
             "</foreach>" +
             "</script>"})
     List<DataSourceEntity> getDatasourceByRoleIds(@Param("list") List<Integer> roleIds);
+
+    @Select("select * from data_source where parent_id = #{parentId}")
+    List<DataSourceDto> getDataSourceByParentId(@Param("parentId") Integer parentId);
 }

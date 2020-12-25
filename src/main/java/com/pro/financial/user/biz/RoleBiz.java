@@ -103,4 +103,8 @@ public class RoleBiz {
         }
         return result;
     }
+
+    public List<DataSourceDto> getDataSourceByParentId(Integer parentId) {
+        return dataSourceDao.getDataSourceByParentId(parentId);
+    }
 }

@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,6 +13,7 @@ import java.util.Date;
 public class DataSourceDto {
     private Integer dataSourceId;
     private Integer parentId;
-    private String dateSourceName;
+    private String dataSourceName;
     private Date createDatetime;
+    private List<DataSourceDto> son;
 }
