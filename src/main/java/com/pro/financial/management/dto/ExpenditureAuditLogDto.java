@@ -1,10 +1,14 @@
 package com.pro.financial.management.dto;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Date;
 
 @ToString
+@Getter
+@Setter
 public class ExpenditureAuditLogDto {
     private Integer id;
 
@@ -18,51 +22,5 @@ public class ExpenditureAuditLogDto {
 
     private Integer state;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getExpenditureId() {
-        return expenditureId;
-    }
-
-    public void setExpenditureId(Integer expenditureId) {
-        this.expenditureId = expenditureId;
-    }
-
-    public Integer getAuditType() {
-        return auditType;
-    }
-
-    public void setAuditType(Integer auditType) {
-        this.auditType = auditType;
-    }
-
-    public Integer getCreateUser() {
-        return createUser;
-    }
-
-    public void setCreateUser(Integer createUser) {
-        this.createUser = createUser;
-    }
-
-    public Date getCtime() {
-        return ctime;
-    }
-
-    public void setCtime(Date ctime) {
-        this.ctime = ctime;
-    }
-
-    public Integer getState() {
-        return state;
-    }
-
-    public void setState(Integer state) {
-        this.state = state;
-    }
+    private String username;
 }

@@ -18,6 +18,6 @@ public interface ExpenditureAuditLogDao {
     @Select("select audit_type from expenditure_audit_log where expenditure_id = #{expenditureId} and state = 1 order by ctime desc limit 1")
     String getLastLog(@Param("expenditureId") Integer expenditureId);
 
-    @Select("select * from expenditure_audit_log where expenditure_id = #{expenditureId} and state = 1 order by ctime desc")
+    @Select("select * from expenditure_audit_log left join `user` on create_user = user where expenditure_id = #{expenditureId} and state = 1 order by ctime desc")
     List<ExpenditureAuditLogEntity> getLogByEId(Integer expenditureId);
 }

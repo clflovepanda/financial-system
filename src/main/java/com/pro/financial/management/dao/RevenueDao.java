@@ -14,8 +14,8 @@ import java.util.List;
 @Repository
 public interface RevenueDao {
 
-    @Insert("insert into revenue (`id`, `receivement_id`, `revenue_type_id`, `data_source_id`, `project_id`, `cny_money`, `delete`, `remark`, `create_user`, `ctime`, `update_user`, `utime`) VALUES " +
-            "(#{entity.id}, #{entity.receivementId}, #{entity.revenueTypeId}, #{entity.dataSourceId}, #{entity.projectId}, #{entity.cnyMoney}, #{entity.delete}, #{entity.remark}, #{entity.createUser}, #{entity.ctime}, #{entity.updateUser}, #{entity.utime}, #{entity.}, #{entity.}, #{entity.}, #{entity.}, #{entity.}, )")
+    @Insert("insert into revenue ( `receivement_id`, 'revenue_no' `revenue_type_id`, `data_source_id`, `project_id`, `cny_money`, `remark`, `create_user`, `ctime`, `update_user`, `utime`) VALUES " +
+            "(#{entity.receivementId},#{entity.revenueNo}, #{entity.revenueTypeId}, #{entity.dataSourceId}, #{entity.projectId}, #{entity.cnyMoney}, #{entity.remark}, #{entity.createUser}, #{entity.ctime}, #{entity.updateUser}, #{entity.utime})")
     int insert(@Param("entity") RevenueEntity entity);
 
     @Select("<script>" +
