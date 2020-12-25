@@ -15,8 +15,8 @@ public interface ReceivementDao {
     int insert(@Param("entity") ReceivementEntity entity);
 
     @Update("update receivement set company_id = #{entity.companyId}, receivement_type_id = #{entity.receivementTypeId}, receivement_money = #{entity.receivementMoney}, " +
-            "remitter_method_id = #{entity.remitterMethodId}, remitter = #{entity.remitter}, receive_date = #{entity.receiveDate}, state = #{entity.state}, " +
-            "remark = #{entity.remark}, create_user = #{entity.createUser}, ctime = #{entity.ctime}, update_user = #{entity.updateUser}, utime = #{entity.utime} where id = #{entity.id}")
+            "remitter_method_id = #{entity.remitterMethodId}, remitter = #{entity.remitter}, receive_date = #{entity.receiveDate}, " +
+            "remark = #{entity.remark}, update_user = #{entity.updateUser}, utime = #{entity.utime} where id = #{entity.id}")
     int update(@Param("entity") ReceivementEntity entity);
 
 //    @Select("<script> " +

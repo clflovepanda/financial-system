@@ -66,8 +66,6 @@ public class ReceivementController {
             return result;
         }
         ReceivementDto receivementDto = JSONObject.parseObject(jsonInfo.toJSONString(), ReceivementDto.class);
-        receivementDto.setCreateUser(userId);
-        receivementDto.setCtime(new Date());
         receivementDto.setUpdateUser(userId);
         receivementDto.setUtime(new Date());
         if (flag == 1) {
