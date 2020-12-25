@@ -43,10 +43,9 @@ public class ReceivableBiz extends ServiceImpl<ReceivableDao, ReceivableEntity> 
         //获取最后一条数据的编号
         String lastNo = receivableDao.selectLastNo();
         if (StringUtils.isEmpty(lastNo)) {
-            receivableNo = "001";
-        } else  {
-            receivableNo = CommonUtil.generatorNO(CommonConst.initials_receivable, receivableDto.getDataSource(), lastNo);
+            lastNo = "001";
         }
+        receivableNo = CommonUtil.generatorNO(CommonConst.initials_receivable, receivableDto.getDataSource(), lastNo);
         receivableEntity.setReceivableNo(receivableNo);
         return receivableDao.insert(receivableEntity);
     }

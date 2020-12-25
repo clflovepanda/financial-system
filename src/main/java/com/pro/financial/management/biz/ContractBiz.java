@@ -32,10 +32,9 @@ public class ContractBiz {
         //获取最后一条数据的编号
         String lastNo = contractDao.selectLastNo();
         if (StringUtils.isEmpty(lastNo)) {
-            contractNo = "001";
-        } else  {
-            contractNo = CommonUtil.generatorNO(CommonConst.initials_contract, contractDto.getDataSource(), lastNo);
+            lastNo = "001";
         }
+        contractNo = CommonUtil.generatorNO(CommonConst.initials_contract, contractDto.getDataSource(), lastNo);
         contractEntity.setContractNo(contractNo);
         return contractDao.addContract(contractEntity);
     }

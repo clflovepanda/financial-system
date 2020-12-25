@@ -32,10 +32,9 @@ public class QuotationBiz {
         //获取最后一条数据的编号
         String lastNo = quotationDao.selectLastNo();
         if (StringUtils.isEmpty(lastNo)) {
-            quotationNo = "001";
-        } else  {
-            quotationNo = CommonUtil.generatorNO(CommonConst.initials_quotation, quotationDto.getDataSource(), lastNo);
+            lastNo = "001";
         }
+        quotationNo = CommonUtil.generatorNO(CommonConst.initials_quotation, quotationDto.getDataSource(), lastNo);
         quotationEntity.setQuotationNo(quotationNo);
         return quotationDao.addQuotation(quotationEntity);
     }

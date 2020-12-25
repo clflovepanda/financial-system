@@ -32,10 +32,9 @@ public class SettlementBiz {
         //获取最后一条数据的编号
         String lastNo = settlementDao.selectLastNo();
         if (StringUtils.isEmpty(lastNo)) {
-            settlementNo = "001";
-        } else  {
-            settlementNo = CommonUtil.generatorNO(CommonConst.initials_settlement, settlementDto.getDataSource(), lastNo);
+            lastNo = "001";
         }
+        settlementNo = CommonUtil.generatorNO(CommonConst.initials_settlement, settlementDto.getDataSource(), lastNo);
         settlementEntity.setSettlementNo(settlementNo);
         return settlementDao.addSettlement(settlementEntity);
     }
