@@ -1,18 +1,12 @@
 package com.pro.financial.management.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.pro.financial.management.biz.*;
-import com.pro.financial.management.converter.ExpenditureEntity2Dto;
 import com.pro.financial.management.converter.ProjectEntity2Dto;
-import com.pro.financial.management.converter.RevenueEntity2Dto;
-import com.pro.financial.management.dao.ProjectCompanyDao;
-import com.pro.financial.management.dao.ProjectUserDao;
 import com.pro.financial.management.dao.entity.*;
 import com.pro.financial.management.dto.*;
-import com.pro.financial.user.dto.DataSourceDto;
-import com.pro.financial.user.dto.PermissionDto;
+import com.pro.financial.user.dao.UserDao;
 import com.pro.financial.utils.ConvertUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +52,8 @@ public class ProjectController {
     private QuotationBiz quotationBiz;
     @Autowired
     private ProjectTaskBiz projectTaskBiz;
+    @Autowired
+    private UserDao userDao;
 
 
     @RequestMapping("/add")
@@ -158,6 +154,11 @@ public class ProjectController {
         projectIds.add(id);
         // 项目表
         List<ProjectEntity> projectEntities = projectBiz.getProjectList(projectIds);
+        if (CollectionUtils.isEmpty(projectEntities)) {
+            result.put("code", 10001);
+            result.put("msg", "未查询到项目");
+            return result;
+        }
         // 项目人员表
         List<ProjectUserEntity> projectUserEntities = projectUserBiz.getProjectUserList(projectIds);
         // 项目收入表
@@ -174,6 +175,13 @@ public class ProjectController {
         List<QuotationEntity> quotationEntities = quotationBiz.getListByProjectIds(projectIds);
         // 应收单
         List<ReceivableEntity> receivableEntities = receivableBiz.getListByProjectIds(projectIds);
+        //审核人
+        ProjectAuditLogDto projectAuditLogDto = projectAuditLogBiz.getProjectAuditByProjectId(id);
+        ProjectEntity projectEntity = projectEntities.get(0);
+        String company = projectCompanyBiz.getCompanyByProjectId(id);
+        projectEntity.setCompany(company);
+        int createUser = projectEntity.getCreateUser();
+        projectEntity.setCreateUserName(userDao.getUserById(createUser).getUsername());
         // 项目工时表 TODO
         result.put("code", HttpStatus.OK.value());
         result.put("msg", HttpStatus.OK.getReasonPhrase());
@@ -188,6 +196,7 @@ public class ProjectController {
         resultMap.put("contractEntities", contractEntities);
         resultMap.put("quotationEntities", quotationEntities);
         resultMap.put("receivableEntities", receivableEntities);
+        resultMap.put("projectAuditLog", projectAuditLogDto);
         result.put("data", resultMap);
         return result;
     }

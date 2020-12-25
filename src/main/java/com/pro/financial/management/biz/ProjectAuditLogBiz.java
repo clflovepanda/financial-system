@@ -14,4 +14,8 @@ public class ProjectAuditLogBiz {
     public int addProjectAuditLog(ProjectAuditLogDto projectAuditLogDto) {
         return projectAuditLogDao.insert(ProjectAuditLogDto2Entity.instance.convert(projectAuditLogDto));
     }
+
+    public ProjectAuditLogDto getProjectAuditByProjectId(Integer projectId) {
+        return projectAuditLogDao.getProjectAuditByProjectId(projectId);
+    }
 }

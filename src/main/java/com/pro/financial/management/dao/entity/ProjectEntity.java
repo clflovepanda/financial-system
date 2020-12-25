@@ -65,4 +65,16 @@ public class ProjectEntity {
     @TableField(exist = false)
     private String userNames;
 
+    //项目成员
+    @TableField(exist = false)
+    private String dataSourceName;
+
+    //项目公司
+    @TableField(exist = false)
+    private String company;
+
+    //项目公司
+    @TableField(exist = false)
+    private String createUserName;
+
 }

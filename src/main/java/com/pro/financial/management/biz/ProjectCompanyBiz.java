@@ -23,4 +23,8 @@ public class ProjectCompanyBiz {
         projectCompanyDto.setId(projectCompanyEntity.getId());
         return count;
     }
+
+    public String getCompanyByProjectId(Integer id) {
+        return projectCompanyDao.getCompanyByProjectId(id);
+    }
 }

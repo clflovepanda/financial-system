@@ -31,6 +31,10 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
 
     @Select("<script>" +
             "select * from project " +
+            "left join project_data_source " +
+            "using(project_id) " +
+            "left join data_source " +
+            "using(data_source_id) " +
             "where project_id in " +
             "<foreach collection='ids' item='id' index='index' separator=',' open='(' close=')'>" +
             "#{id}" +
