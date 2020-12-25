@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface RevenueDao {
 
-    @Insert("insert into revenue ( `receivement_id`, 'revenue_no' `revenue_type_id`, `data_source_id`, `project_id`, `cny_money`, `remark`, `create_user`, `ctime`, `update_user`, `utime`) VALUES " +
+    @Insert("insert into revenue ( `receivement_id`, `revenue_no`, `revenue_type_id`, `data_source_id`, `project_id`, `cny_money`, `remark`, `create_user`, `ctime`, `update_user`, `utime`) VALUES " +
             "(#{entity.receivementId},#{entity.revenueNo}, #{entity.revenueTypeId}, #{entity.dataSourceId}, #{entity.projectId}, #{entity.cnyMoney}, #{entity.remark}, #{entity.createUser}, #{entity.ctime}, #{entity.updateUser}, #{entity.utime})")
     int insert(@Param("entity") RevenueEntity entity);
 
