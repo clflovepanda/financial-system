@@ -14,4 +14,8 @@ public class ExpenditureAuditLogBiz {
     public int addExpenditureAuditLog(ExpenditureAuditLogDto expenditureAuditLogDto) {
         return expenditureAuditLogDao.insert(ExpenditureAuditLogDto2Entity.instance.convert(expenditureAuditLogDto));
     }
+
+    public String getLastLog(Integer expenditureId) {
+        return expenditureAuditLogDao.getLastLog(expenditureId);
+    }
 }

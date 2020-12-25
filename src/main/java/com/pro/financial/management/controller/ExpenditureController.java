@@ -1,6 +1,7 @@
 package com.pro.financial.management.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pro.financial.management.biz.ExpenditureAuditLogBiz;
 import com.pro.financial.management.biz.ExpenditureBiz;
 import com.pro.financial.management.dto.ExpenditureDto;
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +21,8 @@ public class ExpenditureController {
 
     @Autowired
     private ExpenditureBiz expenditureBiz;
+    @Autowired
+    private ExpenditureAuditLogBiz expenditureAuditLogBiz;
 
     @RequestMapping("/add")
     public JSONObject addExpenditure(@RequestBody JSONObject jsonInfo) {
@@ -67,6 +70,9 @@ public class ExpenditureController {
         Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
         List<ExpenditureDto> expenditureDtos = expenditureBiz.searchList(projectId, companyId, numbering, expenditureMethodId, expenditureTypeId,
                 beneficiaryUnit, createUser, state, expenditureAuditLog, expenditurePurposeId, startDate, endDate);
+        for (ExpenditureDto expenditureDto : expenditureDtos) {
+            expenditureDto.setAuditType(expenditureAuditLogBiz.getLastLog(expenditureDto.getExpenditureId()));
+        }
 
         result.put("code", 0);
         result.put("msg", "");
