@@ -311,7 +311,7 @@ public class ProjectController {
             projectAuditLogDto.setAuditType(auditState);
             projectAuditLogDto.setCreateUser(userId);
             projectAuditLogDto.setCtime(new Date());
-            projectAuditLogDto.setState(0);
+            projectAuditLogDto.setState(1);
             projectAuditLogBiz.addProjectAuditLog(projectAuditLogDto);
             return result;
         }

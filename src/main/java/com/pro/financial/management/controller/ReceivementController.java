@@ -73,7 +73,7 @@ public class ReceivementController {
         if (flag == 1) {
             receivementDto.setCreateUser(userId);
             receivementDto.setCtime(new Date());
-            receivementDto.setState(0);
+            receivementDto.setState(1);
             int count = receivementBiz.addReceivement(receivementDto);
         } else {
             int count = receivementBiz.updateReceivement(receivementDto);
@@ -229,7 +229,7 @@ public class ReceivementController {
         AccountingLogDto accountingLogDto = new AccountingLogDto();
         accountingLogDto.setReceivementId(receivementId);
         accountingLogDto.setVoucherNo(voucherNo);
-        accountingLogDto.setState(0);
+        accountingLogDto.setState(1);
         accountingLogDto.setRemark("");
         accountingLogDto.setCreateUser(userId);
         accountingLogDto.setCtime(new Date());
