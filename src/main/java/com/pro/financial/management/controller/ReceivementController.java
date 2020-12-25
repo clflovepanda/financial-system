@@ -277,6 +277,8 @@ public class ReceivementController {
         ReceivementEntity receivementEntity = receivementBiz.getById(subscriptionLogDto.getReceivementId());
         //全进入收入表 区分类型在不同场景 不在此处
         int countRevenue = revenueBiz.addRevenueBySubLog(subscriptionLogDto, userId);
+        //TODO 修改已经认款
+        receivementBiz.updateReceivementState(subscriptionLogDto.getReceivementId(), 2);
 
         result.put("code", HttpStatus.OK.value());
         result.put("msg", HttpStatus.OK.getReasonPhrase());

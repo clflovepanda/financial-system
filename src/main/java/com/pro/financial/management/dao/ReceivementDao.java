@@ -31,7 +31,7 @@ public interface ReceivementDao {
     @Select("select * from receivement where id = #{id}")
     ReceivementEntity getById(@Param("id") Integer id);
 
-    @Update("update receivement set state = #{state} where id = #{state}")
+    @Update("update receivement set state = #{state} where id = #{id}")
     int update(@Param("id") Integer id, @Param("state") Integer state);
 
     @Select("select * from receivement order by id asc")
