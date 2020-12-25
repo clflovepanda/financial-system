@@ -17,8 +17,8 @@ public interface ProjectUserDao {
 
     @Insert("<script>" +
             "insert into project_user (`id`, `project_id`, `user_id`, `type`, `ctime`) VALUES " +
-            "<foreach collection='entities' item='entity' index='index' separator=',' open='(' close=')'>" +
-            "#{entity.id}, #{entity.projectId}, #{entity.userId}, #{entity.type}, #{entity.ctime}" +
+            "<foreach collection='entities' item='entity' index='index' separator=','>" +
+            "(#{entity.id}, #{entity.projectId}, #{entity.userId}, #{entity.type}, #{entity.ctime})" +
             "</foreach>" +
             "</script>")
     int batchInsert(@Param("entities") List<ProjectUserEntity> entities);
