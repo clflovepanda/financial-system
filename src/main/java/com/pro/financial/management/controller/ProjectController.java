@@ -323,18 +323,8 @@ public class ProjectController {
         if (StringUtils.isEmpty(auditingState)) {
             auditingState = "1";
         }
-        Date startDate = null;
-        Date endDate = null;
-        if (StringUtils.isNotEmpty(startDt) && StringUtils.isNotEmpty(endDt)) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            try {
-                startDate = simpleDateFormat.parse(startDt);
-                endDate = simpleDateFormat.parse(endDt);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
+        Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
+        Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
         List<ProjectEntity> projectEntities = projectBiz.getList(projectIds, projectNo, projectName, managerName, salesName, userNames, settlementState, state, saleCommisState, startDate, endDate, auditingState);
         // 项目人员表
         List<ProjectUserEntity> projectUserEntities = projectUserBiz.getProjectUserList(projectIds);
