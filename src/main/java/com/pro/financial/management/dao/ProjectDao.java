@@ -50,4 +50,12 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
                                 @Param("userNames") String userNames, @Param("settlementState") String settlementState,
                                 @Param("state") String state, @Param("saleCommisState") String saleCommisState,
                                 @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("auditingState") String auditingState);
+
+    @Select("select * from project " +
+            "left join project_data_source " +
+            "using(project_id) " +
+            "left join data_source " +
+            "using(data_source_id) " +
+            "where project_id = #{projectId}" )
+    ProjectEntity getProjectById(@Param("projectId") int projectId);
 }

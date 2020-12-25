@@ -2,6 +2,7 @@ package com.pro.financial.management.dao;
 
 import com.pro.financial.management.dao.entity.RevenueEntity;
 import com.pro.financial.management.dto.RevenueDto;
+import jdk.nashorn.internal.objects.annotations.Setter;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -30,4 +31,6 @@ public interface RevenueDao {
                                    @Param("remitterMethodId") String remitterMethodId, @Param("receivementTypeId") String receivementTypeId,
                                    @Param("companyId") String companyId, @Param("remitter") String remitter,
                                    @Param("createUser") String createUser, @Param("startDt") Date startDate, @Param("endDt") Date endDate);
+    @Select("SELECT revenue_no FROM revenue ORDER BY id DESC LIMIT 0,1")
+    String selectLastNo();
 }

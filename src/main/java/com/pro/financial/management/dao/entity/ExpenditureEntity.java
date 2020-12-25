@@ -63,5 +63,8 @@ public class ExpenditureEntity {
     private ExpenditurePurposeEntity expenditurePurpose;
 
     private String username;
-
+    private String expenditureMethodName;
+    private String expenditureTypeName;
+    private String expenditurePurposeName;
+    private String coName;
 }

@@ -68,6 +68,9 @@ public class ProjectEntity {
     //项目成员
     @TableField(exist = false)
     private String dataSourceName;
+    //项目成员
+    @TableField(exist = false)
+    private Integer dataSourceId;
 
     //项目公司
     @TableField(exist = false)

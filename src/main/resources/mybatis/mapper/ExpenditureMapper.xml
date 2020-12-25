@@ -84,6 +84,10 @@
   <select id="searchList" resultType="com.pro.financial.management.dao.entity.ExpenditureEntity">
     select * from expenditure e
     left join `user` u on e.create_user = u.user_id
+    left join expenditure_method using (expenditure_method_id)
+    left join expenditure_purpose using (expenditure_purpose_id)
+    left join expenditure_type using (expenditure_type_id)
+    left join company using (company_id)
     where 1=1
     <if test="projectId != null and projectId != ''">
       and e.project_id = #{projectId}

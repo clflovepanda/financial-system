@@ -1,16 +1,15 @@
 package com.pro.financial.management.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pro.financial.consts.CommonConst;
 import com.pro.financial.management.biz.*;
 import com.pro.financial.management.controller.view.ReceivementView;
-import com.pro.financial.management.dao.entity.ReceivementEntity;
-import com.pro.financial.management.dao.entity.ReceivementTypeEntity;
-import com.pro.financial.management.dao.entity.RemitterMethodEntity;
-import com.pro.financial.management.dao.entity.SubscriptionLogEntity;
+import com.pro.financial.management.dao.entity.*;
 import com.pro.financial.management.dto.AccountingLogDto;
 import com.pro.financial.management.dto.ReceivementDto;
 import com.pro.financial.management.dto.SubscriptionLogDto;
 import com.pro.financial.user.dao.entity.CompanyEntity;
+import com.pro.financial.utils.CommonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +43,9 @@ public class ReceivementController {
     private AccountingLogBiz accountingLogBiz;
     @Autowired
     private ProjectDataSourceBiz projectDataSourceBiz;
+
+    @Autowired
+    private RevenueBiz revenueBiz;
 
     /**
      *
@@ -254,6 +256,27 @@ public class ReceivementController {
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", subscriptionLogDtos);
+        return result;
+    }
+
+    @RequestMapping("/addsublog")
+    public JSONObject addSubscriptionLog(@RequestBody JSONObject jsonInfo, @CookieValue("user_id") Integer userId) {
+        JSONObject result = new JSONObject();
+        SubscriptionLogDto subscriptionLogDto = JSONObject.parseObject(jsonInfo.toJSONString(), SubscriptionLogDto.class);
+        if (subscriptionLogDto == null || subscriptionLogDto.getReceivementId() == null) {
+            result.put("code", 1001);
+            result.put("msg", "未传入认款类型");
+            return result;
+        }
+        int count = subscriptionLogBiz.addSubscriptionLog(subscriptionLogDto);
+        // TODO 这里需要处理 如果是收入类型为预收押金，则自动进入到押金列表。收入类型为收回押金，则自动进入到支出管理-押金支出列表。
+        // TODO 或者在收入支出押金列表中区别类型处理
+        ReceivementEntity receivementEntity = receivementBiz.getById(subscriptionLogDto.getReceivementId());
+        //全进入收入表 区分类型在不同场景 不在此处
+        int countRevenue = revenueBiz.addRevenueBySubLog(subscriptionLogDto, userId);
+
+        result.put("code", HttpStatus.OK.value());
+        result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
     }
 
