@@ -14,7 +14,7 @@ public interface ProjectAuditLogDao {
     int insert(@Param("entity") ProjectAuditLogEntity entity);
 
 
-    @Select("select project_id, audit_type, create_user, project_audit_log.state, username createUserName " +
+    @Select("select project_id, audit_type, create_user, project_audit_log.state, project_audit_log.ctime, username createUserName " +
             "from project_audit_log " +
             "left join user " +
             "on user_id = create_user " +

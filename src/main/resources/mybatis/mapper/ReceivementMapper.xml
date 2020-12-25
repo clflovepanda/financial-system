@@ -1,23 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pro.financial.management.dao.ReceivementDao">
-  <resultMap id="BaseResultMap" type="com.pro.financial.management.dao.entity.ReceivementEntity">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="company_id" jdbcType="INTEGER" property="companyId" />
-    <result column="receivement_type_id" jdbcType="INTEGER" property="receivementTypeId" />
-    <result column="receivement_money" jdbcType="DECIMAL" property="receivementMoney" />
-    <result column="remitter_method_id" jdbcType="CHAR" property="remitterMethodId" />
-    <result column="remitter" jdbcType="VARCHAR" property="remitter" />
-    <result column="receive_date" jdbcType="TIMESTAMP" property="receiveDate" />
-    <result column="state" jdbcType="INTEGER" property="state" />
-    <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <result column="create_user" jdbcType="INTEGER" property="createUser" />
-    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
-    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
-    <result column="utime" jdbcType="TIMESTAMP" property="utime" />
-  </resultMap>
-  <sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="com.pro.financial.management.dao.entity.ReceivementEntity">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="company_id" jdbcType="INTEGER" property="companyId"/>
+        <result column="receivement_type_id" jdbcType="INTEGER" property="receivementTypeId"/>
+        <result column="receivement_money" jdbcType="DECIMAL" property="receivementMoney"/>
+        <result column="remitter_method_id" jdbcType="CHAR" property="remitterMethodId"/>
+        <result column="remitter" jdbcType="VARCHAR" property="remitter"/>
+        <result column="receive_date" jdbcType="TIMESTAMP" property="receiveDate"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="create_user" jdbcType="INTEGER" property="createUser"/>
+        <result column="ctime" jdbcType="TIMESTAMP" property="ctime"/>
+        <result column="update_user" jdbcType="INTEGER" property="updateUser"/>
+        <result column="utime" jdbcType="TIMESTAMP" property="utime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, company_id, receivement_type_id, receivement_money, remitter_method_id, remitter, 
     receive_date, state, remark, create_user, ctime, update_user, utime
   </sql>
+    <select id="getList" resultType="com.pro.financial.management.dao.entity.ReceivementEntity">
+        select * from receivement
+        left join company using(company_id)
+        left join receivement_type using(receivement_type_id)
+        left join remitter_method using(remitter_method_id)
+        where id
+        in
+        <foreach item='item' index='index' collection='ids' open='(' separator=',' close=')'>#{item}</foreach>
+        <if test="companyId != null and companyId != ''">
+          AND company_id = #{companyId}
+        </if>
+      <if test="receivementTypeId != null and receivementTypeId != ''">
+          AND receivement_type_id = #{receivementTypeId}
+      </if>
+      <if test="remitterMethodId != null and remitterMethodId != ''">
+          AND remitter_method_id = #{remitterMethodId}
+      </if>
+      <if test="remitter != null and remitter != ''">
+          AND remitter like "%${remitter}%"
+      </if>
+      <if test="startDate !=  null and endDate != null">
+        and receive_date > #{startDate}
+        and receive_date <![CDATA[ < ]]> #{endDate}
+      </if>
+        order by id desc
+    </select>
 </mapper>

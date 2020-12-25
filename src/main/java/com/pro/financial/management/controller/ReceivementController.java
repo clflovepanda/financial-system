@@ -10,6 +10,7 @@ import com.pro.financial.management.dao.entity.SubscriptionLogEntity;
 import com.pro.financial.management.dto.AccountingLogDto;
 import com.pro.financial.management.dto.ReceivementDto;
 import com.pro.financial.user.dao.entity.CompanyEntity;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -80,7 +81,15 @@ public class ReceivementController {
         //根据用户权限获取到能看到的到款id列表
         List<ReceivementView> receivementViewList = new ArrayList<>();
         List<Integer> ids = projectDataSourceBiz.getProjectIdsByCookie(request);
-        List<ReceivementEntity> receivementEntities = receivementBiz.getListById(ids);
+        String companyId = request.getParameter("companyId");
+        String receivementTypeId = request.getParameter("receivementTypeId");
+        String remitterMethodId = request.getParameter("remitterMethodId");
+        String remitter = request.getParameter("remitter");
+        String startDt = request.getParameter("startDt");
+        String endDt = request.getParameter("endDt");
+        Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
+        Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
+        List<ReceivementEntity> receivementEntities = receivementBiz.getList(ids, companyId, receivementTypeId, remitterMethodId, remitter, startDate, endDate);
         if (CollectionUtils.isEmpty(receivementEntities)) {
             result.put("code", HttpStatus.OK.value());
             result.put("msg", HttpStatus.OK.getReasonPhrase());

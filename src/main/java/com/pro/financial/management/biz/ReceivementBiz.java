@@ -7,6 +7,7 @@ import com.pro.financial.management.dto.ReceivementDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -24,7 +25,7 @@ public class ReceivementBiz {
     }
 
     public List<ReceivementEntity> getListById(List<Integer> ids) {
-        return receivementDao.getListById(ids);
+        return receivementDao.getList(ids, null, null, null, null, null, null);
     }
 
     public ReceivementEntity getById(Integer id) {
@@ -37,5 +38,9 @@ public class ReceivementBiz {
 
     public List<ReceivementEntity> getAllList() {
         return receivementDao.getAllList();
+    }
+
+    public List<ReceivementEntity> getList(List<Integer> ids, String companyId, String receivementTypeId, String remitterMethodId, String remitter, Date startDate, Date endDate) {
+        return receivementDao.getList(ids, companyId, receivementTypeId, remitterMethodId, remitter, startDate, endDate);
     }
 }
