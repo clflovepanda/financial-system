@@ -35,6 +35,8 @@ public class RevenueDto {
 
     private Date utime;
 
+    private Integer subscriptionLogId;
+
     private String coName;
     private String remitterMethodName;
     private String receivementTypeName;

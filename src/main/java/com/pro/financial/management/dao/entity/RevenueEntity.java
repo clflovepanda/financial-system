@@ -37,6 +37,8 @@ public class RevenueEntity {
 
     private Date utime;
 
+    private Integer subscriptionLogId;
+
     private String coName;
     private String remitterMethodName;
     private String receivementTypeName;
