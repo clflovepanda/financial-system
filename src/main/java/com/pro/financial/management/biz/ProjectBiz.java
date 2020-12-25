@@ -11,6 +11,7 @@ import com.pro.financial.management.dto.ProjectDto;
 import com.pro.financial.user.dto.DataSourceDto;
 import com.pro.financial.user.filter.LoginFilter;
 import com.pro.financial.utils.ConvertUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -57,5 +58,13 @@ public class ProjectBiz extends ServiceImpl<ProjectDao, ProjectEntity> {
                                        String settlementState, String state, String saleCommisState, Date startDate, Date endDate, String auditingState) {
         return projectDao.getList(projectIds, projectNo, projectName, managerName, salesName, userNames,
                 settlementState, state, saleCommisState, startDate, endDate, auditingState);
+    }
+
+    public List<ProjectDto> getProjectByKeywords(String keyWords) {
+        if (StringUtils.isNotEmpty(keyWords)) {
+            String keyWord = "%" + keyWords + "%";
+            return ConvertUtil.convert(ProjectEntity2Dto.instance, projectDao.getProjectByKeywords(keyWord));
+        }
+        return ConvertUtil.convert(ProjectEntity2Dto.instance, projectDao.getAllProjectList());
     }
 }

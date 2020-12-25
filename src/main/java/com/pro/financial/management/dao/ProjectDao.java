@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pro.financial.management.dao.entity.ProjectEntity;
 
+import com.pro.financial.management.dto.ProjectDto;
 import com.pro.financial.user.dto.DataSourceDto;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
@@ -42,7 +43,11 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
             "</script>")
     List<ProjectEntity> getProjectList(@Param("ids") List<Integer> ids);
 
-    @Select("select * from project")
+    @Select("select * from project " +
+            "left join project_data_source " +
+            "using(project_id) " +
+            "left join data_source " +
+            "using(data_source_id) ")
     List<ProjectEntity> getAllProjectList();
 
     List<ProjectEntity> getList(@Param("ids") List<Integer> projectIds, @Param("projectNo") String projectNo, @Param("projectName") String projectName,
@@ -58,4 +63,12 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
             "using(data_source_id) " +
             "where project_id = #{projectId}" )
     ProjectEntity getProjectById(@Param("projectId") int projectId);
+
+    @Select("select * from project " +
+            "left join project_data_source " +
+            "using(project_id) " +
+            "left join data_source " +
+            "using(data_source_id) " +
+            "where name like #{keyWords}" )
+    List<ProjectEntity> getProjectByKeywords(@Param("keyWords") String keyWords);
 }

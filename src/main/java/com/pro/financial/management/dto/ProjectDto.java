@@ -78,6 +78,9 @@ public class ProjectDto {
     //支出
     private ExpenditureDto expenditure;
 
+    private String dataSourceName;
+    private String dataSourceId;
+
 
 
     private Integer limit;

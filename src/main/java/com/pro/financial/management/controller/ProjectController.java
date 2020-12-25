@@ -385,4 +385,15 @@ public class ProjectController {
         return result;
     }
 
+    @RequestMapping("/getbykey")
+    public JSONObject getProjectByKeywords(HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        String keyWords = request.getParameter("keyWords");
+        List<ProjectDto> projectDtos = projectBiz.getProjectByKeywords(keyWords);
+        result.put("code", HttpStatus.OK.value());
+        result.put("msg", HttpStatus.OK.getReasonPhrase());
+        result.put("data", projectDtos);
+        return result;
+    }
+
 }
