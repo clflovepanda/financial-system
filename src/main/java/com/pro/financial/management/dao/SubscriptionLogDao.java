@@ -33,6 +33,6 @@ public interface SubscriptionLogDao {
             "LEFT JOIN data_source ds USING (data_source_id) " +
             "LEFT JOIN revenue_type rt USING (revenue_type_id) " +
             "LEFT JOIN `user` u ON subscription_log.create_user = user_id " +
-            "where receivement_id = #{receivementId}")
+            "where receivement_id = #{receivementId} and state = 1")
     List<SubscriptionLogEntity> getListByProjectId(@Param("receivementId") Integer receivementId);
 }

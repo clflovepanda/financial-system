@@ -29,5 +29,5 @@ public interface RevenueDao {
     List<RevenueEntity> searchList(@Param("projectId") String projectId, @Param("revenueNo") String revenueNo,
                                    @Param("remitterMethodId") String remitterMethodId, @Param("receivementTypeId") String receivementTypeId,
                                    @Param("companyId") String companyId, @Param("remitter") String remitter,
-                                   @Param("createUser") String createUser, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+                                   @Param("createUser") String createUser, @Param("startDt") Date startDate, @Param("endDt") Date endDate);
 }
