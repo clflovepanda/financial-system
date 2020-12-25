@@ -1,11 +1,13 @@
 package com.pro.financial.management.dao;
 
 import com.pro.financial.management.dao.entity.RevenueEntity;
+import com.pro.financial.management.dto.RevenueDto;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -23,4 +25,9 @@ public interface RevenueDao {
             "</foreach>" +
             "</script>")
     List<RevenueEntity> getRevenueList(@Param("projectIds") List<Integer> projectIds);
+
+    List<RevenueEntity> searchList(@Param("projectId") String projectId, @Param("revenueNo") String revenueNo,
+                                   @Param("remitterMethodId") String remitterMethodId, @Param("receivementTypeId") String receivementTypeId,
+                                   @Param("companyId") String companyId, @Param("remitter") String remitter,
+                                   @Param("createUser") String createUser, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

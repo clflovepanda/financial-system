@@ -34,7 +34,8 @@ public interface ExpenditureDao {
     @Update("update set company_id = #{entity.companyId}, expenditure_type = #{expenditureType},")
     int update(@Param("entity") ExpenditureEntity entity);
 
-    List<ExpenditureEntity> searchList(@Param("companyId") String companyId, @Param("numbering") String numbering, @Param("expenditureMethodId") String expenditureMethodId,
+    List<ExpenditureEntity> searchList(@Param("projectId") String projectId, @Param("companyId") String companyId,
+                                       @Param("numbering") String numbering, @Param("expenditureMethodId") String expenditureMethodId,
                                     @Param("expenditureTypeId") String expenditureTypeId, @Param("beneficiaryUnit") String beneficiaryUnit, @Param("createUser") String createUser,
                                     @Param("state") String state, @Param("expenditureAuditLog") String expenditureAuditLog,
                                     @Param("expenditurePurposeId") String expenditurePurposeId, @Param("Date") Date startDate, @Param("endDate") Date endDate);

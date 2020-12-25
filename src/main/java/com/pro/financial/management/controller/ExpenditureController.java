@@ -44,6 +44,7 @@ public class ExpenditureController {
     @RequestMapping("/list")
     public JSONObject getExpenditure(HttpServletRequest request) {
         JSONObject result = new JSONObject();
+        String projectId = request.getParameter("projectId");
         String companyId = request.getParameter("companyId");
         String numbering = request.getParameter("numbering");
         //支出方式
@@ -64,7 +65,7 @@ public class ExpenditureController {
         String endDt = request.getParameter("endDt");
         Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
         Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
-        List<ExpenditureDto> expenditureDtos = expenditureBiz.searchList(companyId, numbering, expenditureMethodId, expenditureTypeId,
+        List<ExpenditureDto> expenditureDtos = expenditureBiz.searchList(projectId, companyId, numbering, expenditureMethodId, expenditureTypeId,
                 beneficiaryUnit, createUser, state, expenditureAuditLog, expenditurePurposeId, startDate, endDate);
 
         result.put("code", 0);

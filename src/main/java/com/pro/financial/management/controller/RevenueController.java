@@ -5,6 +5,7 @@ import com.pro.financial.management.biz.RevenueBiz;
 import com.pro.financial.management.biz.RevenueTypeBiz;
 import com.pro.financial.management.dto.RevenueDto;
 import com.pro.financial.management.dto.RevenueTypeDto;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -43,5 +46,32 @@ public class RevenueController {
         return result;
     }
 
+    @RequestMapping("/list")
+    public JSONObject getExpenditure(HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        String projectId = request.getParameter("projectId");
+        //收入编号
+        String revenueNo = request.getParameter("revenueNo");
+        //汇款放类型
+        String remitterMethodId = request.getParameter("remitterMethodId");
+        //认款类型
+        String receivementTypeId = request.getParameter("receivementTypeId");
+        //账户
+        String companyId = request.getParameter("companyId");
+        //汇款方
+        String remitter = request.getParameter("remitter");
+        //认款人
+        String createUser = request.getParameter("createUser");
 
+        String startDt = request.getParameter("startDt");
+        String endDt = request.getParameter("endDt");
+        Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
+        Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
+        List<RevenueDto> revenueDtos = revenueBiz.searchList(projectId, revenueNo, remitterMethodId, receivementTypeId, companyId, remitter, createUser, startDate, endDate);
+
+        result.put("code", 0);
+        result.put("msg", "");
+        result.put("data", revenueDtos);
+        return result;
+    }
 }

@@ -85,6 +85,9 @@
     select * from expenditure e
     left join `user` u on e.create_user = u.user_id
     where 1=1
+    <if test="projectId != null and projectId != ''">
+      and e.project_id = #{projectId}
+    </if>
     <if test="companyId != null and companyId !=''">
       and e.company_id = #{companyId}
     </if>
