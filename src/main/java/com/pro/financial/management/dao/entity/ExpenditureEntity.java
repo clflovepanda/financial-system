@@ -62,4 +62,6 @@ public class ExpenditureEntity {
     private ExpenditureTypeEntity expenditureTypeEntity;
     private ExpenditurePurposeEntity expenditurePurpose;
 
+    private String username;
+
 }

@@ -66,4 +66,5 @@ public class ExpenditureDto {
     private ExpenditureTypeEntity expenditureTypeEntity;
     private ExpenditurePurposeEntity expenditurePurpose;
 
+    private String username;
 }

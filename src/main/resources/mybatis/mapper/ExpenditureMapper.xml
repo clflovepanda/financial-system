@@ -80,4 +80,42 @@
     </if>
     order by expenditure_id desc
   </select>
+
+  <select id="searchList" resultType="com.pro.financial.management.dao.entity.ExpenditureEntity">
+    select * from expenditure e
+    left join `user` u on e.create_user = u.user_id
+    where 1=1
+    <if test="companyId != null and companyId !=''">
+      and e.company_id = #{companyId}
+    </if>
+    <if test="numbering != null and numbering !=''">
+      and e.numbering like "$%{numbering}%"
+    </if>
+    <if test="expenditureMethodId != null and expenditureMethodId !=''">
+      and e.expenditure_method_id = #{expenditureMethodId}
+    </if>
+    <if test="expenditureTypeId != null and expenditureTypeId !=''">
+      and e.expenditure_type_id = #{expenditureTypeId}
+    </if>
+    <if test="beneficiaryUnit != null and beneficiaryUnit !=''">
+      and e.beneficiary_unit like "$%{beneficiaryUnit}%"
+    </if>
+    <if test="state != null and state !=''">
+      and e.state = #{state}
+    </if>
+    <if test="expenditureAuditLog != null and expenditureAuditLog !=''">
+      and e.expenditure_audit_log = #{expenditureAuditLog}
+    </if>
+    <if test="expenditurePurposeId != null and expenditurePurposeId !=''">
+      and e.expenditure_purpose_id = #{expenditurePurposeId}
+    </if>
+    <if test="createUser != null and createUser !=''">
+      and u.username like "$%{createUser}%
+    </if>
+    <if test="startDt != null  and endDt != null">
+      AND e.ctime > #{startDt}
+      AND e.ctime <![CDATA[ < ]]> #{endDt}
+    </if>
+    order by expenditure_id desc
+  </select>
 </mapper>

@@ -40,4 +40,36 @@ public class ExpenditureController {
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
     }
+
+    @RequestMapping("/list")
+    public JSONObject getExpenditure(HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        String companyId = request.getParameter("companyId");
+        String numbering = request.getParameter("numbering");
+        //支出方式
+        String expenditureMethodId = request.getParameter("expenditureMethodId");
+        //支出类型
+        String expenditureTypeId = request.getParameter("expenditureTypeId");
+        //收款人单位
+        String beneficiaryUnit = request.getParameter("beneficiaryUnit");
+        //申请人
+        String createUser = request.getParameter("createUser");
+        //最新状态
+        String state = request.getParameter("state");
+        //工作流
+        String expenditureAuditLog = request.getParameter("expenditureAuditLog");
+        //用途
+        String expenditurePurposeId = request.getParameter("expenditurePurposeId");
+
+        String startDt = request.getParameter("startDt");
+        String endDt = request.getParameter("endDt");
+        Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
+        Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
+        List<ExpenditureDto> expenditureDtos = expenditureBiz.searchList(companyId, numbering, expenditureMethodId, expenditureTypeId,
+                beneficiaryUnit, createUser, state, expenditureAuditLog, expenditurePurposeId, startDate, endDate);
+
+        result.put("code", 0);
+        result.put("msg", "");
+        return result;
+    }
 }

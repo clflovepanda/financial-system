@@ -9,6 +9,7 @@ import com.pro.financial.management.dao.entity.RemitterMethodEntity;
 import com.pro.financial.management.dao.entity.SubscriptionLogEntity;
 import com.pro.financial.management.dto.AccountingLogDto;
 import com.pro.financial.management.dto.ReceivementDto;
+import com.pro.financial.management.dto.SubscriptionLogDto;
 import com.pro.financial.user.dao.entity.CompanyEntity;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -240,4 +241,20 @@ public class ReceivementController {
         result.put("msg", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
         return result;
     }
+    @RequestMapping("/getsublog")
+    public JSONObject getSubLog(HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        Integer receivementId = Integer.valueOf(request.getParameter("receivementId"));
+        if (receivementId == null || receivementId < 1) {
+            result.put("code", 1001);
+            result.put("msg", "参数传入有误");
+            return result;
+        }
+        List<SubscriptionLogDto> subscriptionLogDtos = subscriptionLogBiz.getListByReceivementId(receivementId);
+        result.put("code", 0);
+        result.put("msg", "");
+        result.put("data", subscriptionLogDtos);
+        return result;
+    }
+
 }
