@@ -154,7 +154,8 @@ public class ProjectController {
     public JSONObject getProjectDetail(HttpServletRequest request) {
         JSONObject result = new JSONObject();
         Integer id = Integer.valueOf(request.getParameter("id"));
-        List<Integer> projectIds = new ArrayList<>(id);
+        List<Integer> projectIds = new ArrayList<>();
+        projectIds.add(id);
         // 项目表
         List<ProjectEntity> projectEntities = projectBiz.getProjectList(projectIds);
         // 项目人员表
