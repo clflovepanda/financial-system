@@ -183,6 +183,29 @@ public class ProjectController {
         int createUser = projectEntity.getCreateUser();
         projectEntity.setCreateUserName(userDao.getUserById(createUser).getUsername());
         // 项目工时表 TODO
+        //财务统计 TODO
+        ProjectFinancialStatisticsDto projectFinancialStatisticsDto = new ProjectFinancialStatisticsDto();
+        projectFinancialStatisticsDto.setEstincome(projectEntity.getEstincome());
+        projectFinancialStatisticsDto.setBudget(projectEntity.getBudget());
+        //实际收入
+        projectFinancialStatisticsDto.setActualIncome(new BigDecimal(0));
+        //实际支出
+        projectFinancialStatisticsDto.setActualExpenditure(new BigDecimal(0));
+        //预收押金
+        projectFinancialStatisticsDto.setDeposit(new BigDecimal(0));
+        //押金转收入
+        projectFinancialStatisticsDto.setDepositIncome(new BigDecimal(0));
+        //项目利润
+        projectFinancialStatisticsDto.setProfit(new BigDecimal(0));
+        //毛利率
+        projectFinancialStatisticsDto.setRate(new Double(0));
+        //支出比
+        projectFinancialStatisticsDto.setExpenditureRatio(new Double(0));
+        //结算收入
+        projectFinancialStatisticsDto.setSettlement(new BigDecimal(0));
+        //应收收入
+        projectFinancialStatisticsDto.setReceivable(new BigDecimal(0));
+
         result.put("code", HttpStatus.OK.value());
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         //封装参数到data
@@ -197,6 +220,7 @@ public class ProjectController {
         resultMap.put("quotationEntities", quotationEntities);
         resultMap.put("receivableEntities", receivableEntities);
         resultMap.put("projectAuditLog", projectAuditLogDto);
+        resultMap.put("financial", projectFinancialStatisticsDto);
         result.put("data", resultMap);
         return result;
     }
