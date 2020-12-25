@@ -1,11 +1,15 @@
 package com.pro.financial.management.dto;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 @ToString
+@Getter
+@Setter
 public class SubscriptionLogDto {
     private Integer id;
 
@@ -27,83 +31,8 @@ public class SubscriptionLogDto {
 
     private Date ctime;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getReceivementId() {
-        return receivementId;
-    }
-
-    public void setReceivementId(Integer receivementId) {
-        this.receivementId = receivementId;
-    }
-
-    public Integer getRevenueTypeId() {
-        return revenueTypeId;
-    }
-
-    public void setRevenueTypeId(Integer revenueTypeId) {
-        this.revenueTypeId = revenueTypeId;
-    }
-
-    public Integer getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
-    }
-
-    public BigDecimal getReceivementMoney() {
-        return receivementMoney;
-    }
-
-    public void setReceivementMoney(BigDecimal receivementMoney) {
-        this.receivementMoney = receivementMoney;
-    }
-
-    public Date getSubscriptionDate() {
-        return subscriptionDate;
-    }
-
-    public void setSubscriptionDate(Date subscriptionDate) {
-        this.subscriptionDate = subscriptionDate;
-    }
-
-    public Integer getState() {
-        return state;
-    }
-
-    public void setState(Integer state) {
-        this.state = state;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
-
-    public Integer getCreateUser() {
-        return createUser;
-    }
-
-    public void setCreateUser(Integer createUser) {
-        this.createUser = createUser;
-    }
-
-    public Date getCtime() {
-        return ctime;
-    }
-
-    public void setCtime(Date ctime) {
-        this.ctime = ctime;
-    }
+    private String username;
+    private String projectName;
+    private String dataSourceName;
+    private String revenueTypeName;
 }
