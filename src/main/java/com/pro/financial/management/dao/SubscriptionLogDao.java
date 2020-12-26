@@ -2,10 +2,7 @@ package com.pro.financial.management.dao;
 
 import com.pro.financial.management.dao.entity.SubscriptionLogEntity;
 import com.pro.financial.management.dto.SubscriptionLogDto;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -38,4 +35,7 @@ public interface SubscriptionLogDao {
             "LEFT JOIN `user` u ON subscription_log.create_user = user_id " +
             "where receivement_id = #{receivementId} and subscription_log.state = 1")
     List<SubscriptionLogEntity> getListByProjectId(@Param("receivementId") Integer receivementId);
+
+    @Update("update subscription_log set state = 0 where receivement_id = #{id}")
+    int deleteByReceivementId(@Param("id") Integer id);
 }

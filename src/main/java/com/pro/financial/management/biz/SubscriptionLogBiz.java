@@ -18,7 +18,10 @@ public class SubscriptionLogBiz {
     private SubscriptionLogDao subscriptionLogDao;
 
     public int addSubscriptionLog(SubscriptionLogDto subscriptionLogDto) {
-        return subscriptionLogDao.insert(SubscriptionLogDto2Entity.instance.convert(subscriptionLogDto));
+        SubscriptionLogEntity subscriptionLogEntity = SubscriptionLogDto2Entity.instance.convert(subscriptionLogDto);
+        int count = subscriptionLogDao.insert(subscriptionLogEntity);
+        subscriptionLogDto.setId(subscriptionLogEntity.getId());
+        return count;
     }
 
     public List<SubscriptionLogEntity> getListByReceivementIds(List<Integer> receivementIds) {
@@ -31,5 +34,10 @@ public class SubscriptionLogBiz {
 
     public List<SubscriptionLogDto> getListByReceivementId(Integer receivementId) {
         return ConvertUtil.convert(SubscriptionLogEntity2Dto.instance, subscriptionLogDao.getListByProjectId(receivementId));
+    }
+
+
+    public int deleteByReceivementId(Integer id) {
+        return subscriptionLogDao.deleteByReceivementId(id);
     }
 }

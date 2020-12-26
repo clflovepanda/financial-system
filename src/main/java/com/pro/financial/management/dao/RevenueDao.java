@@ -6,6 +6,7 @@ import jdk.nashorn.internal.objects.annotations.Setter;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -33,4 +34,7 @@ public interface RevenueDao {
                                    @Param("createUser") String createUser, @Param("startDt") Date startDate, @Param("endDt") Date endDate);
     @Select("SELECT revenue_no FROM revenue ORDER BY id DESC LIMIT 0,1")
     String selectLastNo();
+
+    @Update("update revenue set delete = 0 where receivement_id = #{id}")
+    int deleteByReceivementId(@Param("id") Integer id);
 }

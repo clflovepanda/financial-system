@@ -63,4 +63,8 @@ public class RevenueBiz {
         revenueEntity.setUtime(new Date());
         return revenueDao.insert(revenueEntity);
     }
+
+    public int deleteByReceivementId(Integer id) {
+        return revenueDao.deleteByReceivementId(id);
+    }
 }

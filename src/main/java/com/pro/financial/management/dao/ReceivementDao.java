@@ -32,7 +32,7 @@ public interface ReceivementDao {
     ReceivementEntity getById(@Param("id") Integer id);
 
     @Update("update receivement set state = #{state} where id = #{id}")
-    int update(@Param("id") Integer id, @Param("state") Integer state);
+    int updatestate(@Param("id") Integer id, @Param("state") Integer state);
 
     @Select("select * from receivement order by id asc")
     List<ReceivementEntity> getAllList();
@@ -40,4 +40,5 @@ public interface ReceivementDao {
     List<ReceivementEntity> getList(@Param("ids") List<Integer> ids, @Param("companyId") String companyId,
                                     @Param("receivementTypeId") String receivementTypeId, @Param("remitterMethodId") String remitterMethodId,
                                     @Param("remitter") String remitter, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
 }

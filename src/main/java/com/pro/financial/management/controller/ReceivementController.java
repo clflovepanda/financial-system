@@ -195,6 +195,9 @@ public class ReceivementController {
         if (count == 1) {
             result.put("code", HttpStatus.OK.value());
             result.put("msg", HttpStatus.OK.getReasonPhrase());
+            //删除成功删除认款日志和收入
+            revenueBiz.deleteByReceivementId(id);
+            subscriptionLogBiz.deleteByReceivementId(id);
             return result;
         }
         result.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());

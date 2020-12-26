@@ -63,8 +63,11 @@
         <if test="projectName !=  null and projectName != ''">
             and a.name LIKE "%${projectName}%"
         </if>
-        <if test="auditingState !=  null and auditingState != ''">
-            and a.auditing_state = #{auditingState}
+        <if test="auditingState != null and auditingState != '' and auditingState == '1'">
+            and a.auditing_state = 1
+        </if>
+        <if test="auditingState != null and auditingState != '1'">
+            and a.auditing_state  <![CDATA[ <> ]]> 1
         </if>
         <if test="state !=  null and state != ''">
             and a.state =#{state}
