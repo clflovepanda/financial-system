@@ -34,7 +34,7 @@ public class CommonUtil {
         if (StringUtils.equals(dateStr, date)) {
             realNo = Integer.parseInt(no.substring(no.length() - 3)) + 1;
         }
-        return dataSource + "-" + type + "-" + dateStr + int2String3(realNo);
+        return StringUtils.isEmpty(dataSource) ? type + "-" + dateStr + int2String3(realNo) :  dataSource + "-" + type + "-" + dateStr + int2String3(realNo);
     }
 
     private static String int2String3(int no) {
