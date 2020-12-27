@@ -2,6 +2,7 @@ package com.pro.financial.management.dao;
 
 import com.pro.financial.management.dao.entity.ProjectTaskEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
@@ -29,4 +30,6 @@ public interface ProjectTaskDao extends BaseMapper<ProjectTaskEntity> {
             "</foreach>" +
             "</script>")
     List<ProjectTaskEntity> getListByProjectIds(List<Integer> projectIds);
+
+    List<ProjectTaskEntity> gettask(@Param("projectId") Integer projectId, @Param("userId") Integer userId);
 }

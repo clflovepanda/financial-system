@@ -27,4 +27,22 @@
         </if>
     </select>
 
+    <select id="gettask" resultType="com.pro.financial.management.dao.entity.ProjectTaskEntity">
+        select p.name projectName, u.username, pt.amount, pt.take_time, t.template_name, ptr.template_name relationName, pt.completion_time
+        from project_task pt
+        left join project_task_relation ptr
+        using (task_relation_id)
+        left join template t on pt.template_id = t.template_id
+        left join `user` u using (user_id)
+        left join project p using (project_id)
+        where 1=1
+        and pt.status <![CDATA[ <> ]]> -1
+        <if test="projectId != null and projectId > 0">
+            and p.project_id = #{projectId}
+        </if>
+        <if test="userId != null and userId > 0">
+            and u.user_id = #{userId}
+        </if>
+    </select>
+
 </mapper>

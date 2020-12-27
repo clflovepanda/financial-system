@@ -37,4 +37,7 @@ public interface ProjectUserDao {
             "left join user using(user_id) " +
             "where project_id = #{projectId} ")
     List<ProjectUserEntity> getPrjectUserListById(@Param("projectId") Integer projectId);
+
+    @Select("select distinct * from user")
+    List<ProjectUserEntity> getAllUser();
 }

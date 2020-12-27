@@ -1,5 +1,6 @@
 package com.pro.financial.management.dto;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -62,6 +63,13 @@ public class ProjectTaskDto {
      * 完成时间
      */
     private LocalDateTime completionTime;
+
+
+    private String templateName;
+    private String projectName;
+    private String relationName;
+    private String username;
+
 
     private Integer projectId;
     private Integer limit;

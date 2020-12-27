@@ -228,7 +228,14 @@ public class ProjectTaskBiz extends ServiceImpl<ProjectTaskDao, ProjectTaskEntit
 
     public List<ProjectUserDto> getProjectUsers(Integer projectId) {
 
-        List<ProjectUserEntity> prjectUserList = projectUserDao.getPrjectUserListById(projectId);
+
+        List<ProjectUserEntity> prjectUserList = projectId == 0 ? projectUserDao.getAllUser() : projectUserDao.getPrjectUserListById(projectId);
         return ConvertUtil.convert(ProjectUserEntity2Dto.instance, prjectUserList);
+    }
+
+    public List<ProjectTaskDto> gettask(Integer projectId, Integer userId) {
+        List<ProjectTaskEntity> projectTaskEntities = projectTaskDao.gettask(projectId, userId);
+
+        return ConvertUtil.convert(ProjectTaskEntity2Dto.instance, projectTaskEntities);
     }
 }

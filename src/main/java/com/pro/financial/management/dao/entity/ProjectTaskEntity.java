@@ -91,5 +91,15 @@ public class ProjectTaskEntity implements Serializable {
     @TableField(exist = false)
     private UserEntity user;
 
+    @TableField(exist = false)
+    private String templateName;
+    @TableField(exist = false)
+    private String projectName;
+    @TableField(exist = false)
+    private String relationName;
+    @TableField(exist = false)
+    private String username;
+
+
 
 }
