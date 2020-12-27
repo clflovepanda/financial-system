@@ -40,4 +40,7 @@ public interface ProjectUserDao {
 
     @Select("select distinct * from user")
     List<ProjectUserEntity> getAllUser();
+
+    @Select("select distinct project_id from project_user where user_id = #{userId}")
+    List<Integer> getProjectIdByUserId(@Param("userId") int userId);
 }

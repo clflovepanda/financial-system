@@ -65,7 +65,7 @@
       AND e.company_id = #{company}
     </if>
     <if test="projectNo != null and projectNo != ''">
-      AND e.numbering = #{projectNo}
+      AND (e.numbering like "%${projectNo}%" or p.name like "%${projectNo}%")
     </if>
     <if test="purpose != null and purpose != ''">
       AND epu.expenditure_purpose_name = #{purpose}
