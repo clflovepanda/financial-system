@@ -40,9 +40,10 @@ public class ReceivableController {
         String userName = jsonInfo.getString("userName");
         Date startDate = jsonInfo.getDate("start");
         Date endDate = jsonInfo.getDate("end");
+        String projectId = jsonInfo.getString("projectId");
         Integer limit = StringUtils.isEmpty(request.getParameter("limit")) ? null : Integer.parseInt(request.getParameter("limit"));
         Integer offset = StringUtils.isEmpty(request.getParameter("offset")) ? null : Integer.parseInt(request.getParameter("offset"));
-        List<ReceivableDto> receivableDtos = receivableBiz.getReceivable(org, receivableNo, taxableServiceName, userName, startDate, endDate, limit, offset);
+        List<ReceivableDto> receivableDtos = receivableBiz.getReceivable(projectId, org, receivableNo, taxableServiceName, userName, startDate, endDate, limit, offset);
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", receivableDtos);

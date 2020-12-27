@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.pro.financial.user.dao.entity.UserEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -85,6 +87,9 @@ public class ProjectTaskEntity implements Serializable {
 
     @TableField(exist = false)
     private Integer relationTemplateId;
+
+    @TableField(exist = false)
+    private UserEntity user;
 
 
 }

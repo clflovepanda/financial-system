@@ -20,7 +20,7 @@ import java.util.List;
 @Repository
 public interface ReceivableDao extends BaseMapper<ReceivableEntity> {
 
-    List<ReceivableEntity> getReceivable(@Param("org") String org, @Param("receivableNo") String receivableNo, @Param("taxableServiceName") String taxableServiceName, @Param("userName") String userName, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("limit") Integer limit, @Param("offset") Integer offset);
+    List<ReceivableEntity> getReceivable(@Param("projectId") String projectId, @Param("org") String org, @Param("receivableNo") String receivableNo, @Param("taxableServiceName") String taxableServiceName, @Param("userName") String userName, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("limit") Integer limit, @Param("offset") Integer offset);
 
     @Select("SELECT receivable_no FROM receivable ORDER BY receivable_id DESC LIMIT 0,1")
     String selectLastNo();

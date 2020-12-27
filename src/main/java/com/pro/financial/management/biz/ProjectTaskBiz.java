@@ -6,21 +6,23 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pro.financial.consts.CommonConst;
-import com.pro.financial.management.converter.ProjectTaskDto2Entity;
-import com.pro.financial.management.converter.ProjectTaskRelationDto2Entity;
+import com.pro.financial.management.converter.*;
 import com.pro.financial.management.dao.ProjectTaskDao;
 import com.pro.financial.management.dao.ProjectTaskRelationDao;
-import com.pro.financial.management.dao.entity.ProjectEntity;
-import com.pro.financial.management.dao.entity.ProjectTaskEntity;
+import com.pro.financial.management.dao.ProjectUserDao;
+import com.pro.financial.management.dao.TemplateDao;
+import com.pro.financial.management.dao.entity.*;
 import com.pro.financial.management.dto.ProjectTaskDto;
 import com.pro.financial.management.dto.ProjectTaskRelationDto;
+import com.pro.financial.management.dto.ProjectUserDto;
+import com.pro.financial.user.dao.UserDao;
+import com.pro.financial.user.dto.UserDto;
+import com.pro.financial.utils.ConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -38,6 +40,15 @@ public class ProjectTaskBiz extends ServiceImpl<ProjectTaskDao, ProjectTaskEntit
 
     @Autowired
     private ProjectTaskDao projectTaskDao;
+
+    @Autowired
+    private TemplateDao templateDao;
+
+    @Autowired
+    private ProjectUserDao projectUserDao;
+
+    @Autowired
+    private UserDao userDao;
 
     /**
      * 添加/修改项目对应工时模板,项目可以对应多套模板
@@ -103,12 +114,16 @@ public class ProjectTaskBiz extends ServiceImpl<ProjectTaskDao, ProjectTaskEntit
             return result;
         }
         for (ProjectTaskDto projectTaskDto : projectTaskDtos) {
+            projectTaskDto.setStatus(CommonConst.project_task_status_review);
+            projectTaskDto.setTaskStatus(CommonConst.task_status_init);
             if (projectTaskDto.getTaskId() != null && projectTaskDto.getTaskId() > 1) {
                 projectTaskWithTaskId.add(projectTaskDto);
             } else {
                 projectTaskWithoutTaskId.add(projectTaskDto);
             }
         }
+        this.saveBatch(ConvertUtil.convert(ProjectTaskDto2Entity.instance, projectTaskWithoutTaskId));
+        this.updateBatchById(ConvertUtil.convert(ProjectTaskDto2Entity.instance, projectTaskWithTaskId));
 
         result.put("code", 0);
         result.put("msg", "");
@@ -122,6 +137,7 @@ public class ProjectTaskBiz extends ServiceImpl<ProjectTaskDao, ProjectTaskEntit
      */
     public JSONObject initTask(ProjectTaskDto projectTaskDto) {
         JSONObject result = new JSONObject();
+        Map<String,Object> resutlMap = new HashMap<>();
         if (projectTaskDto.getTaskRelationId() == null || projectTaskDto.getTaskRelationId() < 1) {
             result.put("code", 1001);
             result.put("msg", "未传入关联id");
@@ -132,15 +148,35 @@ public class ProjectTaskBiz extends ServiceImpl<ProjectTaskDao, ProjectTaskEntit
             result.put("msg", "未获取到模板id");
             return result;
         }
-        ProjectTaskEntity projectTaskEntity = ProjectTaskDto2Entity.instance.convert(projectTaskDto);
-        projectTaskEntity.setStatus(CommonConst.project_task_status_template);
-        if (projectTaskDto.getTaskId() == null || projectTaskDto.getTaskId() < 1) {
-            projectTaskDao.insert(projectTaskEntity);
+
+        TemplateEntity templateEntity = templateDao.selectById(projectTaskDto.getTemplateId());
+        QueryWrapper<ProjectTaskEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("task_relation_id", projectTaskDto.getTaskRelationId()).eq("template_id", projectTaskDto.getTemplateId())
+                .eq("status", CommonConst.project_task_status_template).eq("task_status", CommonConst.task_status_init);
+        List<ProjectTaskEntity> projectTaskEntities = projectTaskDao.selectList(queryWrapper);
+        if (!CollectionUtils.isEmpty(projectTaskEntities)) {
+            resutlMap.put("tasktemp", projectTaskEntities.get(0));
         } else {
-            projectTaskDao.updateById(projectTaskEntity);
+            ProjectTaskEntity projectTaskEntity = ProjectTaskDto2Entity.instance.convert(projectTaskDto);
+            projectTaskEntity.setStatus(CommonConst.project_task_status_template);
+            projectTaskEntity.setTaskStatus(CommonConst.task_status_init);
+            projectTaskEntity.setTakeTime(templateEntity.getTakeTime());
+            projectTaskEntity.setAmount(templateEntity.getQuantity()+"");
+            projectTaskDao.insert(projectTaskEntity);
+            resutlMap.put("tasktemp", projectTaskEntity);
         }
+
+        QueryWrapper<ProjectTaskEntity> addUserWrapper = new QueryWrapper<>();
+        addUserWrapper.eq("task_relation_id", projectTaskDto.getTaskRelationId()).eq("template_id", projectTaskDto.getTemplateId())
+                .eq("status", CommonConst.project_task_status_review).eq("task_status", CommonConst.task_status_init);
+        List<ProjectTaskEntity> addUserEntities = projectTaskDao.selectList(addUserWrapper);
+        for (ProjectTaskEntity projectTaskEntity : addUserEntities) {
+            projectTaskEntity.setUser(userDao.getUserById(projectTaskEntity.getUserId()));
+        }
+        resutlMap.put("task", addUserEntities);
         result.put("code", 0);
         result.put("msg", "");
+        result.put("data", resutlMap);
         return result;
     }
 
@@ -181,5 +217,18 @@ public class ProjectTaskBiz extends ServiceImpl<ProjectTaskDao, ProjectTaskEntit
 
     public List<ProjectTaskEntity> getListByProjectIds(List<Integer> projectIds) {
         return projectTaskDao.getListByProjectIds(projectIds);
+    }
+
+    public List<ProjectTaskRelationDto> getTaskRelation(Integer projectId) {
+        QueryWrapper<ProjectTaskRelationEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("project_id", projectId);
+        List<ProjectTaskRelationEntity> projectTaskRelationEntities = projectTaskRelationDao.selectList(queryWrapper);
+        return ConvertUtil.convert(ProjectTaskRelationEntity2Dto.instance, projectTaskRelationEntities);
+    }
+
+    public List<ProjectUserDto> getProjectUsers(Integer projectId) {
+
+        List<ProjectUserEntity> prjectUserList = projectUserDao.getPrjectUserListById(projectId);
+        return ConvertUtil.convert(ProjectUserEntity2Dto.instance, prjectUserList);
     }
 }

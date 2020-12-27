@@ -29,6 +29,8 @@
     LEFT JOIN receivement_type USING (receivement_type_id)
     LEFT JOIN data_source USING (data_source_id)
     where 1=1
+    and re.state = 1
+
     <if test="projectId != null and projectId != ''">
       and re.project_id = #{projectId}
     </if>
@@ -40,6 +42,9 @@
     </if>
     <if test="receivementTypeId != null and receivementTypeId != ''">
       and r.receivement_type_id = #{receivementTypeId}
+    </if>
+    <if test="receivementTypeId == null or receivementTypeId == ''">
+      and r.receivement_type_id in (1,2,3)
     </if>
     <if test="companyId != null and companyId != ''">
       and r.company_id = #{companyId}

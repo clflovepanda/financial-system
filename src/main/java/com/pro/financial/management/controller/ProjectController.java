@@ -362,9 +362,6 @@ public class ProjectController {
         String endDt = request.getParameter("endDt");
         //审核状态
         String auditingState = request.getParameter("auditing_state");
-        if (StringUtils.isEmpty(auditingState)) {
-            auditingState = "1";
-        }
         Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
         Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
         List<ProjectEntity> projectEntities = projectBiz.getList(projectIds, projectNo, projectName, managerName, salesName, userNames, settlementState, state, saleCommisState, startDate, endDate, auditingState);

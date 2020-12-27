@@ -73,4 +73,7 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
 
     @Select("SELECT code FROM project ORDER BY project_id DESC LIMIT 0,1")
     String selectLastNo();
+
+    List<ProjectEntity> statistics(@Param("dataSourceId") String dataSourceId, @Param("keyWord") String keyWord,
+                                   @Param("startDt") Date startDate, @Param("endDt") Date endDate, @Param("state") String state);
 }

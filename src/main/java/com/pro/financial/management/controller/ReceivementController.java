@@ -222,7 +222,7 @@ public class ReceivementController {
         List<Integer> receivementIds = new ArrayList<>();
         List<SubscriptionLogDto> subscriptionLogEntities = subscriptionLogBiz.getListByReceivementId(receivementId);
         for (SubscriptionLogDto entity : subscriptionLogEntities) {
-            diff.subtract(entity.getReceivementMoney());
+            diff = diff.subtract(entity.getReceivementMoney());
         }
         if (diff.compareTo(BigDecimal.ZERO) != 0) {
             result.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
@@ -238,6 +238,7 @@ public class ReceivementController {
         accountingLogDto.setCtime(new Date());
         int count = accountingLogBiz.addAccountingLog(accountingLogDto);
         if (count == 1) {
+            receivementBiz.updateReceivementState(receivementId, 4);
             result.put("code", HttpStatus.OK.value());
             result.put("msg", HttpStatus.OK.getReasonPhrase());
             return result;
@@ -271,6 +272,10 @@ public class ReceivementController {
             result.put("msg", "未传入认款类型");
             return result;
         }
+        Integer state = jsonInfo.getInteger("state");
+        if (state == null || state !=3) {
+            state = 2;
+        }
         subscriptionLogDto.setState(1);
         subscriptionLogDto.setCreateUser(userId);
         subscriptionLogDto.setCtime(new Date());
@@ -280,8 +285,7 @@ public class ReceivementController {
         ReceivementEntity receivementEntity = receivementBiz.getById(subscriptionLogDto.getReceivementId());
         //全进入收入表 区分类型在不同场景 不在此处
         int countRevenue = revenueBiz.addRevenueBySubLog(subscriptionLogDto, userId);
-        //TODO 修改已经认款
-        receivementBiz.updateReceivementState(subscriptionLogDto.getReceivementId(), 2);
+        receivementBiz.updateReceivementState(subscriptionLogDto.getReceivementId(), state);
 
         result.put("code", HttpStatus.OK.value());
         result.put("msg", HttpStatus.OK.getReasonPhrase());

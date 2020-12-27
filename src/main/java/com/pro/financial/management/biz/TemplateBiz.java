@@ -61,7 +61,7 @@ public class TemplateBiz extends ServiceImpl<TemplateDao, TemplateEntity> {
                     //遍历2级模板查出3级模板
                     for (TemplateEntity templateEntity : templateLevel2) {
                         QueryWrapper<TemplateEntity> levle3wrapper = new QueryWrapper<>();
-                        levle2wrapper.eq("level", 3).eq("parent_id", templateEntity.getTemplateId()).eq("origin_id", templateLevel1.getTemplateId());
+                        levle3wrapper.eq("level", 3).eq("parent_id", templateEntity.getTemplateId()).eq("origin_id", templateLevel1.getTemplateId());
                         List<TemplateEntity> templateLevel3 = templateDao.selectList(levle3wrapper);
                         templateEntity.setTemplates(templateLevel3);
                     }

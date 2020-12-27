@@ -24,7 +24,7 @@ public interface ProjectUserDao {
     int batchInsert(@Param("entities") List<ProjectUserEntity> entities);
 
     @Select("<script>" +
-            "select * from project_user " +
+            "select distinct * from project_user " +
             "left join user using(user_id) " +
             "where project_id in " +
             "<foreach collection='projectIds' item='projectId' index='index' separator=',' open='(' close=')'>" +
@@ -32,4 +32,9 @@ public interface ProjectUserDao {
             "</foreach>" +
             "</script>")
     List<ProjectUserEntity> getPrjectUserList(@Param("projectIds") List<Integer> projectIds);
+
+    @Select("select distinct user.* from project_user " +
+            "left join user using(user_id) " +
+            "where project_id = #{projectId} ")
+    List<ProjectUserEntity> getPrjectUserListById(@Param("projectId") Integer projectId);
 }

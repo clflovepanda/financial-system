@@ -35,6 +35,6 @@ public interface RevenueDao {
     @Select("SELECT revenue_no FROM revenue ORDER BY id DESC LIMIT 0,1")
     String selectLastNo();
 
-    @Update("update revenue set delete = 0 where receivement_id = #{id}")
+    @Update("update revenue set `delete` = 0 where receivement_id = #{id}")
     int deleteByReceivementId(@Param("id") Integer id);
 }

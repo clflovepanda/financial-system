@@ -30,9 +30,9 @@ public class ReceivableBiz extends ServiceImpl<ReceivableDao, ReceivableEntity> 
     @Autowired
     private ReceivableDao receivableDao;
 
-    public List<ReceivableDto> getReceivable(String org, String receivableNo, String taxableServiceName, String userName, Date startDate, Date endDate, Integer limit, Integer offset) {
+    public List<ReceivableDto> getReceivable(String projectId, String org, String receivableNo, String taxableServiceName, String userName, Date startDate, Date endDate, Integer limit, Integer offset) {
 
-        List<ReceivableEntity> receivableEntities = receivableDao.getReceivable(org, receivableNo, taxableServiceName, userName, startDate, endDate, limit, offset);
+        List<ReceivableEntity> receivableEntities = receivableDao.getReceivable(projectId, org, receivableNo, taxableServiceName, userName, startDate, endDate, limit, offset);
         return ConvertUtil.convert(ReceivableEntity2Dto.instance, receivableEntities);
     }
 

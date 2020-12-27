@@ -66,9 +66,9 @@ public class TemplateController {
     }
 
     @RequestMapping("/getthreelayers")
-    public JSONObject getThreeLayers(@RequestBody JSONObject jsonInfo) {
+    public JSONObject getThreeLayers(HttpServletRequest request) {
         JSONObject result = new JSONObject();
-        int layer = jsonInfo.getInteger("layer");
+        int layer = Integer.valueOf(request.getParameter("layer"));
         if (layer < 1) {
             result.put("code", 1001);
             result.put("msg", "未选择第几套模板");

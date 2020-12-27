@@ -19,4 +19,10 @@ public class ProjectUserDto {
     private Integer type;
 
     private Date ctime;
+
+    private String username;
+
+    private String mobile;
+
+    private String email;
 }

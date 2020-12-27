@@ -71,4 +71,9 @@ public class ProjectBiz extends ServiceImpl<ProjectDao, ProjectEntity> {
     public String selectLastNo() {
         return projectDao.selectLastNo();
     }
+
+    public List<ProjectDto> statistics(String dataSourceId, String keyWord, Date startDate, Date endDate, String state) {
+        List<ProjectEntity> projectEntities = projectDao.statistics(dataSourceId, keyWord, startDate, endDate, state);
+        return ConvertUtil.convert(ProjectEntity2Dto.instance, projectEntities);
+    }
 }

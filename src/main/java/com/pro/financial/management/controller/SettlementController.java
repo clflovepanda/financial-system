@@ -1,7 +1,9 @@
 package com.pro.financial.management.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pro.financial.management.biz.ProjectBiz;
 import com.pro.financial.management.biz.SettlementBiz;
+import com.pro.financial.management.dao.entity.ProjectEntity;
 import com.pro.financial.management.dto.SettlementDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class SettlementController {
 
     @Autowired
     private SettlementBiz settlementBiz;
+
+    @Autowired
+    private ProjectBiz projectBiz;
 
     @RequestMapping("/list")
     public JSONObject list(HttpServletRequest request) {
@@ -40,6 +45,13 @@ public class SettlementController {
         SettlementDto settlementDto = JSONObject.parseObject(jsonInfo.toJSONString(), SettlementDto.class);
         //TODO 会有条件限制
         int count = settlementBiz.addSettlement(settlementDto);
+        if (StringUtils.equals(settlementDto.getIsLastSettlement(), "1") && settlementDto.getProjectId() != null) {
+            //最终结算单 项目为结算状态
+            ProjectEntity projectEntity = new ProjectEntity();
+            projectEntity.setProjectId(settlementDto.getProjectId());
+            projectEntity.setSettlementState(1);
+            projectBiz.updateById(projectEntity);
+        }
         result.put("code", 0);
         result.put("msg", "");
         return result;

@@ -2,12 +2,15 @@ package com.pro.financial.management.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pro.financial.management.biz.ExpenditureBiz;
+import com.pro.financial.management.biz.ProjectBiz;
 import com.pro.financial.management.biz.ReceivementBiz;
 import com.pro.financial.management.biz.SubscriptionLogBiz;
 import com.pro.financial.management.controller.view.ReceivementStatisticsView;
+import com.pro.financial.management.dao.entity.ProjectEntity;
 import com.pro.financial.management.dao.entity.ReceivementEntity;
 import com.pro.financial.management.dao.entity.SubscriptionLogEntity;
 import com.pro.financial.management.dto.ExpenditureDto;
+import com.pro.financial.management.dto.ProjectDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,6 +35,8 @@ public class StatisticsController {
 
     @Autowired
     private ExpenditureBiz expenditureBiz;
+    @Autowired
+    private ProjectBiz projectBiz;
 
     /**
      * 收款统计
@@ -169,6 +174,28 @@ public class StatisticsController {
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", expenditureDtos);
+        return result;
+    }
+
+
+    /**
+     * 支出统计
+     * @param request
+     * @return
+     */
+    @RequestMapping("/project")
+    public JSONObject project(HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        String dataSourceId = request.getParameter("dataSourceId");
+        String keyWord = request.getParameter("keyword");
+        String startDt = request.getParameter("startDt");
+        String endDt = request.getParameter("endDt");
+        Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
+        Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
+        String state = request.getParameter("state");
+
+        List<ProjectDto> projectDtos = projectBiz.statistics(dataSourceId, keyWord, startDate, endDate, state);
+
         return result;
     }
 }
