@@ -25,6 +25,9 @@ public class CommonConst {
     public static final String initials_revenue = "SR";
     public static final String initials_project = "PRO";
 
+    //应收发票
+    public static final String initials_invoice = "IN";
+
 
     //对应projecttask task_status
     //工时状态-初始化

@@ -74,8 +74,10 @@ public class ProjectTaskBiz extends ServiceImpl<ProjectTaskDao, ProjectTaskEntit
         } else {
             projectTaskRelationDao.insert(ProjectTaskRelationDto2Entity.instance.convert(projectTaskRelationDto));
         }
+        List<ProjectTaskRelationDto> projectTaskRelationDtos = this.getTaskRelation(projectTaskRelationDto.getProjectId());
         result.put("code", 0);
         result.put("msg", "");
+        result.put("data", projectTaskRelationDtos);
         return result;
     }
 

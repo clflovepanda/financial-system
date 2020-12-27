@@ -32,15 +32,17 @@ public class ReceivableController {
     private ReceivableBiz receivableBiz;
 
     @RequestMapping("/list")
-    public JSONObject list(HttpServletRequest request, @RequestBody JSONObject jsonInfo) {
+    public JSONObject list(HttpServletRequest request) {
         JSONObject result = new JSONObject();
-        String org = jsonInfo.getString("org");
-        String receivableNo = jsonInfo.getString("receivableNo");
-        String taxableServiceName = jsonInfo.getString("taxableServiceName");
-        String userName = jsonInfo.getString("userName");
-        Date startDate = jsonInfo.getDate("start");
-        Date endDate = jsonInfo.getDate("end");
-        String projectId = jsonInfo.getString("projectId");
+        String org = request.getParameter("org");
+        String receivableNo = request.getParameter("receivableNo");
+        String taxableServiceName = request.getParameter("taxableServiceName");
+        String userName = request.getParameter("userName");
+        String startDt = request.getParameter("startDt");
+        String endDt = request.getParameter("endDt");
+        Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
+        Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
+        String projectId = request.getParameter("projectId");
         Integer limit = StringUtils.isEmpty(request.getParameter("limit")) ? null : Integer.parseInt(request.getParameter("limit"));
         Integer offset = StringUtils.isEmpty(request.getParameter("offset")) ? null : Integer.parseInt(request.getParameter("offset"));
         List<ReceivableDto> receivableDtos = receivableBiz.getReceivable(projectId, org, receivableNo, taxableServiceName, userName, startDate, endDate, limit, offset);
