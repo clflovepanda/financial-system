@@ -20,7 +20,7 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
 //            "(#{entity.id}, #{entity.code}, #{entity.name}, #{entity.fullname}, #{entity.startDate}, #{entity.endDate}, #{entity.estincome}, #{entity.budget}, #{entity.description}, #{entity.state}, #{entity.auditingState}, #{entity.saleCommisState}, #{entity.settlementState}, #{entity.createUser}, #{entity.ctime}, #{entity.update_user}, #{entity.utime})")
 //    int insert(@Param("entity") ProjectEntity entity);
 
-    @Update("update project set auditing_state = #{auditstate} where project_id = #{id}")
+    @Update("update project set auditing_state = #{auditState} where project_id = #{id}")
     int updateAuditState(@Param("id") Integer id, @Param("auditState") Integer auditState);
 
     @Update("update project set sale_commis_state = #{saleCommisState} where project_id = #{id}")
