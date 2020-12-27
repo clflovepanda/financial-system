@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.financial.management.dao.InvoiceDao">
+
+    <select id="getList" resultType="com.pro.financial.management.dao.entity.InvoiceEntity">
+        select i.*,p.name projectName, c.co_name companyName, rt.revenue_type_name from invoice i
+        left join `user` u on u.user_id = i.operator
+        left join project p using (project_id)
+        left join company c using (company_id)
+        left join revenue_type rt using (revenue_type_id)
+        where 1=1
+        <if test="username != null and username != ''">
+            and u.username like "%${username}%"
+        </if>
+        <if test="keyWord != null and keyWord != ''">
+            and (i.invoice_no like "%${keyWord}%" or i.unitname like "%${keyWord}%")
+        </if>
+        <if test="startDate != null  and endDate != null">
+            AND i.create_datetime > #{startDate}
+            AND i.create_datetime <![CDATA[ < ]]> #{endDate}
+        </if>
+        order by i.invoice_id desc
+    </select>
+
+</mapper>

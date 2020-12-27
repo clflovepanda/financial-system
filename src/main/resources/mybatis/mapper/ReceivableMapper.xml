@@ -10,8 +10,8 @@
         <if test="receivableNo != null and receivableNo != ''">
             and receivable_no LIKE "%${receivableNo}%"
         </if>
-        <if test="pojectId !=  null and pojectId != ''">
-            and poject_id = #{projectId}
+        <if test="projectId !=  null and projectId != ''">
+            and project_id = #{projectId}
         </if>
         <if test="org !=  null and org != ''">
             and org LIKE "%${org}%"
