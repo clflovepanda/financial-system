@@ -7,6 +7,7 @@ import com.pro.financial.management.biz.InvoiceBiz;
 import com.pro.financial.management.converter.InvoiceDto2Entity;
 import com.pro.financial.management.dto.InvoiceDto;
 import com.pro.financial.utils.CommonUtil;
+import com.pro.financial.utils.SimpleMoneyFormat;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -51,8 +52,14 @@ public class InvoiceController {
     @RequestMapping("/add")
     public JSONObject addInvoice(@RequestBody InvoiceDto invoiceDto, @CookieValue("user_id") Integer userId) {
         JSONObject result = new JSONObject();
+        if (userId == null) {
+            result.put("code", 1001);
+            result.put("msg", "为获取到登录信息");
+            return result;
+        }
         invoiceDto.setOperator(userId);
         invoiceDto.setCreateDatetime(new Date());
+        invoiceDto.setMoneyCapital(SimpleMoneyFormat.getInstance().format(invoiceDto.getCnyMoney()));
         String invoiceNo = "001";
         //获取最后一条数据的编号
         String lastNo = invoiceBiz.selectLastNo();

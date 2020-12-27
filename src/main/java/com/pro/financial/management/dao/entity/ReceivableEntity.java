@@ -1,13 +1,13 @@
 package com.pro.financial.management.dao.entity;
 
-import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import java.io.Serializable;
-
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * <p>
@@ -111,12 +111,12 @@ public class ReceivableEntity implements Serializable {
     /**
      * 申请日期
      */
-    private LocalDateTime applyDatetime;
+    private Date applyDatetime;
 
     /**
      * 创建时间
      */
-    private LocalDateTime createDatetime;
+    private Date createDatetime;
 
     /**
      * 备用字段

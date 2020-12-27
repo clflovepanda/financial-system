@@ -3,7 +3,8 @@
 <mapper namespace="com.pro.financial.management.dao.InvoiceDao">
 
     <select id="getList" resultType="com.pro.financial.management.dao.entity.InvoiceEntity">
-        select i.*,p.name projectName, c.co_name companyName, rt.revenue_type_name from invoice i
+        select i.*,p.name projectName, c.co_name companyName, rt.revenue_type_name, u.username
+         from invoice i
         left join `user` u on u.user_id = i.operator
         left join project p using (project_id)
         left join company c using (company_id)

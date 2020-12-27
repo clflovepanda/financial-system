@@ -5,7 +5,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -97,12 +98,12 @@ public class ReceivableDto {
     /**
      * 申请日期
      */
-    private LocalDateTime applyDatetime;
+    private Date applyDatetime;
 
     /**
      * 创建时间
      */
-    private LocalDateTime createDatetime;
+    private Date createDatetime;
 
     /**
      * 备用字段

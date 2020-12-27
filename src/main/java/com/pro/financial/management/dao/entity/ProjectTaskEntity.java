@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.io.Serializable;
 
 import com.pro.financial.user.dao.entity.UserEntity;
@@ -70,17 +70,17 @@ public class ProjectTaskEntity implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    private Date createTime;
 
     /**
      * 审核时间
      */
-    private LocalDateTime auditTime;
+    private Date auditTime;
 
     /**
      * 完成时间
      */
-    private LocalDateTime completionTime;
+    private Date completionTime;
 
     @TableField(exist = false)
     private Integer projectId;

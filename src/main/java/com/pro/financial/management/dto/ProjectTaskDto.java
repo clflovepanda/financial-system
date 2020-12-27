@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -52,17 +52,17 @@ public class ProjectTaskDto {
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    private Date createTime;
 
     /**
      * 审核时间
      */
-    private LocalDateTime auditTime;
+    private Date auditTime;
 
     /**
      * 完成时间
      */
-    private LocalDateTime completionTime;
+    private Date completionTime;
 
 
     private String templateName;

@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -25,5 +25,5 @@ public class ValidateDto {
     /**
      * 创建时间
      */
-    private LocalDateTime createDatetime;
+    private Date createDatetime;
 }

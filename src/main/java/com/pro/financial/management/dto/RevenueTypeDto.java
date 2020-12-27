@@ -1,36 +1,17 @@
 package com.pro.financial.management.dto;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @ToString
+@Getter
+@Setter
 public class RevenueTypeDto {
-    private Integer id;
+    private Integer revenueTypeId;
 
-    private String name;
+    private String revenueTypeName;
 
     private String remark;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
 }

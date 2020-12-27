@@ -196,6 +196,9 @@ public class StatisticsController {
 
         List<ProjectDto> projectDtos = projectBiz.statistics(dataSourceId, keyWord, startDate, endDate, state);
 
+        result.put("code", 0);
+        result.put("msg", "");
+        result.put("data", projectDtos);
         return result;
     }
 }
