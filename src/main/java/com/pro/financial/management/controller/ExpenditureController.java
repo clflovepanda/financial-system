@@ -1,6 +1,7 @@
 package com.pro.financial.management.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pro.financial.consts.CommonConst;
 import com.pro.financial.management.biz.*;
 import com.pro.financial.management.converter.ExpenditurePurposeEntity2Dto;
 import com.pro.financial.management.converter.ExpenditureTypeEntity2Dto;
@@ -8,6 +9,7 @@ import com.pro.financial.management.dao.entity.DepositLogEntity;
 import com.pro.financial.management.dto.ExpenditureDto;
 import com.pro.financial.management.dto.ExpenditurePurposeDto;
 import com.pro.financial.management.dto.ExpenditureTypeDto;
+import com.pro.financial.utils.CommonUtil;
 import com.pro.financial.utils.ConvertUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,16 @@ public class ExpenditureController {
     public JSONObject addExpenditure(@RequestBody JSONObject jsonInfo, HttpServletRequest request, @CookieValue("user_id") Integer userId) {
         JSONObject result = new JSONObject();
         ExpenditureDto expenditureDto = JSONObject.parseObject(jsonInfo.toJSONString(), ExpenditureDto.class);
+
+        //生成编号
+        String numbering;
+        //获取最后一条数据的编号
+        String lastNo = expenditureBiz.selectLastNo();
+        if (StringUtils.isEmpty(lastNo)) {
+            lastNo = "001";
+        }
+        numbering = CommonUtil.generatorNO(CommonConst.initials_expenditure, "", lastNo);
+        expenditureDto.setNumbering(numbering);
         expenditureDto.setCreateUser(userId);
         expenditureDto.setCtime(new Date());
         expenditureDto.setUpdateUser(userId);

@@ -43,4 +43,8 @@ public class ExpenditureBiz {
         return ConvertUtil.convert(ExpenditureEntity2Dto.instance, expenditureDao.searchList(projectId, companyId, numbering, expenditureMethodId, expenditureTypeId,
                 beneficiaryUnit, createUser, state, expenditureAuditLog, expenditurePurposeId, startDate, endDate, keyWord));
     }
+
+    public String selectLastNo() {
+        return expenditureDao.selectLastNo();
+    }
 }

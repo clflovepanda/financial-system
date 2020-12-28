@@ -12,8 +12,8 @@ import java.util.List;
 public interface ExpenditureDao {
 
     @Options(useGeneratedKeys = true, keyProperty = "expenditureId", keyColumn = "expenditure_id")
-    @Insert("insert into expenditure ( numbering, expenditure_type, company_id, project_id, expenditure_method_id, expenditure_type_id, expenditure_purpose_id, expenditure_purpose_content, expenditure_money, state, remark, beneficiary_unit, beneficiary_number, province, city, beneficiary_bank, create_user, ctime, update_user, utime, is_effective) VALUES " +
-            "( #{entity.numbering}, #{entity.expenditureType}, #{entity.companyId}, #{entity.projectId}, #{entity.expenditureMethodId}, #{entity.expenditureTypeId}, #{entity.expenditurePurposeId}, #{entity.expenditurePurposeContent}, #{entityExpenditureMoney}, #{entity.state}, #{entity.remark}, #{entity.beneficiaryUnit}, #{entity.beneficiaryNumber}, #{entityProvince}, #{entity.city}, #{entity.beneficiaryBank}, #{entity.createUser}, #{entity.ctime}, #{entity.updateUser}, #{entity.utime}, #{entity.isEffective})")
+    @Insert("insert into expenditure ( numbering, expenditure_type, company_id, project_id, expenditure_method_id, expenditure_type_id, expenditure_purpose_id, expenditure_purpose_content, expenditure_money, remark, beneficiary_unit, beneficiary_number, province, city, beneficiary_bank, create_user, ctime, update_user, utime) VALUES " +
+            "( #{entity.numbering}, #{entity.expenditureTypeId}, #{entity.companyId}, #{entity.projectId}, #{entity.expenditureMethodId}, #{entity.expenditureTypeId}, #{entity.expenditurePurposeId}, #{entity.expenditurePurposeContent}, #{entity.expenditureMoney}, #{entity.remark}, #{entity.beneficiaryUnit}, #{entity.beneficiaryNumber}, #{entity.province}, #{entity.city}, #{entity.beneficiaryBank}, #{entity.createUser}, #{entity.ctime}, #{entity.updateUser}, #{entity.utime})")
     int insert(@Param("entity") ExpenditureEntity entity);
 
     @Select("<script>" +
@@ -38,4 +38,7 @@ public interface ExpenditureDao {
                                     @Param("state") String state, @Param("expenditureAuditLog") String expenditureAuditLog,
                                     @Param("expenditurePurposeId") String expenditurePurposeId, @Param("startDt") Date startDate, @Param("endDt") Date endDate,
                                        @Param("keyWord") String keyWord);
+
+    @Select("select numbering from expenditure order by expenditure_id desc")
+    String selectLastNo();
 }
