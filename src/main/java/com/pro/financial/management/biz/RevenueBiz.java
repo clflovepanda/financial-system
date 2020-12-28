@@ -34,8 +34,12 @@ public class RevenueBiz {
         return revenueDao.getRevenueList(projectIds);
     }
 
-    public List<RevenueDto> searchList(String projectId, String revenueNo, String remitterMethodId, String receivementTypeId, String companyId, String remitter, String createUser, Date startDate, Date endDate) {
-        return ConvertUtil.convert(RevenueEntity2Dto.instance, revenueDao.searchList(projectId, revenueNo, remitterMethodId, receivementTypeId, companyId, remitter, createUser, startDate, endDate));
+    public List<RevenueDto> searchList(String projectId, String revenueNo, String remitterMethodId, String receivementTypeId,
+                                       String companyId, String remitter, String createUser, Date startDate, Date endDate,
+                                       String projectName, String projectNo, String revenueTypeId) {
+        return ConvertUtil.convert(RevenueEntity2Dto.instance, revenueDao.searchList(projectId, revenueNo, remitterMethodId,
+                receivementTypeId, companyId, remitter, createUser, startDate, endDate,
+                projectName, projectNo, revenueTypeId));
     }
 
     public int addRevenueBySubLog(SubscriptionLogDto subscriptionLogDto, Integer userId) {

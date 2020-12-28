@@ -67,4 +67,5 @@ public class ExpenditureEntity {
     private String expenditureTypeName;
     private String expenditurePurposeName;
     private String coName;
+    private String name;
 }

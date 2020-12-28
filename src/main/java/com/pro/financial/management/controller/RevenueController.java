@@ -63,11 +63,14 @@ public class RevenueController {
         //认款人
         String createUser = request.getParameter("createUser");
 
+        String revenueTypeId = "1";
+
         String startDt = request.getParameter("startDt");
         String endDt = request.getParameter("endDt");
         Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
         Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
-        List<RevenueDto> revenueDtos = revenueBiz.searchList(projectId, revenueNo, remitterMethodId, receivementTypeId, companyId, remitter, createUser, startDate, endDate);
+        List<RevenueDto> revenueDtos = revenueBiz.searchList(projectId, revenueNo, remitterMethodId, receivementTypeId, companyId,
+                remitter, createUser, startDate, endDate, null, null, revenueTypeId);
 
         result.put("code", 0);
         result.put("msg", "");

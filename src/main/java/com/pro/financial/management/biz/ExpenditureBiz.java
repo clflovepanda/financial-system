@@ -37,8 +37,10 @@ public class ExpenditureBiz {
         return expenditureDao.update(ExpenditureDto2Entity.instance.convert(expenditureDto));
     }
 
-    public List<ExpenditureDto> searchList(String projectId, String companyId, String numbering, String expenditureMethodId, String expenditureTypeId, String beneficiaryUnit, String createUser, String state, String expenditureAuditLog, String expenditurePurposeId, Date startDate, Date endDate) {
+    public List<ExpenditureDto> searchList(String projectId, String companyId, String numbering, String expenditureMethodId,
+                                           String expenditureTypeId, String beneficiaryUnit, String createUser, String state,
+                                           String expenditureAuditLog, String expenditurePurposeId, Date startDate, Date endDate, String keyWord) {
         return ConvertUtil.convert(ExpenditureEntity2Dto.instance, expenditureDao.searchList(projectId, companyId, numbering, expenditureMethodId, expenditureTypeId,
-                beneficiaryUnit, createUser, state, expenditureAuditLog, expenditurePurposeId, startDate, endDate));
+                beneficiaryUnit, createUser, state, expenditureAuditLog, expenditurePurposeId, startDate, endDate, keyWord));
     }
 }

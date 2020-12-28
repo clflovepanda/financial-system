@@ -45,4 +45,9 @@ public class RevenueEntity {
     private String dataSourceName;
     private String username;
 
+    private String remitter;
+
+    private String projectName;
+    private String projectNo;
+
 }

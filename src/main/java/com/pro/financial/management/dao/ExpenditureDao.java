@@ -38,5 +38,6 @@ public interface ExpenditureDao {
                                        @Param("numbering") String numbering, @Param("expenditureMethodId") String expenditureMethodId,
                                     @Param("expenditureTypeId") String expenditureTypeId, @Param("beneficiaryUnit") String beneficiaryUnit, @Param("createUser") String createUser,
                                     @Param("state") String state, @Param("expenditureAuditLog") String expenditureAuditLog,
-                                    @Param("expenditurePurposeId") String expenditurePurposeId, @Param("startDt") Date startDate, @Param("endDt") Date endDate);
+                                    @Param("expenditurePurposeId") String expenditurePurposeId, @Param("startDt") Date startDate, @Param("endDt") Date endDate,
+                                       @Param("keyWord") String keyWord);
 }

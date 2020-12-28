@@ -72,6 +72,7 @@ public class ExpenditureDto {
     private String expenditureTypeName;
     private String expenditurePurposeName;
     private String coName;
+    private String name;
 
     private String auditType;
 

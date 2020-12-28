@@ -90,6 +90,7 @@
     left join expenditure_purpose using (expenditure_purpose_id)
     left join expenditure_type using (expenditure_type_id)
     left join company using (company_id)
+    left join project p using (project_id)
     where 1=1
     <if test="projectId != null and projectId != ''">
       and e.project_id = #{projectId}
@@ -120,6 +121,9 @@
     </if>
     <if test="createUser != null and createUser !=''">
       and u.username like "%${createUser}%
+    </if>
+    <if test="keyWord != null and keyWord != ''">
+      and (u.username like "%${keyWord}% or e.numbering like "%${keyWord}% or p.name like "%${keyWord}% )
     </if>
     <if test="startDt != null  and endDt != null">
       AND e.ctime > #{startDt}

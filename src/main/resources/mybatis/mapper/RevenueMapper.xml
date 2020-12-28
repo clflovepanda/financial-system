@@ -21,15 +21,26 @@
     ctime, update_user, utime
   </sql>
   <select id="searchList" resultType="com.pro.financial.management.dao.entity.RevenueEntity">
-    select re.id, re.revenue_no, co_name, remitter_method_name, r.remitter, receivement_type_name, data_source_name, re.cny_money, u.username, re.ctime  from revenue re
+    select re.id, re.revenue_no, co_name, remitter_method_name, r.remitter, receivement_type_name, data_source_name, re.cny_money, u.username, re.ctime, p.name projectName, p.code  projectNo
+    from revenue re
     left join receivement r on re.receivement_id = r.id
     left join `user` u on r.create_user = u.user_id
     LEFT JOIN company USING (company_id)
     LEFT JOIN remitter_method USING (remitter_method_id)
     LEFT JOIN receivement_type USING (receivement_type_id)
     LEFT JOIN data_source USING (data_source_id)
+    left join project p using (project_id)
+    LEFT JOIN revenue_type rt USING(revenue_type_id)
     where 1=1
-    and re.state = 1
+    and re.delete = 1
+--     非押金类型
+    <if test="revenueTypeId != null and revenueTypeId != ''">
+      and rt.remark != "Y"
+    </if>
+--     押金类型
+    <if test="revenueTypeId == null or revenueTypeId == ''">
+      and rt.remark = "Y"
+    </if>
     <if test="projectId != null and projectId != ''">
       and re.project_id = #{projectId}
     </if>
@@ -42,9 +53,6 @@
     <if test="receivementTypeId != null and receivementTypeId != ''">
       and r.receivement_type_id = #{receivementTypeId}
     </if>
-    <if test="receivementTypeId == null or receivementTypeId == ''">
-      and r.receivement_type_id in (1,2,3)
-    </if>
     <if test="companyId != null and companyId != ''">
       and r.company_id = #{companyId}
     </if>
@@ -53,6 +61,12 @@
     </if>
     <if test="createUser != null and createUser != ''">
       and u.username like "%${createUser}%"
+    </if>
+    <if test="projectName != null and projectName != ''">
+      and p.name like "%${projectName}%"
+    </if>
+    <if test="projectNo != null and projectName != ''">
+      and p.code like "%${projectName}%"
     </if>
     <if test="startDt != null  and endDt != null">
       AND re.ctime > #{startDt}
