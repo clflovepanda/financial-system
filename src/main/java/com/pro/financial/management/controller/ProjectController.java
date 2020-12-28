@@ -1,6 +1,5 @@
 package com.pro.financial.management.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.pro.financial.consts.CommonConst;
 import com.pro.financial.management.biz.*;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -90,6 +88,7 @@ public class ProjectController {
         projectDto.setCtime(new Date());
         projectDto.setUpdateUser(userId);
         projectDto.setUtime(new Date());
+        projectDto.setFullname(projectDto.getName());
         int count = projectBiz.addProject(projectDto);
         int projectId = projectDto.getProjectId();
         // 处理项目关联类目表

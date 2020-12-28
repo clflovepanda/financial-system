@@ -149,7 +149,6 @@ public class StatisticsController {
      */
     @RequestMapping("/expenditure")
     public JSONObject statistics(HttpServletRequest request) {
-        //todo 接口未完成
         JSONObject result = new JSONObject();
         //属性
         String attribute = request.getParameter("attribute");
@@ -193,12 +192,27 @@ public class StatisticsController {
         Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
         Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
         String state = request.getParameter("state");
-
         List<ProjectDto> projectDtos = projectBiz.statistics(dataSourceId, keyWord, startDate, endDate, state);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("projcet", projectDtos);
+
+        //报价收入
+        BigDecimal estincome = new BigDecimal(0);
+        //结算收入
+        BigDecimal settlementIncome = new BigDecimal(0);
+        //实际收入
+        BigDecimal relRevenue = new BigDecimal(0);
+        //应收收入
+        BigDecimal revenue = new BigDecimal(0);
+        resultMap.put("estincome",estincome);
+        resultMap.put("settlementIncome",settlementIncome);
+        resultMap.put("relRevenue",relRevenue);
+        resultMap.put("revenue",revenue);
+
 
         result.put("code", 0);
         result.put("msg", "");
-        result.put("data", projectDtos);
+        result.put("data", resultMap);
         return result;
     }
 }
