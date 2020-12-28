@@ -34,7 +34,7 @@ public class ExpenditureBiz {
     }
 
     public int updateExpenditure(ExpenditureDto expenditureDto) {
-        return expenditureDao.update(ExpenditureDto2Entity.instance.convert(expenditureDto));
+        return expenditureDao.updateById(ExpenditureDto2Entity.instance.convert(expenditureDto));
     }
 
     public List<ExpenditureDto> searchList(String projectId, String companyId, String numbering, String expenditureMethodId,
