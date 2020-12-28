@@ -80,4 +80,14 @@ public class ProjectEntity {
     @TableField(exist = false)
     private String createUserName;
 
+    //实际收入
+    @TableField(exist = false)
+    private BigDecimal relRevenue;
+    @TableField(exist = false)
+    private BigDecimal receivable;
+
+    //结算收入
+    @TableField(exist = false)
+    private BigDecimal settlementIncome;
+
 }
