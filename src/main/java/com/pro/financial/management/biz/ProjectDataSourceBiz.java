@@ -76,7 +76,6 @@ public class ProjectDataSourceBiz extends ServiceImpl<ProjectDataSourceDao, Proj
                 }
             }
         }
-        //todo 查询项目中有本人的项目id
         List<Integer> userProjectId = projectUserDao.getProjectIdByUserId(userId);
         projectIds.addAll(userProjectId);
         return new ArrayList<>(projectIds);

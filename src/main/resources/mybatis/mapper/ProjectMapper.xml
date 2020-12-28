@@ -95,7 +95,11 @@
     </select>
 
     <select id="statistics" resultType="com.pro.financial.management.dao.entity.ProjectEntity">
-        SELECT * from project p
+        SELECT p.project_id, p.name, p.fullname, u.username managerName, p.estincome,
+        (SELECT SUM(settlement_income) FROM settlement WHERE project_id = p.project_id and state = 1 ) settlementIncome,
+        (SELECT SUM(re.cny_money) FROM revenue re LEFT JOIN receivement r on re.receivement_id = r.id WHERE r.receivement_type_id in (1,2,3) and re.project_id = p.project_id) relRevenue,
+        (SELECT SUM(cny_money) FROM invoice WHERE project_id = p.project_id) receivable
+        from project p
         LEFT JOIN project_data_source pds USING(project_id)
         LEFT JOIN data_source ds USING(data_source_id)
         LEFT JOIN project_user pu ON pu.project_id = p.project_id AND type = 2
@@ -108,7 +112,7 @@
             and pds.data_source_id = #{dataSourceId}
         </if>
         <if test="keyWord !=  null and keyWord != ''">
-            and (p.name like "%${keyWord}%" or p.code like "%${keyWord}%" or ds.date_source_name like "%${keyWord}%" or u.username like "%${keyWord}%")
+            and (p.name like "%${keyWord}%" or p.code like "%${keyWord}%" or ds.data_source_name like "%${keyWord}%" or u.username like "%${keyWord}%")
         </if>
         <if test="startDt !=  null and endDt != null">
             and p.create_datetime > #{startDate}

@@ -30,7 +30,6 @@
     LEFT JOIN data_source USING (data_source_id)
     where 1=1
     and re.state = 1
-
     <if test="projectId != null and projectId != ''">
       and re.project_id = #{projectId}
     </if>

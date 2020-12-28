@@ -203,11 +203,14 @@ public class StatisticsController {
         //实际收入
         BigDecimal relRevenue = new BigDecimal(0);
         //应收收入
-        BigDecimal revenue = new BigDecimal(0);
+        BigDecimal receivable = new BigDecimal(0);
+        for (ProjectDto projectDto : projectDtos) {
+            estincome = estincome.add(projectDto.getEstincome());
+        }
         resultMap.put("estincome",estincome);
         resultMap.put("settlementIncome",settlementIncome);
         resultMap.put("relRevenue",relRevenue);
-        resultMap.put("revenue",revenue);
+        resultMap.put("receivable",receivable);
 
 
         result.put("code", 0);

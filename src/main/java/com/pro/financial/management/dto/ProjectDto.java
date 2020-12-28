@@ -87,6 +87,11 @@ public class ProjectDto {
     private Integer salesId;
     private List<Integer> userIds;
 
+    //实际收入
+    private BigDecimal relRevenue;
+    private BigDecimal receivable;
+
+
     private Integer limit;
     private Integer offset;
 }
