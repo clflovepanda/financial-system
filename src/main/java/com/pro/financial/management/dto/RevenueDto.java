@@ -13,6 +13,8 @@ import java.util.Date;
 public class RevenueDto {
     private Integer id;
 
+    private String revenueNo;
+
     private Integer receivementId;
 
     private Integer revenueTypeId;

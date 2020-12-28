@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/deposit")
@@ -46,9 +48,11 @@ public class DepositController {
         Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
         List<RevenueDto> revenueDtos = revenueBiz.searchList(projectId, revenueNo, null, receivementTypeId,
                 companyId, remitter, createUser, startDate, endDate, projectName, projectNo, revenueTypeId);
+        Map<String, Object> resutlMap = new HashMap<>();
+        resutlMap.put("deposit", revenueDtos);
         result.put("code", 0);
         result.put("msg", "");
-        result.put("data", revenueDtos);
+        result.put("data", resutlMap);
         return result;
     }
 

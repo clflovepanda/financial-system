@@ -15,6 +15,6 @@ public interface ExpenditurePurposeDao {
             "(#{entity.id}, #{entity.expenditureMethodId}, #{entity.name}, #{entity.remark})")
     int insert(@Param("entity") ExpenditurePurposeEntity entity);
 
-    @Select("select * from expenditure_purpose order by id asc")
+    @Select("select * from expenditure_purpose")
     List<ExpenditurePurposeEntity> getList();
 }

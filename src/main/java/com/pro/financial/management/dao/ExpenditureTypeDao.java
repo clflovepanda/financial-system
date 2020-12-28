@@ -15,6 +15,6 @@ public interface ExpenditureTypeDao {
             "(#{entity.id}, #{entity.expenditureMethodId}, #{entity.name}, #{entity.remark})")
     int insert(@Param("entity") ExpenditureTypeEntity entity);
 
-    @Select("select * from expenditure_type order by id asc")
+    @Select("select * from expenditure_type")
     List<ExpenditureTypeEntity> getList();
 }
