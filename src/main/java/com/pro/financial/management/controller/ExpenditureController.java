@@ -55,6 +55,7 @@ public class ExpenditureController {
             lastNo = "001";
         }
         numbering = CommonUtil.generatorNO(CommonConst.initials_expenditure, "", lastNo);
+        expenditureDto.setExpenditureType(expenditureDto.getExpenditureTypeId());
         expenditureDto.setNumbering(numbering);
         expenditureDto.setCreateUser(userId);
         expenditureDto.setCtime(new Date());

@@ -1,9 +1,10 @@
 package com.pro.financial.management.dao.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.pro.financial.user.dao.entity.DataSourceEntity;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -11,7 +12,14 @@ import java.util.Date;
 @ToString
 @Getter
 @Setter
+@Data
+@EqualsAndHashCode(callSuper = false)
+@TableName("expenditure")
 public class ExpenditureEntity {
+
+    private static final long serialVersionUID = 1L;
+
+    @TableId(value = "expenditure_id", type = IdType.AUTO)
     private Integer expenditureId;
 
     private String numbering;
