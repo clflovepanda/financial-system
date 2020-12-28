@@ -21,7 +21,8 @@
     ctime, update_user, utime
   </sql>
   <select id="searchList" resultType="com.pro.financial.management.dao.entity.RevenueEntity">
-    select re.id, re.revenue_no, co_name, remitter_method_name, r.remitter, receivement_type_name, data_source_name, re.cny_money, u.username, re.ctime, p.name projectName, p.code  projectNo
+    select re.id, re.revenue_no, co_name, remitter_method_name, r.remitter, receivement_type_name, data_source_name,
+     re.cny_money, u.username, re.ctime, p.name projectName, p.code  projectNo, p.project_id
     from revenue re
     left join receivement r on re.receivement_id = r.id
     left join `user` u on r.create_user = u.user_id

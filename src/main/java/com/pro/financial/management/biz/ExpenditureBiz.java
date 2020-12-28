@@ -20,8 +20,11 @@ public class ExpenditureBiz {
     private ExpenditureDao expenditureDao;
 
     public int addExpenditure(ExpenditureDto expenditureDto) {
+        ExpenditureEntity expenditureEntity = ExpenditureDto2Entity.instance.convert(expenditureDto);
+        int count = expenditureDao.insert(expenditureEntity);
+        expenditureDto.setExpenditureId(expenditureEntity.getExpenditureId());
         //添加支出编号
-        return expenditureDao.insert(ExpenditureDto2Entity.instance.convert(expenditureDto));
+        return count;
     }
 
     public List<ExpenditureEntity> getExpenditureList(List<Integer> projectIds) {
