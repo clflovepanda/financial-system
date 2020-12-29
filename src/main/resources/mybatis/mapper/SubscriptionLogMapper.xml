@@ -23,9 +23,10 @@
   </insert>
 
     <select id="getListByReceivementIdsnew" resultType="com.pro.financial.management.dao.entity.SubscriptionLogEntity">
-        select sl.* from subscription_log sl
+        select sl.*, rt.revenue_type_name, rt.remark revenueRemark from subscription_log sl
         left join project p using(project_id)
         left join project_data_source pds using(project_id)
+        left join revenue_type rt using (revenue_type_id)
         where receivement_id in
         <foreach item='item' index='index' collection='receivementIds' open='(' separator=',' close=')'>
          #{item}
@@ -36,5 +37,9 @@
         <if test="projectName != null and dataSourceId != ''">
             and (p.name like "%${projectName}%" or p.code like "%${projectName}%")
         </if>
+        <if test="revenueTypeId != null and revenueTypeId != ''">
+            and sl.revenue_type_id = #{revenueTypeId}
+        </if>
+
     </select>
 </mapper>

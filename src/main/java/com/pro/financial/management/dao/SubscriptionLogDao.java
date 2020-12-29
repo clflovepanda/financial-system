@@ -22,7 +22,8 @@ public interface SubscriptionLogDao {
             "</script>")
     List<SubscriptionLogEntity> getListByReceivementIds(@Param("receivementIds") List<Integer> receivementIds);
 
-    List<SubscriptionLogEntity> getListByReceivementIdsnew(@Param("receivementIds") List<Integer> receivementIds, @Param("projectName") String projectName, @Param("dataSourceId") String dataSourceId);
+    List<SubscriptionLogEntity> getListByReceivementIdsnew(@Param("receivementIds") List<Integer> receivementIds, @Param("projectName") String projectName,
+                                                           @Param("dataSourceId") String dataSourceId, @Param("revenueTypeId")  String revenueTypeId);
 
     @Select("<script> " +
             "select * from subscription_log where project_id " +

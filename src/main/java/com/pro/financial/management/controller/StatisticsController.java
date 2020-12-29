@@ -76,7 +76,7 @@ public class StatisticsController {
                 .collect(Collectors.toList());
 
         List<Integer> receivementIds = receivementEntities.stream().map(ReceivementEntity::getId).collect(Collectors.toList());
-        List<SubscriptionLogEntity> subscriptionLogEntities = subscriptionLogBiz.getListByReceivementIdsnew(receivementIds, projectName, dataSourceId);
+        List<SubscriptionLogEntity> subscriptionLogEntities = subscriptionLogBiz.getListByReceivementIdsnew(receivementIds, projectName, dataSourceId, revenueTypeId);
         subscriptionLogEntities = subscriptionLogEntities.stream().filter(et -> et.getState() == 1).collect(Collectors.toList());
         Map<Integer, ReceivementStatisticsView> map = new HashMap<>();
         //设置到款金额和数量
@@ -105,9 +105,9 @@ public class StatisticsController {
                 }
                 ReceivementStatisticsView viewTemp = map.get(y);
                 // todo 押金
-                if (entity.getRevenueTypeId() == 7 || entity.getRevenueTypeId() == 5) {
+                if (StringUtils.equalsIgnoreCase("Y", entity.getRevenueRemark())) {
                     viewTemp.setDeposit(viewTemp.getDeposit().add(entity.getReceivementMoney()));
-                } else if (entity.getRevenueTypeId() != 5 && entity.getRevenueTypeId() != 5){
+                } else {
                     viewTemp.setRevenue(viewTemp.getRevenue().add(entity.getReceivementMoney()));
                 }
             }

@@ -36,4 +36,5 @@ public class SubscriptionLogEntity {
     private String projectName;
     private String dataSourceName;
     private String revenueTypeName;
+    private String revenueRemark;
 }
