@@ -73,7 +73,7 @@ public class ProjectTaskController {
     @RequestMapping("/gettaskrelation")
     public JSONObject getTaskRelation(HttpServletRequest request) {
         JSONObject result = new JSONObject();
-        Integer projectId = Integer.valueOf(request.getParameter("projectId"));
+        Integer projectId = Integer.valueOf(request.getParameter("projectId") == null ? "0" : request.getParameter("projectId"));
         if (projectId < 1) {
             result.put("code", 1001);
             result.put("msg", "参数传入有误");
