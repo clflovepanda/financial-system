@@ -235,8 +235,8 @@ public class ProjectTaskBiz extends ServiceImpl<ProjectTaskDao, ProjectTaskEntit
         return ConvertUtil.convert(ProjectUserEntity2Dto.instance, prjectUserList);
     }
 
-    public List<ProjectTaskDto> gettask(Integer projectId, Integer userId) {
-        List<ProjectTaskEntity> projectTaskEntities = projectTaskDao.gettask(projectId, userId);
+    public List<ProjectTaskDto> gettask(Integer projectId, Integer userId, Integer taskRelationId) {
+        List<ProjectTaskEntity> projectTaskEntities = projectTaskDao.gettask(projectId, userId, taskRelationId);
 
         return ConvertUtil.convert(ProjectTaskEntity2Dto.instance, projectTaskEntities);
     }

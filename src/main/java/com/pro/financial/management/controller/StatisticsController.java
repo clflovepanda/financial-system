@@ -104,7 +104,6 @@ public class StatisticsController {
                     continue;
                 }
                 ReceivementStatisticsView viewTemp = map.get(y);
-                // todo 押金
                 if (StringUtils.equalsIgnoreCase("Y", entity.getRevenueRemark())) {
                     viewTemp.setDeposit(viewTemp.getDeposit().add(entity.getReceivementMoney()));
                 } else {

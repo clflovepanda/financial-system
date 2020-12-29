@@ -2,7 +2,10 @@ package com.pro.financial.management.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.pro.financial.management.biz.ProjectTaskBiz;
+import com.pro.financial.management.dao.ProjectTaskRelationDao;
+import com.pro.financial.management.dao.entity.ProjectTaskEntity;
 import com.pro.financial.management.dto.ProjectTaskDto;
 import com.pro.financial.management.dto.ProjectTaskRelationDto;
 import com.pro.financial.management.dto.ProjectUserDto;
@@ -10,6 +13,7 @@ import com.pro.financial.management.dto.TemplateDto;
 import com.pro.financial.user.dto.UserDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -35,6 +39,11 @@ public class ProjectTaskController {
 
     @Autowired
     private ProjectTaskBiz projectTaskBiz;
+
+    @Autowired
+    private ProjectTaskRelationDao projectTaskRelationDao;
+
+
 
     @RequestMapping("/addrelation")
     public JSONObject addRelation(@RequestBody JSONObject jsonInfo) {
@@ -107,8 +116,9 @@ public class ProjectTaskController {
         JSONObject result = new JSONObject();
         Integer projectId = Integer.valueOf(StringUtils.isEmpty(request.getParameter("projectId")) ? "0" : request.getParameter("projectId"));
         Integer userId = Integer.valueOf(StringUtils.isEmpty(request.getParameter("userId")) ? "0" : request.getParameter("userId"));
+        Integer taskRelationId = Integer.valueOf(StringUtils.isEmpty(request.getParameter("taskRelationId")) ? "0" : request.getParameter("taskRelationId"));
 
-        List<ProjectTaskDto> projectTaskDtos =  projectTaskBiz.gettask(projectId, userId);
+        List<ProjectTaskDto> projectTaskDtos =  projectTaskBiz.gettask(projectId, userId, taskRelationId);
         Map<String, Object> resultMap = new HashMap<>();;
         resultMap.put("task", projectTaskDtos);
         BigDecimal total = new BigDecimal(0);
@@ -121,6 +131,22 @@ public class ProjectTaskController {
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", resultMap);
+        return result;
+    }
+
+    @RequestMapping("/del")
+    public JSONObject delTask(HttpServletRequest request, @CookieValue("user_id") Integer userId) {
+        JSONObject result = new JSONObject();
+        Integer taskRelationId = Integer.valueOf(StringUtils.isEmpty(request.getParameter("taskRelationId")) ? "0" : request.getParameter("taskRelationId"));
+        if (taskRelationId < 0 || userId == null | userId <0) {
+            result.put("code",1001);
+            result.put("msg","");
+            return result;
+        }
+        projectTaskRelationDao.deleteById(taskRelationId);
+        QueryWrapper<ProjectTaskEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("task_relation_id", taskRelationId);
+        projectTaskBiz.remove(queryWrapper);
         return result;
     }
 }

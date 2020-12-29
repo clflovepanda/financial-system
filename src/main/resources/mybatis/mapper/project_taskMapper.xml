@@ -43,6 +43,9 @@
         <if test="userId != null and userId > 0">
             and u.user_id = #{userId}
         </if>
+        <if test="taskRelationId != null and taskRelationId > 0">
+            and ptr.task_relation_id = #{taskRelationId}
+        </if>
     </select>
 
 </mapper>

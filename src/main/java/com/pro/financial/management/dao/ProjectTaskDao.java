@@ -31,5 +31,5 @@ public interface ProjectTaskDao extends BaseMapper<ProjectTaskEntity> {
             "</script>")
     List<ProjectTaskEntity> getListByProjectIds(List<Integer> projectIds);
 
-    List<ProjectTaskEntity> gettask(@Param("projectId") Integer projectId, @Param("userId") Integer userId);
+    List<ProjectTaskEntity> gettask(@Param("projectId") Integer projectId, @Param("userId") Integer userId, @Param("taskRelationId") Integer taskRelationId);
 }
