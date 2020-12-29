@@ -60,12 +60,12 @@ public class StatisticsController {
         receivementEntities = receivementEntities.stream()
                 .filter(et -> year == 0 ? true : year == et.getReceiveDate().getYear())
                 .filter(et -> quarter == 0 ? true : quarter == getQuarter(et.getReceiveDate()))
-                .filter(et -> quarter == 0 ? true : quarter == et.getReceiveDate().getMonth())
+                .filter(et -> month == 0 ? true : month == et.getReceiveDate().getMonth())
                 .collect(Collectors.toList());
 
         List<Integer> receivementIds = receivementEntities.stream().map(ReceivementEntity::getId).collect(Collectors.toList());
         List<SubscriptionLogEntity> subscriptionLogEntities = subscriptionLogBiz.getListByReceivementIds(receivementIds);
-        subscriptionLogEntities = subscriptionLogEntities.stream().filter(et -> et.getState() == 0).collect(Collectors.toList());
+        subscriptionLogEntities = subscriptionLogEntities.stream().filter(et -> et.getState() == 1).collect(Collectors.toList());
         Map<Integer, ReceivementStatisticsView> map = new HashMap<>();
         for (ReceivementEntity entity : receivementEntities) {
             int y = entity.getReceiveDate().getYear();
@@ -217,5 +217,18 @@ public class StatisticsController {
         result.put("msg", "");
         result.put("data", resultMap);
         return result;
+    }
+
+    @RequestMapping("/receivementnew")
+    public JSONObject receivementnew(HttpServletRequest request) {
+        Integer companyId = Integer.valueOf(request.getParameter("companyId") == null ? "0" : request.getParameter("companyId"));
+        int staType = Integer.valueOf(request.getParameter("staType"));
+        // 年
+        int year = Integer.valueOf(request.getParameter("year") == null ? "0" : request.getParameter("year"));
+        // 季度
+        int quarter = Integer.valueOf(request.getParameter("quarter") == null ? "0" : request.getParameter("quarter"));
+        // 月
+        int month = Integer.valueOf(request.getParameter("month") == null ? "0" : request.getParameter("month"));
+        return null;
     }
 }

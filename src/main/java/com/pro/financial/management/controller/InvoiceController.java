@@ -98,23 +98,7 @@ public class InvoiceController {
         return result;
     }
 
-    @RequestMapping("/export")
-    public JSONObject exportInvoice(HttpServletRequest request) {
-        JSONObject result = new JSONObject();
-        String keyWord = request.getParameter("keyWord");
-        String username = request.getParameter("username");
-        //项目时间
-        String startDt = request.getParameter("startDt");
-        String endDt = request.getParameter("endDt");
-        Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
-        Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
-        List<InvoiceDto> invoiceDtos = invoiceBiz.getList(keyWord, username, startDate, endDate);
-        String url = invoiceBiz.exprotInvoice(invoiceDtos);
-        result.put("code", 0);
-        result.put("msg", "");
-        result.put("data", url);
-        return result;
-    }
+
 
 
 }
