@@ -33,6 +33,13 @@ public class SubscriptionLogBiz {
         return subscriptionLogDao.getListByReceivementIds(receivementIds);
     }
 
+    public List<SubscriptionLogEntity> getListByReceivementIdsnew(List<Integer> receivementIds, String projectName, String dataSourceId) {
+        if (CollectionUtils.isEmpty(receivementIds)) {
+            return new ArrayList<>();
+        }
+        return subscriptionLogDao.getListByReceivementIdsnew(receivementIds, projectName, dataSourceId);
+    }
+
     public List<SubscriptionLogEntity> getListByProjectIds(List<Integer> projectIds) {
         return subscriptionLogDao.getListByProjectIds(projectIds);
     }

@@ -55,8 +55,17 @@ public class StatisticsController {
         int quarter = Integer.valueOf(StringUtils.isEmpty(request.getParameter("quarter")) ? "0" : request.getParameter("quarter"));
         // 月
         int month = Integer.valueOf(StringUtils.isEmpty(request.getParameter("month")) ? "0" : request.getParameter("month"));
+
+        String dataSourceId = request.getParameter("dataSourceId");
+        String revenueTypeId = request.getParameter("revenueTypeId");
+        String projectName = request.getParameter("projectName");
+        String startDt = request.getParameter("startDt");
+        String endDt = request.getParameter("endDt");
+        Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
+        Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
         List<ReceivementStatisticsView> views = new ArrayList<>();
-        List<ReceivementEntity> receivementEntities = receivementBiz.getAllList();
+
+        List<ReceivementEntity> receivementEntities = receivementBiz.statistics(dataSourceId, revenueTypeId, projectName, startDate, endDate);
         SimpleDateFormat yearformat = new SimpleDateFormat("yyyy");
         SimpleDateFormat monthformat = new SimpleDateFormat("MM");
         SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
@@ -67,7 +76,7 @@ public class StatisticsController {
                 .collect(Collectors.toList());
 
         List<Integer> receivementIds = receivementEntities.stream().map(ReceivementEntity::getId).collect(Collectors.toList());
-        List<SubscriptionLogEntity> subscriptionLogEntities = subscriptionLogBiz.getListByReceivementIds(receivementIds);
+        List<SubscriptionLogEntity> subscriptionLogEntities = subscriptionLogBiz.getListByReceivementIdsnew(receivementIds, projectName, dataSourceId);
         subscriptionLogEntities = subscriptionLogEntities.stream().filter(et -> et.getState() == 1).collect(Collectors.toList());
         Map<Integer, ReceivementStatisticsView> map = new HashMap<>();
         //设置到款金额和数量

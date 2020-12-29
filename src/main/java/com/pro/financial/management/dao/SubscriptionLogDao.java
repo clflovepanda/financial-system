@@ -16,10 +16,13 @@ public interface SubscriptionLogDao {
     int insert(SubscriptionLogEntity entity);
 
     @Select("<script> " +
-            "select * from subscription_log where receivement_id " +
+            "select * from subscription_log " +
+            "where receivement_id " +
             "in <foreach item='item' index='index' collection='receivementIds' open='(' separator=',' close=')'> #{item} </foreach> " +
             "</script>")
     List<SubscriptionLogEntity> getListByReceivementIds(@Param("receivementIds") List<Integer> receivementIds);
+
+    List<SubscriptionLogEntity> getListByReceivementIdsnew(@Param("receivementIds") List<Integer> receivementIds, @Param("projectName") String projectName, @Param("dataSourceId") String dataSourceId);
 
     @Select("<script> " +
             "select * from subscription_log where project_id " +

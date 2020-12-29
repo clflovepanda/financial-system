@@ -21,4 +21,20 @@
     insert into subscription_log (`receivement_id`, `revenue_type_id`, project_id, `receivement_money`, `subscription_date`, `state`, `remark`, `create_user`, `ctime`) VALUES
             ( #{receivementId}, #{revenueTypeId}, #{projectId}, #{receivementMoney}, #{subscriptionDate}, #{state}, #{remark}, #{createUser}, #{ctime})
   </insert>
+
+    <select id="getListByReceivementIdsnew" resultType="com.pro.financial.management.dao.entity.SubscriptionLogEntity">
+        select sl.* from subscription_log sl
+        left join project p using(project_id)
+        left join project_data_source pds using(project_id)
+        where receivement_id in
+        <foreach item='item' index='index' collection='receivementIds' open='(' separator=',' close=')'>
+         #{item}
+        </foreach>
+        <if test="dataSourceId != null and dataSourceId != ''">
+            and pds.data_source_id = #{dataSourceId}
+        </if>
+        <if test="projectName != null and dataSourceId != ''">
+            and (p.name like "%${projectName}%" or p.code like "%${projectName}%")
+        </if>
+    </select>
 </mapper>

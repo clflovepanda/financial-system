@@ -43,4 +43,8 @@ public class ReceivementBiz {
     public List<ReceivementEntity> getList(List<Integer> ids, String companyId, String receivementTypeId, String remitterMethodId, String remitter, Date startDate, Date endDate) {
         return receivementDao.getList(ids, companyId, receivementTypeId, remitterMethodId, remitter, startDate, endDate);
     }
+
+    public List<ReceivementEntity> statistics(String dataSourceId, String revenueTypeId, String projectName, Date startDate, Date endDate) {
+        return receivementDao.statistics(dataSourceId, revenueTypeId, projectName, startDate, endDate);
+    }
 }

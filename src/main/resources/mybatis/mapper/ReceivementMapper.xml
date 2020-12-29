@@ -54,4 +54,12 @@
              remitter_method_id = #{entity.remitterMethodId}, remitter = #{entity.remitter}, receive_date = #{entity.receiveDate},
              remark = #{entity.remark}, update_user = #{entity.updateUser}, utime = #{entity.utime} where id = #{entity.id}
     </update>
+
+    <select id="statistics" resultType="com.pro.financial.management.dao.entity.ReceivementEntity">
+        select * from receivement
+        <if test="startDate !=  null and endDate != null">
+            and receive_date > #{startDate}
+            and receive_date <![CDATA[ < ]]> #{endDate}
+        </if>
+    </select>
 </mapper>
