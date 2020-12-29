@@ -147,6 +147,8 @@ public class ProjectTaskController {
         QueryWrapper<ProjectTaskEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("task_relation_id", taskRelationId);
         projectTaskBiz.remove(queryWrapper);
+        result.put("code", 0);
+        result.put("msg", "");
         return result;
     }
 }
