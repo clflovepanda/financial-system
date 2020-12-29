@@ -50,4 +50,11 @@ public class RevenueEntity {
     private String projectName;
     private String projectNo;
 
+    //待退回
+    private BigDecimal toBeReturned;
+    //退回中
+    private BigDecimal returning;
+    //已退回
+    private BigDecimal returned;
+
 }

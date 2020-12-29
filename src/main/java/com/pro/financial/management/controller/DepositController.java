@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -50,6 +51,17 @@ public class DepositController {
                 companyId, remitter, createUser, startDate, endDate, projectName, projectNo, revenueTypeId);
         Map<String, Object> resutlMap = new HashMap<>();
         resutlMap.put("deposit", revenueDtos);
+        BigDecimal toBeReturned = new BigDecimal(0);
+        BigDecimal returned = new BigDecimal(0);
+        BigDecimal returning = new BigDecimal(0);
+        for (RevenueDto revenueDto : revenueDtos) {
+            toBeReturned = toBeReturned.add(revenueDto.getToBeReturned() == null ? new BigDecimal(0) : revenueDto.getToBeReturned());
+            returned = returned.add(revenueDto.getReturned() == null ? new BigDecimal(0) : revenueDto.getReturned());
+            returning = returning.add(revenueDto.getReturning() == null ? new BigDecimal(0) : revenueDto.getReturning());
+        }
+        resutlMap.put("toBeReturned", toBeReturned);
+        resutlMap.put("returned", returned);
+        resutlMap.put("returning", returning);
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", resutlMap);
