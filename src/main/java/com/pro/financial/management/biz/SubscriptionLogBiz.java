@@ -8,7 +8,9 @@ import com.pro.financial.management.dto.SubscriptionLogDto;
 import com.pro.financial.utils.ConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,6 +27,9 @@ public class SubscriptionLogBiz {
     }
 
     public List<SubscriptionLogEntity> getListByReceivementIds(List<Integer> receivementIds) {
+        if (CollectionUtils.isEmpty(receivementIds)) {
+            return new ArrayList<>();
+        }
         return subscriptionLogDao.getListByReceivementIds(receivementIds);
     }
 

@@ -9,6 +9,11 @@ import java.util.Date;
 public class ReceivementStatisticsView {
     // 年
     private int year;
+    // 季度
+    private int quarter;
+    //月
+    private int month;
+
     // 到款数量
     private int count = 0;
     // 到款金额

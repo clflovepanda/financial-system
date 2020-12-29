@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -47,28 +48,32 @@ public class StatisticsController {
     public JSONObject receivement(HttpServletRequest request) {
         JSONObject result = new JSONObject();
         // 统计方式
-        int staType = Integer.valueOf(request.getParameter("staType"));
+        int staType = Integer.valueOf(StringUtils.isEmpty(request.getParameter("staType")) ? "0" : request.getParameter("staType"));
         // 年
-        int year = Integer.valueOf(request.getParameter("year") == null ? "0" : request.getParameter("year"));
+        int year = Integer.valueOf(StringUtils.isEmpty(request.getParameter("year")) ? "0" : request.getParameter("year"));
         // 季度
-        int quarter = Integer.valueOf(request.getParameter("quarter") == null ? "0" : request.getParameter("quarter"));
+        int quarter = Integer.valueOf(StringUtils.isEmpty(request.getParameter("quarter")) ? "0" : request.getParameter("quarter"));
         // 月
-        int month = Integer.valueOf(request.getParameter("month") == null ? "0" : request.getParameter("month"));
+        int month = Integer.valueOf(StringUtils.isEmpty(request.getParameter("month")) ? "0" : request.getParameter("month"));
         List<ReceivementStatisticsView> views = new ArrayList<>();
         List<ReceivementEntity> receivementEntities = receivementBiz.getAllList();
-
+        SimpleDateFormat yearformat = new SimpleDateFormat("yyyy");
+        SimpleDateFormat monthformat = new SimpleDateFormat("MM");
+        SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
         receivementEntities = receivementEntities.stream()
-                .filter(et -> year == 0 ? true : year == et.getReceiveDate().getYear())
+                .filter(et -> year == 0 ? true : year == Integer.parseInt(yearformat.format(et.getReceiveDate())))
                 .filter(et -> quarter == 0 ? true : quarter == getQuarter(et.getReceiveDate()))
-                .filter(et -> month == 0 ? true : month == et.getReceiveDate().getMonth())
+                .filter(et -> month == 0 ? true : month == Integer.parseInt(monthformat.format(et.getReceiveDate())))
                 .collect(Collectors.toList());
 
         List<Integer> receivementIds = receivementEntities.stream().map(ReceivementEntity::getId).collect(Collectors.toList());
         List<SubscriptionLogEntity> subscriptionLogEntities = subscriptionLogBiz.getListByReceivementIds(receivementIds);
         subscriptionLogEntities = subscriptionLogEntities.stream().filter(et -> et.getState() == 1).collect(Collectors.toList());
         Map<Integer, ReceivementStatisticsView> map = new HashMap<>();
+        //设置到款金额和数量
         for (ReceivementEntity entity : receivementEntities) {
-            int y = entity.getReceiveDate().getYear();
+            int y = staType == 0 ? Integer.parseInt(yearformat.format(entity.getReceiveDate())) : staType == 1 ?
+                    Integer.parseInt(yearformat.format(entity.getReceiveDate()))*100 + getQuarter(entity.getReceiveDate()) : Integer.parseInt(yearformat.format(entity.getReceiveDate()))*10000 + getQuarter(entity.getReceiveDate())*100 + Integer.parseInt(monthformat.format(entity.getReceiveDate()));
             if (map.containsKey(y)) {
                 ReceivementStatisticsView viewTemp = map.get(y);
                 viewTemp.setMoney(viewTemp.getMoney().add(entity.getReceivementMoney()));
@@ -80,23 +85,27 @@ public class StatisticsController {
                 map.put(y, view);
             }
         }
+        //添加认款押金和收入
         if (!CollectionUtils.isEmpty(subscriptionLogEntities)) {
             for (SubscriptionLogEntity entity : subscriptionLogEntities) {
-                int y = entity.getSubscriptionDate().getYear();
+                int y = staType == 0 ? Integer.parseInt(yearformat.format(entity.getSubscriptionDate())) : staType == 1 ?
+                        Integer.parseInt(yearformat.format(entity.getSubscriptionDate()))*100 + getQuarter(entity.getSubscriptionDate()) : Integer.parseInt(yearformat.format(entity.getSubscriptionDate()))*10000 + getQuarter(entity.getSubscriptionDate())*100 + Integer.parseInt(monthformat.format(entity.getSubscriptionDate()));
+
                 if (!map.containsKey(y)) {
                     continue;
                 }
                 ReceivementStatisticsView viewTemp = map.get(y);
-                // 押金
-                if (entity.getRevenueTypeId() == 6) {
+                // todo 押金
+                if (entity.getRevenueTypeId() == 7 || entity.getRevenueTypeId() == 5) {
                     viewTemp.setDeposit(viewTemp.getDeposit().add(entity.getReceivementMoney()));
-                } else if (entity.getRevenueTypeId() != 5){
+                } else if (entity.getRevenueTypeId() != 5 && entity.getRevenueTypeId() != 5){
                     viewTemp.setRevenue(viewTemp.getRevenue().add(entity.getReceivementMoney()));
                 }
             }
         }
 
         Iterator iterator = map.entrySet().iterator();
+        //比较前一年设置环比金额 增长速度  发展速度 百分比
         while (iterator.hasNext()) {
             Map.Entry<Integer, ReceivementStatisticsView> entry = (Map.Entry<Integer, ReceivementStatisticsView>)iterator.next();
             int y = entry.getKey();
@@ -112,6 +121,35 @@ public class StatisticsController {
             view.setPercentYear(10000);
             view.setPercentTotal(view.getChainMoney().divide(view.getMoney(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("10000")).intValue());
         }
+        Iterator iterator1 = map.entrySet().iterator();
+        while (iterator1.hasNext()) {
+            Map.Entry<Integer, ReceivementStatisticsView> entry = (Map.Entry<Integer, ReceivementStatisticsView>)iterator1.next();
+            int key = entry.getKey();
+            int y = 0;
+            int q = 0;
+            int m = 0;
+            //按年
+            if (staType == 0) {
+                y = key;
+            }
+            //按季节
+            if (staType == 1) {
+                y = key/100;
+                q = key%100;
+            }
+            //按月
+            if (staType == 2) {
+                y = key/10000;
+                q = key%10000/100;
+                m = key%100;
+            }
+            entry.getValue().setYear(y);
+            entry.getValue().setQuarter(q);
+            entry.getValue().setMonth(m);
+            views.add(entry.getValue());
+        }
+
+
 
         result.put("code", HttpStatus.OK.value());
         result.put("msg", HttpStatus.OK.getReasonPhrase());
@@ -120,7 +158,9 @@ public class StatisticsController {
     }
 
     private static int getQuarter(Date date) {
-        int month = date.getMonth();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int month = calendar.get(Calendar.MONTH);
         switch (month) {
             case 0:
             case 1:
@@ -231,4 +271,5 @@ public class StatisticsController {
         int month = Integer.valueOf(request.getParameter("month") == null ? "0" : request.getParameter("month"));
         return null;
     }
+
 }
