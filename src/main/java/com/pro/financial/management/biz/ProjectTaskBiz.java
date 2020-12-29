@@ -111,8 +111,8 @@ public class ProjectTaskBiz extends ServiceImpl<ProjectTaskDao, ProjectTaskEntit
         List<ProjectTaskDto> projectTaskWithTaskId = new LinkedList<>();
         List<ProjectTaskDto> projectTaskWithoutTaskId = new LinkedList<>();
         if (CollectionUtils.isEmpty(projectTaskDtos)) {
-            result.put("code", 1001);
-            result.put("msg", "传入参数有误");
+            result.put("code", 0);
+            result.put("msg", "");
             return result;
         }
         for (ProjectTaskDto projectTaskDto : projectTaskDtos) {
