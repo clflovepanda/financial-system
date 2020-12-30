@@ -8,6 +8,7 @@ import com.pro.financial.management.converter.ExpenditurePurposeEntity2Dto;
 import com.pro.financial.management.converter.ExpenditureTypeEntity2Dto;
 import com.pro.financial.management.dao.entity.DepositLogEntity;
 import com.pro.financial.management.dao.entity.ExpenditureAuditLogEntity;
+import com.pro.financial.management.dao.entity.ExpenditureEntity;
 import com.pro.financial.management.dto.ExpenditureAuditLogDto;
 import com.pro.financial.management.dto.ExpenditureDto;
 import com.pro.financial.management.dto.ExpenditurePurposeDto;
@@ -165,9 +166,15 @@ public class ExpenditureController {
                 return result;
             }
             if (expenditureAuditLogDto.getAuditType() > 2 && lastLog.getAuditType() < 3) {
+                //添加审批记录
                 expenditureAuditLogDto.setCreateUser(userId);
                 expenditureAuditLogDto.setCtime(new Date());
                 expenditureAuditLogBiz.addExpenditureAuditLog(expenditureAuditLogDto);
+                //修改支出表状态
+                ExpenditureDto expenditureDto = new ExpenditureDto();
+                expenditureDto.setExpenditureId(expenditureAuditLogDto.getExpenditureId());
+                expenditureDto.setState(expenditureAuditLogDto.getAuditType());
+                expenditureBiz.updateExpenditure(expenditureDto);
             }
         }
         result.put("code", 0);
@@ -183,6 +190,11 @@ public class ExpenditureController {
             List<ExpenditureAuditLogDto> sortList = expenditureAuditLogDtos.stream().sorted(Comparator.comparing(ExpenditureAuditLogDto::getCtime).reversed()).collect(Collectors.toList());
             lastLog = sortList.get(0);
         }
+        if (lastLog.getId() - expenditureAuditLogDto.getId() != 0) {
+            result.put("code", 4001);
+            result.put("msg", "不是最新记录无法删除");
+            return result;
+        }
         if (expenditureAuditLogDtos.size() == 1 || lastLog.getAuditType() - CommonConst.expenditure_audit_type_submit == 0) {
             result.put("code", 4001);
             result.put("msg", "无法删除提交记录");
@@ -190,6 +202,11 @@ public class ExpenditureController {
         }
         if (lastLog.getId() - expenditureAuditLogDto.getId() == 0 && expenditureAuditLogDto.getCreateUser() - userId == 0) {
             expenditureAuditLogBiz.remove(expenditureAuditLogDto);
+            ExpenditureAuditLogDto nextLog = expenditureAuditLogDtos.get(1);
+            ExpenditureDto expenditureDto = new ExpenditureDto();
+            expenditureDto.setExpenditureId(expenditureAuditLogDto.getExpenditureId());
+            expenditureDto.setState(nextLog.getAuditType());
+            expenditureBiz.updateExpenditure(expenditureDto);
         } else {
             result.put("code", 4001);
             result.put("msg", "非本人提交无法删除");
