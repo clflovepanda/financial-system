@@ -279,6 +279,20 @@ public class ReceivementController {
             result.put("msg", "未传入认款类型");
             return result;
         }
+        //添加到认款记录的金额
+        BigDecimal logMoney = new BigDecimal(0);
+        List<SubscriptionLogDto> subscriptionLogDtos = subscriptionLogBiz.getListByReceivementId(subscriptionLogDto.getReceivementId());
+        if (!CollectionUtils.isEmpty(subscriptionLogDtos)) {
+            for (SubscriptionLogDto dto : subscriptionLogDtos) {
+                logMoney = logMoney.add(dto.getReceivementMoney());
+            }
+        }
+        ReceivementEntity entity = receivementBiz.getById(subscriptionLogDto.getReceivementId());
+        if (entity.getReceivementMoney().compareTo(logMoney) == -1) {
+            result.put("code", 1001);
+            result.put("msg", "认款金额不足");
+            return result;
+        }
         Integer state = jsonInfo.getInteger("state");
         if (state == null || state !=3) {
             state = 2;
