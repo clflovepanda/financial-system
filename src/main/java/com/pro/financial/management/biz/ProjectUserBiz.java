@@ -56,7 +56,7 @@ public class ProjectUserBiz {
             return 0;
         }
         QueryWrapper<ProjectUserEntity> wrapper = new QueryWrapper();
-        wrapper.eq("projectId", projectId);
+        wrapper.eq("project_id", projectId);
         return projectUserDao.delete(wrapper);
     }
 }
