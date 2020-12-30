@@ -1,17 +1,14 @@
 package com.pro.financial.management.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.pro.financial.consts.CommonConst;
 import com.pro.financial.management.biz.*;
-import com.pro.financial.management.converter.ExpenditureAuditLogDto2Entity;
 import com.pro.financial.management.converter.ExpenditurePurposeEntity2Dto;
 import com.pro.financial.management.converter.ExpenditureTypeEntity2Dto;
-import com.pro.financial.management.dao.DepositLogDao;
+import com.pro.financial.management.dao.entity.AccountingLogEntity;
+import com.pro.financial.management.dao.entity.BeneficiaryUnitEntity;
 import com.pro.financial.management.dao.entity.DepositLogEntity;
-import com.pro.financial.management.dao.entity.ExpenditureAuditLogEntity;
-import com.pro.financial.management.dao.entity.ExpenditureEntity;
 import com.pro.financial.management.dto.*;
 import com.pro.financial.utils.CommonUtil;
 import com.pro.financial.utils.ConvertUtil;
@@ -49,6 +46,8 @@ public class ExpenditureController {
     private RevenueBiz revenueBiz;
     @Autowired
     private RevenueTypeBiz revenueTypeBiz;
+    @Autowired
+    private BeneficiaryUnitBiz beneficiaryUnitBiz;
 
     @RequestMapping("/add")
     public JSONObject addExpenditure(@RequestBody JSONObject jsonInfo, HttpServletRequest request, @CookieValue("user_id") Integer userId) {
@@ -72,6 +71,13 @@ public class ExpenditureController {
         expenditureDto.setUpdateUser(userId);
         expenditureDto.setUtime(new Date());
         int count = expenditureBiz.addExpenditure(expenditureDto);
+        //添加银行信息
+        try {
+            BeneficiaryUnitEntity beneficiaryUnitEntity = JSONObject.parseObject(JSONObject.toJSONString(expenditureDto), BeneficiaryUnitEntity.class);
+            beneficiaryUnitBiz.save(beneficiaryUnitEntity);
+        } catch (Exception e) {
+
+        }
         if (StringUtils.equals("deposit", request.getParameter("flag"))) {
             DepositLogEntity depositLogEntity = new DepositLogEntity();
             depositLogEntity.setExpenditureId(expenditureDto.getExpenditureId());
@@ -244,5 +250,17 @@ public class ExpenditureController {
         result.put("code", 0);
         result.put("msg", "");
         return result;
+    }
+
+    @RequestMapping("/getbeneficiary")
+    public JSONObject getBeneficiaryUnit(HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        String keyWords = request.getParameter("keyWords");
+        List<BeneficiaryUnitEntity> beneficiaryUnitEntities = beneficiaryUnitBiz.selectByKeyWords(keyWords);
+        result.put("code", 0);
+        result.put("msg", "");
+        result.put("data", beneficiaryUnitEntities);
+        return result;
+
     }
 }
