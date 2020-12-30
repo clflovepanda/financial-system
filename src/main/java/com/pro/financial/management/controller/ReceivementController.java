@@ -83,7 +83,7 @@ public class ReceivementController {
             }
             int count = receivementBiz.updateReceivement(receivementDto);
         }
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
     }
@@ -104,7 +104,7 @@ public class ReceivementController {
         Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
         List<ReceivementEntity> receivementEntities = receivementBiz.getList(null, companyId, receivementTypeId, remitterMethodId, remitter, startDate, endDate);
         if (CollectionUtils.isEmpty(receivementEntities)) {
-            result.put("code", HttpStatus.OK.value());
+            result.put("code", 0);
             result.put("msg", HttpStatus.OK.getReasonPhrase());
             result.put("data", receivementEntities);
             return result;
@@ -163,7 +163,7 @@ public class ReceivementController {
             receivementViewList.add(view);
         }
 
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         result.put("data", receivementViewList);
         return result;
@@ -179,7 +179,7 @@ public class ReceivementController {
         List<ReceivementTypeEntity> receivementTypeEntities = receivementTypeBiz.getList();
         List<RemitterMethodEntity> remitterMethodEntities = remitterMethodBiz.getList();
         List<SubscriptionLogEntity> subscriptionLogEntities = subscriptionLogBiz.getListByReceivementIds(new ArrayList<>(id));
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         result.put("receivementEntity", receivementEntity);
         result.put("companyEntities", companyEntities);
@@ -200,7 +200,7 @@ public class ReceivementController {
         Integer id = Integer.valueOf(request.getParameter("id"));
         int count = receivementBiz.updateReceivementState(id, 5);
         if (count == 1) {
-            result.put("code", HttpStatus.OK.value());
+            result.put("code", 0);
             result.put("msg", HttpStatus.OK.getReasonPhrase());
             //删除成功删除认款日志和收入
             revenueBiz.deleteByReceivementId(id);
@@ -246,7 +246,7 @@ public class ReceivementController {
         int count = accountingLogBiz.addAccountingLog(accountingLogDto);
         if (count == 1) {
             receivementBiz.updateReceivementState(receivementId, 4);
-            result.put("code", HttpStatus.OK.value());
+            result.put("code", 0);
             result.put("msg", HttpStatus.OK.getReasonPhrase());
             return result;
         }
@@ -294,7 +294,7 @@ public class ReceivementController {
         int countRevenue = revenueBiz.addRevenueBySubLog(subscriptionLogDto, userId);
         receivementBiz.updateReceivementState(subscriptionLogDto.getReceivementId(), state);
 
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
     }

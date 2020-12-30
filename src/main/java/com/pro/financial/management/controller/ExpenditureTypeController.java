@@ -26,7 +26,7 @@ public class ExpenditureTypeController {
         JSONObject result = new JSONObject();
         ExpenditureTypeDto expenditureTypeDto = JSONObject.parseObject(jsonInfo.toJSONString(), ExpenditureTypeDto.class);
         int count = expenditureTypeBiz.addExpenditureType(expenditureTypeDto);
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
     }
@@ -38,7 +38,7 @@ public class ExpenditureTypeController {
     public JSONObject getList(HttpServletRequest request) {
         JSONObject result = new JSONObject();
         List<ExpenditureTypeEntity> expenditureTypeEntities = expenditureTypeBiz.getList();
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         result.put("list", expenditureTypeEntities);
         return result;

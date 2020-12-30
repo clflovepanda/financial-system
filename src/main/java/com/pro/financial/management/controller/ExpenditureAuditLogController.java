@@ -21,7 +21,7 @@ public class ExpenditureAuditLogController {
         JSONObject result = new JSONObject();
         ExpenditureAuditLogDto expenditureAuditLogDto = JSONObject.parseObject(jsonInfo.toJSONString(), ExpenditureAuditLogDto.class);
         int count = expenditureAuditLogBiz.addExpenditureAuditLog(expenditureAuditLogDto);
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
     }

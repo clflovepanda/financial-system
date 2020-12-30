@@ -21,7 +21,7 @@ public class ExpenditureProjectController {
         JSONObject result = new JSONObject();
         ExpenditureProjectDto expenditureProjectDto = JSONObject.parseObject(jsonInfo.toJSONString(), ExpenditureProjectDto.class);
         int count = expenditureProjectBiz.addExpenditureProject(expenditureProjectDto);
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
     }

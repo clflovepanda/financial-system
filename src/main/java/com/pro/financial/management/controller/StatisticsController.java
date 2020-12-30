@@ -159,7 +159,7 @@ public class StatisticsController {
 
 
 
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         result.put("data", views);
         return result;

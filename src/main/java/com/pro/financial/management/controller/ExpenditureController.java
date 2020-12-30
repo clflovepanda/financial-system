@@ -91,7 +91,7 @@ public class ExpenditureController {
         expenditureAuditLogDto.setAuditType(1);
         expenditureAuditLogDto.setCreateUser(userId);
         expenditureAuditLogBiz.addExpenditureAuditLog(expenditureAuditLogDto);
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
     }
@@ -101,7 +101,7 @@ public class ExpenditureController {
         JSONObject result = new JSONObject();
         ExpenditureDto expenditureDto = JSONObject.parseObject(jsonInfo.toJSONString(), ExpenditureDto.class);
         int count = expenditureBiz.updateExpenditure(expenditureDto);
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
     }

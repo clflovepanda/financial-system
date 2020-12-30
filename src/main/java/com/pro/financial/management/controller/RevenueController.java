@@ -31,7 +31,7 @@ public class RevenueController {
         JSONObject result = new JSONObject();
         RevenueDto revenueDto = JSONObject.parseObject(jsonInfo.toJSONString(), RevenueDto.class);
         int count = revenueBiz.addRevenue(revenueDto);
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
     }

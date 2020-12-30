@@ -26,7 +26,7 @@ public class ExpenditurePurposeController {
         JSONObject result = new JSONObject();
         ExpenditurePurposeDto expenditurePurposeDto = JSONObject.parseObject(jsonInfo.toJSONString(), ExpenditurePurposeDto.class);
         int count = expenditurePurposeBiz.addExpenditurePurpose(expenditurePurposeDto);
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
     }
@@ -38,7 +38,7 @@ public class ExpenditurePurposeController {
     public JSONObject getList(HttpServletRequest request) {
         JSONObject result = new JSONObject();
         List<ExpenditurePurposeEntity> expenditurePurposeEntities = expenditurePurposeBiz.getList();
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         result.put("list", expenditurePurposeEntities);
         return result;

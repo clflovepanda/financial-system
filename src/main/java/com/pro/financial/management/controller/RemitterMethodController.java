@@ -26,7 +26,7 @@ public class RemitterMethodController {
         JSONObject result = new JSONObject();
         RemitterMethodDto remitterMethodDto = JSONObject.parseObject(jsonInfo.toJSONString(), RemitterMethodDto.class);
         int count = remitterMethodBiz.addRemitterMethod(remitterMethodDto);
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
     }
@@ -38,7 +38,7 @@ public class RemitterMethodController {
     public JSONObject getList(HttpServletRequest request) {
         JSONObject result = new JSONObject();
         List<RemitterMethodEntity> remitterMethodEntities = remitterMethodBiz.getList();
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         result.put("list", remitterMethodEntities);
         return result;

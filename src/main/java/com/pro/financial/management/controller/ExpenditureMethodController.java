@@ -25,7 +25,7 @@ public class ExpenditureMethodController {
         JSONObject result = new JSONObject();
         ExpenditureMethodDto expenditureMethodDto = JSONObject.parseObject(jsonInfo.toJSONString(), ExpenditureMethodDto.class);
         int count = expenditureMethodBiz.addExpenditureMethod(expenditureMethodDto);
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
     }
@@ -37,7 +37,7 @@ public class ExpenditureMethodController {
     public JSONObject getList(HttpServletRequest request) {
         JSONObject result = new JSONObject();
         List<ExpenditureMethodEntity> expenditureMethodEntities = expenditureMethodBiz.getList();
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         result.put("list", expenditureMethodEntities);
         return result;

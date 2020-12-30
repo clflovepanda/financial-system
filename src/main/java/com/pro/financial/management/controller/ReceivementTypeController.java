@@ -26,7 +26,7 @@ public class ReceivementTypeController {
         JSONObject result = new JSONObject();
         ReceivementTypeDto receivementTypeDto = JSONObject.parseObject(jsonInfo.toJSONString(), ReceivementTypeDto.class);
         int count = receivementTypeBiz.addReceivementType(receivementTypeDto);
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
     }
@@ -38,7 +38,7 @@ public class ReceivementTypeController {
     public JSONObject getList(HttpServletRequest request) {
         JSONObject result = new JSONObject();
         List<ReceivementTypeEntity> receivementTypeEntities = receivementTypeBiz.getList();
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         result.put("list", receivementTypeEntities);
         return result;

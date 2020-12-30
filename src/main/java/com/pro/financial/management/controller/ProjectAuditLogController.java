@@ -21,7 +21,7 @@ public class ProjectAuditLogController {
         JSONObject result = new JSONObject();
         ProjectAuditLogDto projectAuditLogDto = JSONObject.parseObject(jsonInfo.toJSONString(), ProjectAuditLogDto.class);
         int count = projectAuditLogBiz.addProjectAuditLog(projectAuditLogDto);
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
     }

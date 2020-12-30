@@ -148,7 +148,7 @@ public class ProjectController {
         projectUserBiz.batchAddProjectUser(projectUserDtos);
         // 处理项目关联工时 TODO
 
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
     }
@@ -188,7 +188,7 @@ public class ProjectController {
         List<ProjectTaskEntity> projectTaskEntities = projectTaskBiz.getListByProjectIds(projectIds);
 
 
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         //封装参数到data
         Map<String, Object> resultMap = new HashMap<>();
@@ -269,7 +269,7 @@ public class ProjectController {
         //应收收入
         projectFinancialStatisticsDto.setReceivable(new BigDecimal(0));
 
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         Integer dataSourceId = 0;
         if (!CollectionUtils.isEmpty(projectEntities)) {
@@ -306,7 +306,7 @@ public class ProjectController {
         Integer state = Integer.valueOf(request.getParameter("project_state"));
         int updateResult = projectBiz.updateState(id, state);
         if (updateResult == 1) {
-            result.put("code", HttpStatus.OK.value());
+            result.put("code", 0);
             result.put("msg", HttpStatus.OK.getReasonPhrase());
             return result;
         }
@@ -325,7 +325,7 @@ public class ProjectController {
         Integer saleCommisState = Integer.valueOf(request.getParameter("sale_commis_state"));
         int updateResult = projectBiz.updateSaleCommisState(id, saleCommisState);
         if (updateResult == 1) {
-            result.put("code", HttpStatus.OK.value());
+            result.put("code", 0);
             result.put("msg", HttpStatus.OK.getReasonPhrase());
             return result;
         }
@@ -344,7 +344,7 @@ public class ProjectController {
         Integer auditState = Integer.valueOf(request.getParameter("audit_state"));
         int updateResult = projectBiz.updateAuditState(id, auditState);
         if (updateResult == 1) {
-            result.put("code", HttpStatus.OK.value());
+            result.put("code", 0);
             result.put("msg", HttpStatus.OK.getReasonPhrase());
             ProjectAuditLogDto projectAuditLogDto = new ProjectAuditLogDto();
             projectAuditLogDto.setProjectId(id);
@@ -437,7 +437,7 @@ public class ProjectController {
         }
 
 
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         result.put("data", projectDtos);
         return result;
@@ -448,7 +448,7 @@ public class ProjectController {
         JSONObject result = new JSONObject();
         String keyWords = request.getParameter("keyWords");
         List<ProjectDto> projectDtos = projectBiz.getProjectByKeywords(keyWords);
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         result.put("data", projectDtos);
         return result;
@@ -535,7 +535,7 @@ public class ProjectController {
 
         // 处理项目关联工时 TODO
 
-        result.put("code", HttpStatus.OK.value());
+        result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
     }
