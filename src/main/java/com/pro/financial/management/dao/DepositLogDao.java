@@ -2,6 +2,7 @@ package com.pro.financial.management.dao;
 
 import com.pro.financial.management.dao.entity.DepositLogEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author panda
  * @since 2020-12-28
  */
+@Repository
 public interface DepositLogDao extends BaseMapper<DepositLogEntity> {
 
 }

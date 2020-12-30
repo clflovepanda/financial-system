@@ -1,5 +1,6 @@
 package com.pro.financial.management.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pro.financial.management.dao.entity.RevenueEntity;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
@@ -11,11 +12,11 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface RevenueDao {
+public interface RevenueDao extends BaseMapper<RevenueEntity> {
 
-    @Insert("insert into revenue ( `receivement_id`, `subscription_log_id`, `revenue_no`, `revenue_type_id`, `data_source_id`, `project_id`, `cny_money`, `remark`, `create_user`, `ctime`, `update_user`, `utime`) VALUES " +
-            "(#{entity.receivementId},#{entity.subscriptionLogId} ,#{entity.revenueNo}, #{entity.revenueTypeId}, #{entity.dataSourceId}, #{entity.projectId}, #{entity.cnyMoney}, #{entity.remark}, #{entity.createUser}, #{entity.ctime}, #{entity.updateUser}, #{entity.utime})")
-    int insert(@Param("entity") RevenueEntity entity);
+//    @Insert("insert into revenue ( `receivement_id`, `subscription_log_id`, `revenue_no`, `revenue_type_id`, `data_source_id`, `project_id`, `cny_money`, `remark`, `create_user`, `ctime`, `update_user`, `utime`) VALUES " +
+//            "(#{entity.receivementId},#{entity.subscriptionLogId} ,#{entity.revenueNo}, #{entity.revenueTypeId}, #{entity.dataSourceId}, #{entity.projectId}, #{entity.cnyMoney}, #{entity.remark}, #{entity.createUser}, #{entity.ctime}, #{entity.updateUser}, #{entity.utime})")
+//    int insert(@Param("entity") RevenueEntity entity);
 
     @Select("<script>" +
             "select * from revenue " +

@@ -3,8 +3,10 @@ package com.pro.financial.management.biz;
 import com.pro.financial.consts.CommonConst;
 import com.pro.financial.management.converter.RevenueDto2Entity;
 import com.pro.financial.management.converter.RevenueEntity2Dto;
+import com.pro.financial.management.dao.DepositLogDao;
 import com.pro.financial.management.dao.ProjectDao;
 import com.pro.financial.management.dao.RevenueDao;
+import com.pro.financial.management.dao.entity.DepositLogEntity;
 import com.pro.financial.management.dao.entity.ProjectEntity;
 import com.pro.financial.management.dao.entity.RevenueEntity;
 import com.pro.financial.management.dto.RevenueDto;
@@ -25,6 +27,7 @@ public class RevenueBiz {
     private RevenueDao revenueDao;
     @Autowired
     private ProjectDao projectDao;
+
 
     public int addRevenue(RevenueDto revenueDto) {
         return revenueDao.insert(RevenueDto2Entity.instance.convert(revenueDto));
@@ -71,4 +74,10 @@ public class RevenueBiz {
     public int deleteByReceivementId(Integer id) {
         return revenueDao.deleteByReceivementId(id);
     }
+
+    public RevenueDto getByRevenueId(Integer revenueId) {
+        RevenueEntity revenueEntity = revenueDao.selectById(revenueId);
+        return RevenueEntity2Dto.instance.convert(revenueEntity);
+    }
+
 }

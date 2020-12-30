@@ -1,8 +1,14 @@
 package com.pro.financial.management.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pro.financial.management.biz.DepositLogBiz;
+import com.pro.financial.management.biz.ExpenditureBiz;
 import com.pro.financial.management.biz.RevenueBiz;
+import com.pro.financial.management.dao.DepositLogDao;
+import com.pro.financial.management.dao.entity.DepositLogEntity;
+import com.pro.financial.management.dao.entity.ExpenditureEntity;
 import com.pro.financial.management.dto.RevenueDto;
+import com.pro.financial.user.biz.UserBiz;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -22,6 +28,10 @@ public class DepositController {
 
     @Autowired
     private RevenueBiz revenueBiz;
+    @Autowired
+    private DepositLogBiz depositLogBiz;
+    @Autowired
+    private ExpenditureBiz expenditureBiz;
 
     @RequestMapping("/list")
     public JSONObject list(HttpServletRequest request) {
@@ -68,14 +78,30 @@ public class DepositController {
         return result;
     }
 
-    @RequestMapping("/audit")
-    public JSONObject list(HttpServletRequest request, @CookieValue("user_id") Integer userId) {
+    @RequestMapping("/detail")
+    public JSONObject detail(HttpServletRequest request) {
         JSONObject result = new JSONObject();
+        Map<String, Object> resultMap = new HashMap<>();;
+        Integer revenueId = Integer.parseInt(StringUtils.isEmpty(request.getParameter("revenueId")) ? "0" : request.getParameter("revenueId"));
+        if (revenueId < 1) {
+            result.put("code", 1001);
+            result.put("msg", "传入参数有误");
+            return result;
+        }
+        RevenueDto revenueDto =  revenueBiz.getByRevenueId(revenueId);
+        List<Integer> expenditureIds =  depositLogBiz.getDepLog(revenueId);
+        List<ExpenditureEntity> expenditureEntities = expenditureBiz.selectListByIds(expenditureIds);
 
+        resultMap.put("revenue", revenueDto);
+        resultMap.put("expenditure", expenditureEntities);
+        result.put("code", 0);
+        result.put("msg", "");
+        result.put("data", resultMap);
         return result;
     }
 
-    @RequestMapping("/revenue")
+
+    @RequestMapping("/del")
     public JSONObject revenue(HttpServletRequest request) {
         return null;
     }

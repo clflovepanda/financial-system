@@ -1,10 +1,12 @@
 package com.pro.financial.management.biz;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.pro.financial.management.converter.ExpenditureDto2Entity;
 import com.pro.financial.management.converter.ExpenditureEntity2Dto;
 import com.pro.financial.management.dao.ExpenditureDao;
 import com.pro.financial.management.dao.entity.ExpenditureEntity;
 import com.pro.financial.management.dto.ExpenditureDto;
+import com.pro.financial.user.dao.UserDao;
 import com.pro.financial.utils.ConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,8 @@ public class ExpenditureBiz {
 
     @Autowired
     private ExpenditureDao expenditureDao;
+    @Autowired
+    private UserDao userDao;
 
     public int addExpenditure(ExpenditureDto expenditureDto) {
         ExpenditureEntity expenditureEntity = ExpenditureDto2Entity.instance.convert(expenditureDto);
@@ -49,5 +53,15 @@ public class ExpenditureBiz {
 
     public String selectLastNo() {
         return expenditureDao.selectLastNo();
+    }
+
+    public List<ExpenditureEntity> selectListByIds(List<Integer> expenditureIds) {
+        QueryWrapper<ExpenditureEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("expenditure_id", expenditureIds);
+        List<ExpenditureEntity> expenditureEntities = expenditureDao.selectList(queryWrapper);
+        for (ExpenditureEntity expenditureEntity : expenditureEntities) {
+            expenditureEntity.setUsername(userDao.selectById(expenditureEntity.getCreateUser()).getUsername());
+        }
+        return expenditureEntities;
     }
 }

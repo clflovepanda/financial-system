@@ -1,6 +1,7 @@
 package com.pro.financial.user.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
@@ -28,6 +29,8 @@ public class UserEntity {
     private Integer state;
     private Date registerTime;
     private Date createDatetime;
+    @TableField(exist = false)
     private List<RoleEntity> roles;
+    @TableField(exist = false)
     private String roleName;
 }
