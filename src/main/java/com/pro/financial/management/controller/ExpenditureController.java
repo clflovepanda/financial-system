@@ -183,6 +183,11 @@ public class ExpenditureController {
             List<ExpenditureAuditLogDto> sortList = expenditureAuditLogDtos.stream().sorted(Comparator.comparing(ExpenditureAuditLogDto::getCtime).reversed()).collect(Collectors.toList());
             lastLog = sortList.get(0);
         }
+        if (expenditureAuditLogDtos.size() == 1 || lastLog.getAuditType() - CommonConst.expenditure_audit_type_submit == 0) {
+            result.put("code", 4001);
+            result.put("msg", "无法删除提交记录");
+            return result;
+        }
         if (lastLog.getId() - expenditureAuditLogDto.getId() == 0 && expenditureAuditLogDto.getCreateUser() - userId == 0) {
             expenditureAuditLogBiz.remove(expenditureAuditLogDto);
         } else {
