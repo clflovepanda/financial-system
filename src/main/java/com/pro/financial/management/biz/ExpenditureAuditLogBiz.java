@@ -27,7 +27,7 @@ public class ExpenditureAuditLogBiz {
 
     public List<ExpenditureAuditLogDto> getLogByEId(Integer expenditureId) {
         QueryWrapper<ExpenditureAuditLogEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("expenditure_id", expenditureId).eq("state", 1).orderByDesc("");
+        queryWrapper.eq("expenditure_id", expenditureId).eq("state", 1).orderByDesc("ctime");
         return ConvertUtil.convert(ExpenditureAuditLogEntity2Dto.instance, expenditureAuditLogDao.selectList(queryWrapper));
     }
 
