@@ -7,6 +7,7 @@ import com.pro.financial.management.converter.ProjectEntity2Dto;
 import com.pro.financial.management.dao.entity.*;
 import com.pro.financial.management.dto.*;
 import com.pro.financial.user.dao.UserDao;
+import com.pro.financial.user.dao.entity.DataSourceEntity;
 import com.pro.financial.utils.CommonUtil;
 import com.pro.financial.utils.ConvertUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -64,6 +65,22 @@ public class ProjectController {
             result.put("code", 1001);
             result.put("msg", "参数有误");
             return result;
+        }
+        List<DataSourceEntity> dataSourceEntities = userDao.getDataSource(userId);
+        if (CollectionUtils.isEmpty(dataSourceEntities)) {
+            result.put("code", 7001);
+            result.put("msg", "无立项权限");
+            return result;
+        } else {
+            for (DataSourceEntity dataSourceEntity : dataSourceEntities) {
+                if (dataSourceEntity.getDataSourceId() - Integer.parseInt(projectDto.getDataSourceId()) == 0) {
+                    break;
+                } else {
+                    result.put("code", 7001);
+                    result.put("msg", "无立项权限");
+                    return result;
+                }
+            }
         }
         // 解析项目关联类目
         ProjectDataSourceDto projectDataSourceDto = new ProjectDataSourceDto();
