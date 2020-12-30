@@ -47,6 +47,8 @@ public class ExpenditureController {
     private DepositLogBiz depositLogBiz;
     @Autowired
     private RevenueBiz revenueBiz;
+    @Autowired
+    private RevenueTypeBiz revenueTypeBiz;
 
     @RequestMapping("/add")
     public JSONObject addExpenditure(@RequestBody JSONObject jsonInfo, HttpServletRequest request, @CookieValue("user_id") Integer userId) {
@@ -143,8 +145,10 @@ public class ExpenditureController {
         Map<String, Object> resultMap = new HashMap<>();
         List<ExpenditureTypeDto> expenditureTypeDtos = ConvertUtil.convert(ExpenditureTypeEntity2Dto.instance, expenditureTypeBiz.getList());
         List<ExpenditurePurposeDto> expenditurePurposeDtos = ConvertUtil.convert(ExpenditurePurposeEntity2Dto.instance,  expenditurePurposeBiz.getList());
+        List<RevenueTypeDto> revenueTypeDtos = revenueTypeBiz.getType("");
         resultMap.put("type", expenditureTypeDtos);
         resultMap.put("purpose", expenditurePurposeDtos);
+        resultMap.put("revenueType", revenueTypeDtos);
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", resultMap);

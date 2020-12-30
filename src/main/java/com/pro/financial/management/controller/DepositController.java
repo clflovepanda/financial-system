@@ -139,6 +139,8 @@ public class DepositController {
             }
             expenditureAuditLogBiz.deleteExpenditureByid(expenditureId);
         }
+        result.put("code", 0);
+        result.put("msg", "");
         return result;
     }
 }
