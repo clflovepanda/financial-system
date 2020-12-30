@@ -50,4 +50,13 @@ public class ProjectUserBiz {
         }
         return count;
     }
+
+    public int deleteByProjectId(int projectId) {
+        if (projectId < 0) {
+            return 0;
+        }
+        QueryWrapper<ProjectUserEntity> wrapper = new QueryWrapper();
+        wrapper.eq("projectId", projectId);
+        return projectUserDao.delete(wrapper);
+    }
 }

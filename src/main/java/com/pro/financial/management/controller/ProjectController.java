@@ -534,6 +534,7 @@ public class ProjectController {
             projectUserDto.setCtime(new Date());
             projectUserDtos.add(projectUserDto);
         }
+        projectUserBiz.deleteByProjectId(projectId);
         projectUserBiz.batchUpdateProjectUser(projectUserDtos);
 
         // 处理项目关联工时 TODO
