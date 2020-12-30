@@ -25,6 +25,7 @@
     <result column="utime" jdbcType="TIMESTAMP" property="utime" />
     <result column="is_effective" jdbcType="INTEGER" property="isEffective" />
     <result column="co_name" jdbcType="VARCHAR" property="coName" />
+    <result column="username" javaType="string" property="username" />
     <association property="dataSource" resultMap="com.pro.financial.user.dao.DataSourceDao.BaseResultMap"/>
     <association property="project" resultMap="com.pro.financial.management.dao.ProjectDao.BaseResultMap"/>
     <association property="expenditureMethod" resultMap="com.pro.financial.management.dao.ExpenditureMethodDao.BaseResultMap"/>
@@ -54,6 +55,7 @@
     left join data_source dt
     using (data_source_id)
     left join company c on e.company_id = c.company_id
+    left join `user` u on e.create_user = u.user_id
     where 1=1
     <if test="applyUser != null and applyUser != ''">
         AND e.create_user LIKE "%${applyUser}%"
