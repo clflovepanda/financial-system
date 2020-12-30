@@ -27,4 +27,7 @@ public interface DataSourceDao {
 
     @Select("select * from data_source where parent_id = #{parentId}")
     List<DataSourceDto> getDataSourceByParentId(@Param("parentId") Integer parentId);
+
+    @Select("select parent_id from data_source where data_source_id = #{dsId}")
+    Integer getParentDSId(@Param("dsId") int dsId);
 }

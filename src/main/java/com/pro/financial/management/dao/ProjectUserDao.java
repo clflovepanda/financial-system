@@ -1,5 +1,6 @@
 package com.pro.financial.management.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pro.financial.management.dao.entity.ProjectUserEntity;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
@@ -9,11 +10,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProjectUserDao {
+public interface ProjectUserDao extends BaseMapper<ProjectUserEntity> {
 
-    @Insert("insert into project_user (`id`, `project_id`, `user_id`, `type`, `ctime`) VALUES " +
-            "(#{entity.id}, #{entity.projectId}, #{entity.userId}, #{entity.type}, #{entity.ctime})")
-    int insert(@Param("entity") ProjectUserEntity entity);
+//    @Insert("insert into project_user (`id`, `project_id`, `user_id`, `type`, `ctime`) VALUES " +
+//            "(#{entity.id}, #{entity.projectId}, #{entity.userId}, #{entity.type}, #{entity.ctime})")
+//    int insert(@Param("entity") ProjectUserEntity entity);
 
     @Insert("<script>" +
             "insert into project_user (`id`, `project_id`, `user_id`, `type`, `ctime`) VALUES " +

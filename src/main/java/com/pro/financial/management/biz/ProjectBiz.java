@@ -8,6 +8,7 @@ import com.pro.financial.management.converter.ProjectEntity2Dto;
 import com.pro.financial.management.dao.ProjectDao;
 import com.pro.financial.management.dao.entity.ProjectEntity;
 import com.pro.financial.management.dto.ProjectDto;
+import com.pro.financial.user.dao.DataSourceDao;
 import com.pro.financial.user.dto.DataSourceDto;
 import com.pro.financial.user.filter.LoginFilter;
 import com.pro.financial.utils.ConvertUtil;
@@ -25,7 +26,7 @@ public class ProjectBiz extends ServiceImpl<ProjectDao, ProjectEntity> {
     @Autowired
     private ProjectDao projectDao;
     @Autowired
-    private LoginFilter loginFilter;
+    private DataSourceDao dataSourceDao;
 
     public int addProject(ProjectDto projectDto) {
         ProjectEntity projectEntity = ProjectDto2Entity.instance.convert(projectDto);
@@ -75,5 +76,9 @@ public class ProjectBiz extends ServiceImpl<ProjectDao, ProjectEntity> {
     public List<ProjectDto> statistics(String dataSourceId, String keyWord, Date startDate, Date endDate, String state) {
         List<ProjectEntity> projectEntities = projectDao.statistics(dataSourceId, keyWord, startDate, endDate, state);
         return ConvertUtil.convert(ProjectEntity2Dto.instance, projectEntities);
+    }
+
+    public Integer getParentDSId(int dsId) {
+        return dataSourceDao.getParentDSId(dsId);
     }
 }

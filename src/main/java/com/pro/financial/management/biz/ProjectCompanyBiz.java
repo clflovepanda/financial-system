@@ -27,4 +27,9 @@ public class ProjectCompanyBiz {
     public String getCompanyByProjectId(Integer id) {
         return projectCompanyDao.getCompanyByProjectId(id);
     }
+
+
+    public int updateById(ProjectCompanyEntity entity) {
+        return projectCompanyDao.updateById(entity);
+    }
 }

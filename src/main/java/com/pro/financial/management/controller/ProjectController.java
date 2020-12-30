@@ -3,6 +3,9 @@ package com.pro.financial.management.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.pro.financial.consts.CommonConst;
 import com.pro.financial.management.biz.*;
+import com.pro.financial.management.converter.ProjectCompanyDto2Entity;
+import com.pro.financial.management.converter.ProjectDataSourceDto2Entity;
+import com.pro.financial.management.converter.ProjectDto2Entity;
 import com.pro.financial.management.converter.ProjectEntity2Dto;
 import com.pro.financial.management.dao.entity.*;
 import com.pro.financial.management.dto.*;
@@ -12,6 +15,7 @@ import com.pro.financial.utils.CommonUtil;
 import com.pro.financial.utils.ConvertUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -266,6 +271,13 @@ public class ProjectController {
 
         result.put("code", HttpStatus.OK.value());
         result.put("msg", HttpStatus.OK.getReasonPhrase());
+        Integer dataSourceId = 0;
+        if (!CollectionUtils.isEmpty(projectEntities)) {
+            int dsId = projectEntities.get(0).getDataSourceId();
+            if (dsId > 0) {
+                dataSourceId = projectBiz.getParentDSId(dsId);
+            }
+        }
         //封装参数到data
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("projectEntities", projectEntities);
@@ -279,6 +291,7 @@ public class ProjectController {
         resultMap.put("receivableEntities", receivableEntities);
         resultMap.put("projectAuditLog", projectAuditLogDto);
         resultMap.put("financial", projectFinancialStatisticsDto);
+        resultMap.put("dataSourceId", dataSourceId);
         result.put("data", resultMap);
         return result;
     }
@@ -438,6 +451,92 @@ public class ProjectController {
         result.put("code", HttpStatus.OK.value());
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         result.put("data", projectDtos);
+        return result;
+    }
+
+    @RequestMapping("/update")
+    public JSONObject updateProject(@RequestBody JSONObject jsonInfo, @CookieValue("user_id") Integer userId) {
+        JSONObject result = new JSONObject();
+        ProjectDto projectDto = JSONObject.parseObject(JSONObject.toJSON(jsonInfo.get("project")).toString(), ProjectDto.class);
+        if (projectDto.getProjectId() == null || projectDto.getProjectId() < 0) {
+            result.put("code", 1001);
+            result.put("msg", "参数有误");
+            return result;
+        }
+        if (projectDto.getDataSourceId() == null) {
+            result.put("code", 1001);
+            result.put("msg", "参数有误");
+            return result;
+        }
+        List<DataSourceEntity> dataSourceEntities = userDao.getDataSource(userId);
+        if (CollectionUtils.isEmpty(dataSourceEntities)) {
+            result.put("code", 7001);
+            result.put("msg", "无立项权限");
+            return result;
+        } else {
+            for (DataSourceEntity dataSourceEntity : dataSourceEntities) {
+                if (dataSourceEntity.getDataSourceId() - Integer.parseInt(projectDto.getDataSourceId()) == 0) {
+                    break;
+                } else {
+                    result.put("code", 7001);
+                    result.put("msg", "无立项权限");
+                    return result;
+                }
+            }
+        }
+        // 解析项目关联类目
+        ProjectDataSourceDto projectDataSourceDto = new ProjectDataSourceDto();
+        projectDataSourceDto.setDataSourceId(projectDto.getDataSourceId());
+        // 解析项目关联公司
+        ProjectCompanyDto projectCompanyDto = new ProjectCompanyDto();
+        projectCompanyDto.setCompanyId(projectDto.getCompanyId());
+        // 解析项目关联人员
+        List<ProjectUserDto> projectUserDtos = new ArrayList<>();
+        // 解析关联工时
+
+        projectDto.setUpdateUser(userId);
+        projectDto.setUtime(new Date());
+        projectDto.setFullname(projectDto.getName());
+        projectBiz.updateById(ProjectDto2Entity.instance.convert(projectDto));
+        int projectId = projectDto.getProjectId();
+        // 处理项目关联类目表
+        projectDataSourceDto.setProjectId(projectId + "");
+        projectDataSourceDto.setCtime(new Date());
+        projectDataSourceBiz.updateById(ProjectDataSourceDto2Entity.instance.convert(projectDataSourceDto));
+        // 处理项目关联公司表
+        projectCompanyDto.setProjectId(projectId);
+        projectCompanyDto.setCtime(new Date());
+        projectCompanyBiz.updateById(ProjectCompanyDto2Entity.instance.convert(projectCompanyDto));
+
+        //项目经理
+        ProjectUserDto manage = new ProjectUserDto();
+        manage.setProjectId(projectId);
+        manage.setUserId(projectDto.getManagerId());
+        manage.setType(2);
+        manage.setCtime(new Date());
+        projectUserDtos.add(manage);
+        //销售经理
+        ProjectUserDto sales = new ProjectUserDto();
+        sales.setProjectId(projectId);
+        sales.setUserId(projectDto.getSalesId());
+        sales.setType(1);
+        sales.setCtime(new Date());
+        projectUserDtos.add(sales);
+        // 处理项目关联人员
+        for (Integer otherUserId : projectDto.getUserIds()) {
+            ProjectUserDto projectUserDto = new ProjectUserDto();
+            projectUserDto.setProjectId(projectId);
+            projectUserDto.setUserId(otherUserId);
+            projectUserDto.setType(3);
+            projectUserDto.setCtime(new Date());
+            projectUserDtos.add(projectUserDto);
+        }
+        projectUserBiz.batchUpdateProjectUser(projectUserDtos);
+
+        // 处理项目关联工时 TODO
+
+        result.put("code", HttpStatus.OK.value());
+        result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
     }
 
