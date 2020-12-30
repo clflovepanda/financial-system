@@ -137,6 +137,7 @@ public class DepositController {
                 result.put("msg", "已经支付无法删除");
                 return result;
             }
+            expenditureBiz.deleteExpenditureByid(expenditureId);
             expenditureAuditLogBiz.deleteExpenditureByid(expenditureId);
         }
         result.put("code", 0);
