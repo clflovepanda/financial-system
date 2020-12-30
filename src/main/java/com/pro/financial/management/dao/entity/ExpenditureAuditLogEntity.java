@@ -1,8 +1,9 @@
 package com.pro.financial.management.dao.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.*;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.Date;
@@ -10,7 +11,13 @@ import java.util.Date;
 @ToString
 @Getter
 @Setter
+@Data
+@EqualsAndHashCode(callSuper = false)
+@TableName("expenditure_audit_log")
 public class ExpenditureAuditLogEntity {
+    private static final long serialVersionUID = 1L;
+
+    @TableId(value = "project_id", type = IdType.AUTO)
     private Integer id;
 
     private Integer expenditureId;
@@ -24,4 +31,5 @@ public class ExpenditureAuditLogEntity {
     private Integer state;
 
     private String username;
+    private String remark;
 }

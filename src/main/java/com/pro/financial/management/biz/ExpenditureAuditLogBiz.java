@@ -27,4 +27,16 @@ public class ExpenditureAuditLogBiz {
     public List<ExpenditureAuditLogDto> getLogByEId(Integer expenditureId) {
         return ConvertUtil.convert(ExpenditureAuditLogEntity2Dto.instance, expenditureAuditLogDao.getLogByEId(expenditureId));
     }
+
+    /**
+     * 修改为失效状态
+     * @param expenditureAuditLogDto
+     * @return
+     */
+    public int remove(ExpenditureAuditLogDto expenditureAuditLogDto) {
+        ExpenditureAuditLogEntity expenditureAuditLogEntity = new ExpenditureAuditLogEntity();
+        expenditureAuditLogEntity.setId(expenditureAuditLogDto.getId());
+        expenditureAuditLogEntity.setState(0);
+        return expenditureAuditLogDao.updateById(expenditureAuditLogEntity);
+    }
 }

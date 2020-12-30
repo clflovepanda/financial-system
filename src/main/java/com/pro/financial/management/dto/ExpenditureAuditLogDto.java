@@ -23,4 +23,6 @@ public class ExpenditureAuditLogDto {
     private Integer state;
 
     private String username;
+
+    private String remark;
 }

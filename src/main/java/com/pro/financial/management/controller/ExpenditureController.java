@@ -3,9 +3,12 @@ package com.pro.financial.management.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.pro.financial.consts.CommonConst;
 import com.pro.financial.management.biz.*;
+import com.pro.financial.management.converter.ExpenditureAuditLogDto2Entity;
 import com.pro.financial.management.converter.ExpenditurePurposeEntity2Dto;
 import com.pro.financial.management.converter.ExpenditureTypeEntity2Dto;
 import com.pro.financial.management.dao.entity.DepositLogEntity;
+import com.pro.financial.management.dao.entity.ExpenditureAuditLogEntity;
+import com.pro.financial.management.dto.ExpenditureAuditLogDto;
 import com.pro.financial.management.dto.ExpenditureDto;
 import com.pro.financial.management.dto.ExpenditurePurposeDto;
 import com.pro.financial.management.dto.ExpenditureTypeDto;
@@ -14,16 +17,15 @@ import com.pro.financial.utils.ConvertUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/expenditure")
@@ -68,6 +70,13 @@ public class ExpenditureController {
             depositLogEntity.setRevenueId(jsonInfo.getInteger("revenueId"));
             depositLogBiz.save(depositLogEntity);
         }
+        //添加申请工作流
+        ExpenditureAuditLogDto expenditureAuditLogDto = new ExpenditureAuditLogDto();
+        expenditureAuditLogDto.setExpenditureId(expenditureDto.getExpenditureId());
+        //已经提交
+        expenditureAuditLogDto.setState(1);
+        expenditureAuditLogDto.setCreateUser(userId);
+        expenditureAuditLogBiz.addExpenditureAuditLog(expenditureAuditLogDto);
         result.put("code", HttpStatus.OK.value());
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
@@ -133,6 +142,58 @@ public class ExpenditureController {
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", resultMap);
+        return result;
+    }
+
+    @RequestMapping("/approval")
+    public JSONObject approval(HttpServletRequest request, @RequestBody ExpenditureAuditLogDto expenditureAuditLogDto, @CookieValue("user_id") Integer userId) {
+        JSONObject result = new JSONObject();
+        if (expenditureAuditLogDto.getExpenditureId() == null || expenditureAuditLogDto.getExpenditureId() < 1) {
+            result.put("code", 1001);
+            result.put("msg", "传入参数有误");
+            return result;
+        }
+        ExpenditureAuditLogDto lastLog = new ExpenditureAuditLogDto();
+        List<ExpenditureAuditLogDto> expenditureAuditLogDtos = expenditureAuditLogBiz.getLogByEId(expenditureAuditLogDto.getExpenditureId());
+        if (!CollectionUtils.isEmpty(expenditureAuditLogDtos)) {
+            List<ExpenditureAuditLogDto> sortList = expenditureAuditLogDtos.stream().sorted(Comparator.comparing(ExpenditureAuditLogDto :: getCtime).reversed()).collect(Collectors.toList());
+            lastLog = sortList.get(0);
+            //状态为 3,4,5,6 不可继续操作
+            if (lastLog.getAuditType() > 2) {
+                result.put("code", 5001);
+                result.put("msg", "已经是最终状态");
+                return result;
+            }
+            if (expenditureAuditLogDto.getAuditType() > 2 && lastLog.getAuditType() < 3) {
+                expenditureAuditLogDto.setCreateUser(userId);
+                expenditureAuditLogDto.setCtime(new Date());
+                expenditureAuditLogBiz.addExpenditureAuditLog(expenditureAuditLogDto);
+            }
+        }
+        result.put("code", 0);
+        result.put("msg", "");
+        return result;
+    }
+    @RequestMapping("/approval/del")
+    public JSONObject approvalDel(HttpServletRequest request, @RequestBody ExpenditureAuditLogDto expenditureAuditLogDto, @CookieValue("user_id") Integer userId) {
+        JSONObject result = new JSONObject();
+        ExpenditureAuditLogDto lastLog = new ExpenditureAuditLogDto();
+        List<ExpenditureAuditLogDto> expenditureAuditLogDtos = expenditureAuditLogBiz.getLogByEId(expenditureAuditLogDto.getExpenditureId());
+        if (!CollectionUtils.isEmpty(expenditureAuditLogDtos)) {
+            List<ExpenditureAuditLogDto> sortList = expenditureAuditLogDtos.stream().sorted(Comparator.comparing(ExpenditureAuditLogDto::getCtime).reversed()).collect(Collectors.toList());
+            lastLog = sortList.get(0);
+        }
+        if (lastLog.getId() - expenditureAuditLogDto.getId() == 0 && expenditureAuditLogDto.getCreateUser() - userId == 0) {
+            expenditureAuditLogBiz.remove(expenditureAuditLogDto);
+        } else {
+            result.put("code", 4001);
+            result.put("msg", "非本人提交无法删除");
+            return result;
+        }
+
+
+        result.put("code", 0);
+        result.put("msg", "");
         return result;
     }
 }

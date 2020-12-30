@@ -48,4 +48,13 @@ public class CommonConst {
     public static final String project_task_status_approved = "1";
     //工时-模板
     public static final String project_task_status_template = "-1";
+
+    //支出审批状态
+    public static final Integer expenditure_audit_type_not_submit = 0;
+    public static final Integer expenditure_audit_type_submit = 1;
+    public static final Integer expenditure_audit_type_reviewed = 2;
+    public static final Integer expenditure_audit_type_rejected = 3;
+    public static final Integer expenditure_audit_type_paid = 4;
+    public static final Integer expenditure_audit_type_cancel = 5;
+    public static final Integer expenditure_audit_type_flat = 6;
 }
