@@ -10,6 +10,7 @@ import com.pro.financial.user.dao.UserDao;
 import com.pro.financial.utils.ConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,6 +57,9 @@ public class ExpenditureBiz {
     }
 
     public List<ExpenditureEntity> selectListByIds(List<Integer> expenditureIds) {
+        if (CollectionUtils.isEmpty(expenditureIds)) {
+            return new ArrayList<>();
+        }
         QueryWrapper<ExpenditureEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.in("expenditure_id", expenditureIds).eq("is_effective", 1);
         List<ExpenditureEntity> expenditureEntities = expenditureDao.selectList(queryWrapper);
