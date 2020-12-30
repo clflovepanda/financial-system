@@ -1,6 +1,7 @@
 package com.pro.financial.management.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
@@ -30,6 +31,7 @@ public class ExpenditureAuditLogEntity {
 
     private Integer state;
 
+    @TableField(exist = false)
     private String username;
     private String remark;
 }
