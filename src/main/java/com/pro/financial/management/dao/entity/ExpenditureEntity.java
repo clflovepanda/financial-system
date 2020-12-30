@@ -65,6 +65,8 @@ public class ExpenditureEntity {
 
     private Integer isEffective;
 
+    private String moneyCapital;
+
     @TableField(exist = false)
     private ProjectEntity project;
     @TableField(exist = false)

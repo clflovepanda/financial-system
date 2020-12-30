@@ -61,6 +61,8 @@ public class ExpenditureDto {
 
     private Integer isEffective;
 
+    private String moneyCapital;
+
     private ProjectEntity project;
     private DataSourceEntity dataSource;
     private ExpenditureMethodEntity expenditureMethod;

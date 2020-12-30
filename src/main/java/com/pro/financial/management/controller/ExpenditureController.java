@@ -15,6 +15,7 @@ import com.pro.financial.management.dto.ExpenditurePurposeDto;
 import com.pro.financial.management.dto.ExpenditureTypeDto;
 import com.pro.financial.utils.CommonUtil;
 import com.pro.financial.utils.ConvertUtil;
+import com.pro.financial.utils.SimpleMoneyFormat;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,6 +61,7 @@ public class ExpenditureController {
         numbering = CommonUtil.generatorNO(CommonConst.initials_expenditure, "", lastNo);
         expenditureDto.setExpenditureType(expenditureDto.getExpenditureTypeId());
         expenditureDto.setNumbering(numbering);
+        expenditureDto.setMoneyCapital(SimpleMoneyFormat.getInstance().format(expenditureDto.getExpenditureMoney()));
         expenditureDto.setCreateUser(userId);
         expenditureDto.setCtime(new Date());
         expenditureDto.setUpdateUser(userId);
