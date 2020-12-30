@@ -1,5 +1,6 @@
 package com.pro.financial.management.biz;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.pro.financial.management.converter.ExpenditureAuditLogDto2Entity;
 import com.pro.financial.management.converter.ExpenditureAuditLogEntity2Dto;
 import com.pro.financial.management.dao.ExpenditureAuditLogDao;
@@ -25,7 +26,9 @@ public class ExpenditureAuditLogBiz {
     }
 
     public List<ExpenditureAuditLogDto> getLogByEId(Integer expenditureId) {
-        return ConvertUtil.convert(ExpenditureAuditLogEntity2Dto.instance, expenditureAuditLogDao.getLogByEId(expenditureId));
+        QueryWrapper<ExpenditureAuditLogEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("expenditure_id", expenditureId).eq("state", 1).orderByDesc("");
+        return ConvertUtil.convert(ExpenditureAuditLogEntity2Dto.instance, expenditureAuditLogDao.selectList(queryWrapper));
     }
 
     /**
@@ -38,5 +41,13 @@ public class ExpenditureAuditLogBiz {
         expenditureAuditLogEntity.setId(expenditureAuditLogDto.getId());
         expenditureAuditLogEntity.setState(0);
         return expenditureAuditLogDao.updateById(expenditureAuditLogEntity);
+    }
+
+    public int deleteExpenditureByid(Integer expenditureId) {
+        ExpenditureAuditLogEntity expenditureAuditLogEntity = new ExpenditureAuditLogEntity();
+        expenditureAuditLogEntity.setState(0);
+        QueryWrapper<ExpenditureAuditLogEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("expenditure_id", expenditureId);
+        return expenditureAuditLogDao.update(expenditureAuditLogEntity, queryWrapper);
     }
 }

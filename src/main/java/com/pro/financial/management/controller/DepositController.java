@@ -1,16 +1,21 @@
 package com.pro.financial.management.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pro.financial.consts.CommonConst;
 import com.pro.financial.management.biz.DepositLogBiz;
+import com.pro.financial.management.biz.ExpenditureAuditLogBiz;
 import com.pro.financial.management.biz.ExpenditureBiz;
 import com.pro.financial.management.biz.RevenueBiz;
 import com.pro.financial.management.dao.DepositLogDao;
 import com.pro.financial.management.dao.entity.DepositLogEntity;
+import com.pro.financial.management.dao.entity.ExpenditureAuditLogEntity;
 import com.pro.financial.management.dao.entity.ExpenditureEntity;
+import com.pro.financial.management.dto.ExpenditureAuditLogDto;
 import com.pro.financial.management.dto.RevenueDto;
 import com.pro.financial.user.biz.UserBiz;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +37,8 @@ public class DepositController {
     private DepositLogBiz depositLogBiz;
     @Autowired
     private ExpenditureBiz expenditureBiz;
+    @Autowired
+    private ExpenditureAuditLogBiz expenditureAuditLogBiz;
 
     @RequestMapping("/list")
     public JSONObject list(HttpServletRequest request) {
@@ -102,7 +109,36 @@ public class DepositController {
 
 
     @RequestMapping("/del")
-    public JSONObject revenue(HttpServletRequest request) {
-        return null;
+    public JSONObject revenue(HttpServletRequest request, @CookieValue("user_id") Integer userId) {
+        JSONObject result = new JSONObject();
+        Integer expenditureId = Integer.parseInt(StringUtils.isEmpty(request.getParameter("expenditureId")) ? "0" : request.getParameter("expenditureId"));
+        if (expenditureId < 1) {
+            result.put("code", 1001);
+            result.put("msg", "传入参数有误");
+            return result;
+        }
+        ExpenditureEntity expenditureEntity = expenditureBiz.selectById(expenditureId);
+        if (expenditureEntity.getCreateUser() - userId != 0) {
+            result.put("code", 1001);
+            result.put("msg", "非本人无法删除");
+            return result;
+        }
+        if (expenditureEntity.getState() - CommonConst.expenditure_audit_type_paid == 0) {
+            result.put("code", 1001);
+            result.put("msg", "已经支付无法删除");
+            return result;
+        }
+        List<ExpenditureAuditLogDto> expenditureAuditLogDtos = expenditureAuditLogBiz.getLogByEId(expenditureId);
+        if (CollectionUtils.isEmpty(expenditureAuditLogDtos)) {
+            expenditureBiz.deleteExpenditureByid(expenditureId);
+        } else {
+            if (expenditureAuditLogDtos.get(0).getAuditType() - CommonConst.expenditure_audit_type_paid == 0) {
+                result.put("code", 1001);
+                result.put("msg", "已经支付无法删除");
+                return result;
+            }
+            expenditureAuditLogBiz.deleteExpenditureByid(expenditureId);
+        }
+        return result;
     }
 }

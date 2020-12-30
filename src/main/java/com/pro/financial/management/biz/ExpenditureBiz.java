@@ -57,11 +57,22 @@ public class ExpenditureBiz {
 
     public List<ExpenditureEntity> selectListByIds(List<Integer> expenditureIds) {
         QueryWrapper<ExpenditureEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.in("expenditure_id", expenditureIds);
+        queryWrapper.in("expenditure_id", expenditureIds).eq("is_effective", 1);
         List<ExpenditureEntity> expenditureEntities = expenditureDao.selectList(queryWrapper);
         for (ExpenditureEntity expenditureEntity : expenditureEntities) {
             expenditureEntity.setUsername(userDao.selectById(expenditureEntity.getCreateUser()).getUsername());
         }
         return expenditureEntities;
+    }
+
+    public ExpenditureEntity selectById(Integer expenditureId) {
+        return expenditureDao.selectById(expenditureId);
+    }
+
+    public int deleteExpenditureByid(Integer expenditureId) {
+        ExpenditureEntity expenditureEntity = new ExpenditureEntity();
+        expenditureEntity.setExpenditureId(expenditureId);
+        expenditureEntity.setIsEffective(0);
+        return expenditureDao.updateById(expenditureEntity);
     }
 }
