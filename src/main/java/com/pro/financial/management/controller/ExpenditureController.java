@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -53,8 +54,8 @@ public class ExpenditureController {
     public JSONObject addExpenditure(@RequestBody JSONObject jsonInfo, HttpServletRequest request, @CookieValue("user_id") Integer userId) {
         JSONObject result = new JSONObject();
         ExpenditureDto expenditureDto = JSONObject.parseObject(jsonInfo.toJSONString(), ExpenditureDto.class);
-        Integer revenueId = jsonInfo.getInteger("revenueId");
-        RevenueDto revenueDto =  revenueBiz.getByRevenueId(revenueId);
+//        Integer revenueId = jsonInfo.getInteger("revenueId");
+//        RevenueDto revenueDto =  revenueBiz.getByRevenueId(revenueId);
         //生成编号
         String numbering;
         //获取最后一条数据的编号
@@ -78,10 +79,27 @@ public class ExpenditureController {
         } catch (Exception e) {
 
         }
+        //退押金操作
         if (StringUtils.equals("deposit", request.getParameter("flag"))) {
+            //depositId 为收入表revenueId
+            Integer depositId = jsonInfo.getInteger("revenueId");
+            RevenueDto revenueDto =  revenueBiz.getByRevenueId(depositId);
+            //这笔押金总款
+            BigDecimal revenueMoney =  revenueDto.getCnyMoney();
+            //已经退回款项和退回中款项
+            BigDecimal depositMoney = new BigDecimal(0);
+            List<DepositLogEntity> depositLogEntities = depositLogBiz.getListByRevenueId(depositId);
+            for (DepositLogEntity entity : depositLogEntities) {
+                depositMoney = depositMoney.add(entity.getExpenditureMoney() == null ? new BigDecimal(0) : entity.getExpenditureMoney());
+            }
+            if (revenueMoney.compareTo(depositMoney) == -1) {
+                result.put("code", 7001);
+                result.put("msg", "剩余金额不足");
+                return result;
+            }
             DepositLogEntity depositLogEntity = new DepositLogEntity();
             depositLogEntity.setExpenditureId(expenditureDto.getExpenditureId());
-            depositLogEntity.setRevenueId(jsonInfo.getInteger("revenueId"));
+            depositLogEntity.setRevenueId(depositId);
             depositLogBiz.save(depositLogEntity);
         }
         //添加申请工作流
@@ -92,7 +110,7 @@ public class ExpenditureController {
         expenditureAuditLogDto.setCreateUser(userId);
         expenditureAuditLogBiz.addExpenditureAuditLog(expenditureAuditLogDto);
         result.put("code", 0);
-        result.put("msg", HttpStatus.OK.getReasonPhrase());
+        result.put("msg", "");
         return result;
     }
 

@@ -35,4 +35,8 @@ public class DepositLogBiz extends ServiceImpl<DepositLogDao, DepositLogEntity> 
         List<Integer> list = (List)depositLogDao.selectObjs(queryWrapper);
         return list;
     }
+
+    public List<DepositLogEntity> getListByRevenueId(Integer depositId) {
+        return depositLogDao.getListByRevenueId(depositId);
+    }
 }

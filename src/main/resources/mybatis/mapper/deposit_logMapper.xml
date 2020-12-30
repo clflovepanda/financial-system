@@ -2,4 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pro.financial.management.dao.DepositLogDao">
 
+    <select id="getListByRevenueId" resultType="com.pro.financial.management.dao.entity.DepositLogEntity">
+        select * from deposit_log
+        left join expenditure using (expenditure_id)
+        where revenue_id = #{depositId}
+    </select>
+
 </mapper>

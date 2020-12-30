@@ -1,6 +1,7 @@
 package com.pro.financial.management.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.pro.financial.consts.CommonConst;
 import com.pro.financial.management.biz.DepositLogBiz;
 import com.pro.financial.management.biz.ExpenditureAuditLogBiz;
@@ -131,6 +132,9 @@ public class DepositController {
         List<ExpenditureAuditLogDto> expenditureAuditLogDtos = expenditureAuditLogBiz.getLogByEId(expenditureId);
         if (CollectionUtils.isEmpty(expenditureAuditLogDtos)) {
             expenditureBiz.deleteExpenditureByid(expenditureId);
+            QueryWrapper<DepositLogEntity> wrapper  = new QueryWrapper<>();
+            wrapper.eq("expenditure", expenditureId);
+            depositLogBiz.remove(wrapper);
         } else {
             if (expenditureAuditLogDtos.get(0).getAuditType() - CommonConst.expenditure_audit_type_paid == 0) {
                 result.put("code", 1001);
@@ -138,7 +142,12 @@ public class DepositController {
                 return result;
             }
             expenditureBiz.deleteExpenditureByid(expenditureId);
+            //删除支付审批流程
             expenditureAuditLogBiz.deleteExpenditureByid(expenditureId);
+            //删除押金流程
+            QueryWrapper<DepositLogEntity> wrapper  = new QueryWrapper<>();
+            wrapper.eq("expenditure", expenditureId);
+            depositLogBiz.remove(wrapper);
         }
         result.put("code", 0);
         result.put("msg", "");

@@ -1,8 +1,11 @@
 package com.pro.financial.management.dao.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 import java.util.Date;
@@ -56,5 +59,7 @@ public class DepositLogEntity implements Serializable {
      */
     private Date auditTime;
 
+    @TableField(exist = false)
+    private BigDecimal expenditureMoney;
 
 }
