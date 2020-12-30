@@ -18,4 +18,9 @@ public interface ProjectCompanyDao extends BaseMapper<ProjectCompanyEntity> {
             "left join project_company " +
             "using(company_id) where project_id = #{id}")
     String getCompanyByProjectId(@Param("id") Integer id);
+
+    @Select("select company_id from company " +
+            "left join project_company " +
+            "using(company_id) where project_id = #{id}")
+    Integer getCompanyIdByProjectId(@Param("id") Integer id);
 }

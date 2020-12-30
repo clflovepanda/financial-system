@@ -28,6 +28,10 @@ public class ProjectCompanyBiz {
         return projectCompanyDao.getCompanyByProjectId(id);
     }
 
+    public Integer getCompanyIdByProjectId(Integer id) {
+        return projectCompanyDao.getCompanyIdByProjectId(id);
+    }
+
 
     public int updateById(ProjectCompanyEntity entity) {
         return projectCompanyDao.updateById(entity);

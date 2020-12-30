@@ -272,11 +272,13 @@ public class ProjectController {
         result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         Integer dataSourceId = 0;
+        Integer companyId = 0;
         if (!CollectionUtils.isEmpty(projectEntities)) {
             int dsId = projectEntities.get(0).getDataSourceId();
             if (dsId > 0) {
                 dataSourceId = projectBiz.getParentDSId(dsId);
             }
+            companyId = projectCompanyBiz.getCompanyIdByProjectId(projectEntities.get(0).getProjectId());
         }
         //封装参数到data
         Map<String, Object> resultMap = new HashMap<>();
@@ -292,6 +294,7 @@ public class ProjectController {
         resultMap.put("projectAuditLog", projectAuditLogDto);
         resultMap.put("financial", projectFinancialStatisticsDto);
         resultMap.put("dataSourceId", dataSourceId);
+        resultMap.put("companyId", companyId);
         result.put("data", resultMap);
         return result;
     }
