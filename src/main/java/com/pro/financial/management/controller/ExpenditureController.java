@@ -75,7 +75,7 @@ public class ExpenditureController {
         ExpenditureAuditLogDto expenditureAuditLogDto = new ExpenditureAuditLogDto();
         expenditureAuditLogDto.setExpenditureId(expenditureDto.getExpenditureId());
         //已经提交
-        expenditureAuditLogDto.setState(1);
+        expenditureAuditLogDto.setAuditType(1);
         expenditureAuditLogDto.setCreateUser(userId);
         expenditureAuditLogBiz.addExpenditureAuditLog(expenditureAuditLogDto);
         result.put("code", HttpStatus.OK.value());
