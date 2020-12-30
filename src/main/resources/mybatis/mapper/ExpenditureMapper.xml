@@ -42,14 +42,12 @@
     select * from expenditure e
     left join expenditure_method em
     using (expenditure_method_id)
-    left join expenditure_project ep
-    using (expenditure_id)
     left join expenditure_purpose epu
     using (expenditure_purpose_id)
     left join expenditure_type pt
     using (expenditure_type_id)
     left join project p
-    on p.project_id = ep.project_id
+    on p.project_id = e.project_id
     left join project_data_source pds
     on p.project_id = pds.project_id
     left join data_source dt
