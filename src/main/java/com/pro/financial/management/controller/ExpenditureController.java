@@ -147,11 +147,14 @@ public class ExpenditureController {
         //关键字
         String keyWord = request.getParameter("keyWord");
         String startDt = request.getParameter("startDt");
+        String projectName = request.getParameter("projectName");
+        String projectNo = request.getParameter("projectNo");
+
         String endDt = request.getParameter("endDt");
         Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
         Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
         List<ExpenditureDto> expenditureDtos = expenditureBiz.searchList(projectId, companyId, numbering, expenditureMethodId, expenditureTypeId,
-                beneficiaryUnit, createUser, state, expenditureAuditLog, expenditurePurposeId, startDate, endDate, keyWord);
+                beneficiaryUnit, createUser, state, expenditureAuditLog, expenditurePurposeId, startDate, endDate, keyWord, projectName, projectNo);
         for (ExpenditureDto expenditureDto : expenditureDtos) {
             expenditureDto.setAuditType(expenditureAuditLogBiz.getLastLog(expenditureDto.getExpenditureId()));
             expenditureDto.setExpenditureAuditLogs(expenditureAuditLogBiz.getLogByEId(expenditureDto.getExpenditureId()));

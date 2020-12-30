@@ -123,6 +123,12 @@
     <if test="createUser != null and createUser !=''">
       and u.username like "%${createUser}%
     </if>
+    <if test="projectName != null and projectName !=''">
+      and p.name like "%${projectName}%
+    </if>
+    <if test="projectNo != null and projectNo !=''">
+      and p.code like "%${projectNo}%
+    </if>
     <if test="keyWord != null and keyWord != ''">
       and (u.username like "%${keyWord}% or e.numbering like "%${keyWord}% or p.name like "%${keyWord}% )
     </if>

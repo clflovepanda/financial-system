@@ -50,9 +50,10 @@ public class ExpenditureBiz {
 
     public List<ExpenditureDto> searchList(String projectId, String companyId, String numbering, String expenditureMethodId,
                                            String expenditureTypeId, String beneficiaryUnit, String createUser, String state,
-                                           String expenditureAuditLog, String expenditurePurposeId, Date startDate, Date endDate, String keyWord) {
+                                           String expenditureAuditLog, String expenditurePurposeId, Date startDate, Date endDate, String keyWord,
+                                           String projectName, String projectNo) {
         return ConvertUtil.convert(ExpenditureEntity2Dto.instance, expenditureDao.searchList(projectId, companyId, numbering, expenditureMethodId, expenditureTypeId,
-                beneficiaryUnit, createUser, state, expenditureAuditLog, expenditurePurposeId, startDate, endDate, keyWord));
+                beneficiaryUnit, createUser, state, expenditureAuditLog, expenditurePurposeId, startDate, endDate, keyWord,projectName, projectNo));
     }
 
     public String selectLastNo() {

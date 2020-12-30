@@ -38,7 +38,7 @@ public interface ExpenditureDao extends BaseMapper<ExpenditureEntity> {
                                     @Param("expenditureTypeId") String expenditureTypeId, @Param("beneficiaryUnit") String beneficiaryUnit, @Param("createUser") String createUser,
                                     @Param("state") String state, @Param("expenditureAuditLog") String expenditureAuditLog,
                                     @Param("expenditurePurposeId") String expenditurePurposeId, @Param("startDt") Date startDate, @Param("endDt") Date endDate,
-                                       @Param("keyWord") String keyWord);
+                                       @Param("keyWord") String keyWord,@Param("projectName") String projectName,@Param("projectNo") String projectNo);
 
     @Select("select numbering from expenditure order by expenditure_id desc limit 0,1")
     String selectLastNo();
