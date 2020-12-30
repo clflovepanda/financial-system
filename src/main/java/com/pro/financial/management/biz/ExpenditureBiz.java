@@ -6,6 +6,7 @@ import com.pro.financial.management.converter.ExpenditureEntity2Dto;
 import com.pro.financial.management.dao.ExpenditureDao;
 import com.pro.financial.management.dao.entity.ExpenditureEntity;
 import com.pro.financial.management.dto.ExpenditureDto;
+import com.pro.financial.user.dao.CompanyDao;
 import com.pro.financial.user.dao.UserDao;
 import com.pro.financial.utils.ConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class ExpenditureBiz {
     private ExpenditureDao expenditureDao;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private CompanyDao companyDao;
 
     public int addExpenditure(ExpenditureDto expenditureDto) {
         ExpenditureEntity expenditureEntity = ExpenditureDto2Entity.instance.convert(expenditureDto);
@@ -65,6 +68,7 @@ public class ExpenditureBiz {
         List<ExpenditureEntity> expenditureEntities = expenditureDao.selectList(queryWrapper);
         for (ExpenditureEntity expenditureEntity : expenditureEntities) {
             expenditureEntity.setUsername(userDao.selectById(expenditureEntity.getCreateUser()).getUsername());
+            expenditureEntity.setCoName(companyDao.selectById(expenditureEntity.getCompanyId()).getCoName());
         }
         return expenditureEntities;
     }

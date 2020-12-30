@@ -1,18 +1,18 @@
 package com.pro.financial.management.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.pro.financial.consts.CommonConst;
 import com.pro.financial.management.biz.*;
 import com.pro.financial.management.converter.ExpenditureAuditLogDto2Entity;
 import com.pro.financial.management.converter.ExpenditurePurposeEntity2Dto;
 import com.pro.financial.management.converter.ExpenditureTypeEntity2Dto;
+import com.pro.financial.management.dao.DepositLogDao;
 import com.pro.financial.management.dao.entity.DepositLogEntity;
 import com.pro.financial.management.dao.entity.ExpenditureAuditLogEntity;
 import com.pro.financial.management.dao.entity.ExpenditureEntity;
-import com.pro.financial.management.dto.ExpenditureAuditLogDto;
-import com.pro.financial.management.dto.ExpenditureDto;
-import com.pro.financial.management.dto.ExpenditurePurposeDto;
-import com.pro.financial.management.dto.ExpenditureTypeDto;
+import com.pro.financial.management.dto.*;
 import com.pro.financial.utils.CommonUtil;
 import com.pro.financial.utils.ConvertUtil;
 import com.pro.financial.utils.SimpleMoneyFormat;
@@ -45,12 +45,15 @@ public class ExpenditureController {
 
     @Autowired
     private DepositLogBiz depositLogBiz;
+    @Autowired
+    private RevenueBiz revenueBiz;
 
     @RequestMapping("/add")
     public JSONObject addExpenditure(@RequestBody JSONObject jsonInfo, HttpServletRequest request, @CookieValue("user_id") Integer userId) {
         JSONObject result = new JSONObject();
         ExpenditureDto expenditureDto = JSONObject.parseObject(jsonInfo.toJSONString(), ExpenditureDto.class);
-
+        Integer revenueId = jsonInfo.getInteger("revenueId");
+        RevenueDto revenueDto =  revenueBiz.getByRevenueId(revenueId);
         //生成编号
         String numbering;
         //获取最后一条数据的编号
@@ -177,6 +180,14 @@ public class ExpenditureController {
                 expenditureDto.setExpenditureId(expenditureAuditLogDto.getExpenditureId());
                 expenditureDto.setState(expenditureAuditLogDto.getAuditType());
                 expenditureBiz.updateExpenditure(expenditureDto);
+                //已经支付 如果更改押金表记录
+                if (expenditureAuditLogDto.getAuditType() - CommonConst.expenditure_audit_type_paid == 0) {
+                    QueryWrapper<DepositLogEntity> queryWrapper = new QueryWrapper<>();
+                    queryWrapper.eq("expenditure_id", expenditureAuditLogDto.getExpenditureId());
+                    DepositLogEntity depositLogEntity = new DepositLogEntity();
+                    depositLogEntity.setState(1);
+                    depositLogBiz.update(depositLogEntity, queryWrapper);
+                }
             }
         }
         result.put("code", 0);
@@ -209,6 +220,16 @@ public class ExpenditureController {
             expenditureDto.setExpenditureId(expenditureAuditLogDto.getExpenditureId());
             expenditureDto.setState(nextLog.getAuditType());
             expenditureBiz.updateExpenditure(expenditureDto);
+
+            //已经支付 如果更改押金表记录
+            if (expenditureAuditLogDto.getAuditType() - CommonConst.expenditure_audit_type_paid == 0) {
+                QueryWrapper<DepositLogEntity> queryWrapper = new QueryWrapper<>();
+                queryWrapper.eq("expenditure_id", expenditureAuditLogDto.getExpenditureId());
+                DepositLogEntity depositLogEntity = new DepositLogEntity();
+                depositLogEntity.setState(0);
+                depositLogBiz.update(depositLogEntity, queryWrapper);
+            }
+
         } else {
             result.put("code", 4001);
             result.put("msg", "非本人提交无法删除");
