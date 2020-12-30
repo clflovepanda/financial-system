@@ -7,6 +7,7 @@ import com.pro.financial.management.dto.ContractDto;
 import com.pro.financial.management.dto.ReceivableDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -53,9 +54,10 @@ public class ReceivableController {
     }
 
     @RequestMapping("/add")
-    public JSONObject addReceivable(@RequestBody JSONObject jsonInfo) {
+    public JSONObject addReceivable(@RequestBody JSONObject jsonInfo, @CookieValue("user_id") Integer userId) {
         JSONObject result = new JSONObject();
         ReceivableDto receivableDto = JSONObject.parseObject(jsonInfo.toJSONString(), ReceivableDto.class);
+        receivableDto.setUserId(userId);
         int count = receivableBiz.addReceivable(receivableDto);
         result.put("code", 0);
         result.put("msg", "");
