@@ -74,6 +74,13 @@ public class ReceivementController {
             receivementDto.setState(1);
             int count = receivementBiz.addReceivement(receivementDto);
         } else {
+            //获取已经认款金额
+            BigDecimal updateMonye = subscriptionLogBiz.gethadSubscriptionTotalMoneyByRId(receivementDto.getId());
+            if (receivementDto.getReceivementMoney().compareTo(updateMonye) == -1 ) {
+                result.put("code", 8001);
+                result.put("msg", "剩余金额不足");
+                return result;
+            }
             int count = receivementBiz.updateReceivement(receivementDto);
         }
         result.put("code", HttpStatus.OK.value());

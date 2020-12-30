@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,5 +52,14 @@ public class SubscriptionLogBiz {
 
     public int deleteByReceivementId(Integer id) {
         return subscriptionLogDao.deleteByReceivementId(id);
+    }
+
+    /**
+     * 获取剩余认款金额
+     * @param id
+     * @return
+     */
+    public BigDecimal gethadSubscriptionTotalMoneyByRId(Integer id) {
+        return subscriptionLogDao.gethadSubscriptionTotalMoneyByRId(id);
     }
 }
