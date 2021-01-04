@@ -31,6 +31,7 @@
         p.*,
         u.username salesName,
         u1.username managerName,
+        (SELECT SUM(amount * take_time) FROM project_task WHERE task_relation_id IN (SELECT task_relation_id FROM project_task_relation WHERE project_id = p.project_id) AND `status` = 0 AND task_status = "00") takeTime,
         (
         SELECT
         GROUP_CONCAT( u.username )

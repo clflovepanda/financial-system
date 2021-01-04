@@ -439,7 +439,6 @@ public class ProjectController {
                 projectDto.setPaymentExpenses(paymentExpenses);
                 projectDto.setSettlementIncome(settlementIncome);
                 projectDto.setSettlementExpenses(settlementExpenses);
-                projectDto.setTakeTime(projectTaskBiz.getProjectTakeTimeByProjectId(projectDto.getProjectId()));
             }
         }
 
