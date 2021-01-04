@@ -72,7 +72,7 @@ public class ProjectController {
             return result;
         }
         List<DataSourceEntity> dataSourceEntities = userDao.getDataSource(userId);
-        boolean flag = true;
+        boolean flag = false;
         if (CollectionUtils.isEmpty(dataSourceEntities)) {
             result.put("code", 7001);
             result.put("msg", "无立项权限");
@@ -80,9 +80,8 @@ public class ProjectController {
         } else {
             for (DataSourceEntity dataSourceEntity : dataSourceEntities) {
                 if (dataSourceEntity.getDataSourceId() - Integer.parseInt(projectDto.getDataSourceId()) == 0) {
+                    flag = true;
                     break;
-                } else {
-                    flag = false;
                 }
             }
         }
