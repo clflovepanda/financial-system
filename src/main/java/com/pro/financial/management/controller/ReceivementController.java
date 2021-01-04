@@ -71,7 +71,7 @@ public class ReceivementController {
         if (flag == 1) {
             receivementDto.setCreateUser(userId);
             receivementDto.setCtime(new Date());
-            receivementDto.setState(1);
+            receivementDto.setState(0);
             int count = receivementBiz.addReceivement(receivementDto);
         } else {
             //获取已经认款金额
