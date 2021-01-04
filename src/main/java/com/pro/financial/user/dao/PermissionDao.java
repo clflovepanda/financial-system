@@ -1,6 +1,7 @@
 package com.pro.financial.user.dao;
 
 import com.pro.financial.user.dao.entity.PermissionEntity;
+import com.pro.financial.user.dto.PermissionDto;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -49,4 +50,18 @@ public interface PermissionDao {
 
     @Select("SELECT * FROM permission where parent_id <> 0 and state = 1")
     List<PermissionEntity> selectOtherPermission();
+
+    @Select("SELECT * FROM permission WHERE permission_id IN (SELECT " +
+            "permission_id  " +
+            "FROM " +
+            "role_permission_relation  " +
+            "WHERE " +
+            "role_id IN ( " +
+            "SELECT " +
+            "role_id  " +
+            "FROM " +
+            "user_role_relation  " +
+            "WHERE " +
+            "user_id = #{userId}))")
+    List<PermissionDto> getPermissionByUserId(@Param("userId") Integer userId);
 }

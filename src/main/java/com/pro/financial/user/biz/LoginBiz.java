@@ -103,10 +103,10 @@ public class LoginBiz {
                     result.put("msg", "保存cookie失败");
                     return result;
                 }
-                //菜单权限存入cookie
-                CookieUtil.addCookie(response, permissionCookieName, permissionCookieEncode, 36000);
-                // 数据权限存入cookie
-                CookieUtil.addCookie(response, datasourceCookieName, datasourceCookieEncode, 36000);
+//                //菜单权限存入cookie
+//                CookieUtil.addCookie(response, permissionCookieName, permissionCookieEncode, 36000);
+//                // 数据权限存入cookie
+//                CookieUtil.addCookie(response, datasourceCookieName, datasourceCookieEncode, 36000);
                 CookieUtil.addCookie(response, CommonConst.cookie_user_head, userDto.getUserId() + "", 36000);
                 CookieUtil.addCookie(response, CommonConst.cookie_user_name_head, userDto.getUsername(), 36000);
                 request.getSession().setAttribute(permissionCookieName, permissionJsonStr);
@@ -163,11 +163,12 @@ public class LoginBiz {
                         result.put("msg", "保存cookie失败");
                         return result;
                     }
-                    //菜单权限存入cookie
-                    CookieUtil.addCookie(response, permissionCookieName, permissionCookieEncode, 36000);
-                    // 数据权限存入cookie
-                    CookieUtil.addCookie(response, datasourceCookieName, datasourceCookieEncode, 36000);
+//                    //菜单权限存入cookie
+//                    CookieUtil.addCookie(response, permissionCookieName, permissionCookieEncode, 36000);
+//                    // 数据权限存入cookie
+//                    CookieUtil.addCookie(response, datasourceCookieName, datasourceCookieEncode, 36000);
                     CookieUtil.addCookie(response, CommonConst.cookie_user_head, userDto.getUserId() + "", 36000);
+                    CookieUtil.addCookie(response, CommonConst.cookie_user_name_head, userDto.getUsername(), 36000);
                     result.put("code", 0);
                     result.put("msg", "");
                     result.put("data", userDto);

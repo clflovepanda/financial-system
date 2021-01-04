@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.pro.financial.consts.CommonConst;
 import com.pro.financial.user.converter.UserEntity2Dto;
+import com.pro.financial.user.dao.PermissionDao;
 import com.pro.financial.user.dao.UserDao;
 import com.pro.financial.user.dto.DataSourceDto;
 import com.pro.financial.user.dto.PermissionDto;
@@ -14,6 +15,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
@@ -30,6 +32,9 @@ public class LoginFilter implements Filter {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private PermissionDao permissionDao;
 
 
     @Override
@@ -68,25 +73,15 @@ public class LoginFilter implements Filter {
                 }
             }
         }
+        List<PermissionDto> permissionDtos = null;
         if (userDto != null && userDto.getUserId() > 0) {
             permissionCookieName = CommonConst.cookie_permission_head + userDto.getUserId();
             datasourceCookieName = CommonConst.cookie_datasource_head + userDto.getUserId();
+            permissionDtos = permissionDao.getPermissionByUserId(userDto.getUserId());
         }
-        if (ArrayUtils.isNotEmpty(cookies)) {
-            //有cookies
-            for (Cookie cookie : cookies) {
-                if (StringUtils.equals(cookie.getName(), permissionCookieName)) {
-                    permissionJsonStr = URLDecoder.decode(cookie.getValue(), "utf-8");
-                }
-                if (StringUtils.equals(cookie.getName(), datasourceCookieName)) {
-                    datasourceJsonStr = URLDecoder.decode(cookie.getValue(), "utf-8");
-                }
-            }
-        }
-        if (permissionJsonStr != null) {
-            List<String> uriList = JSONArray.parseArray(permissionJsonStr).toJavaList(String.class);
-            for (String uri : uriList) {
-                if (StringUtils.equalsIgnoreCase(urlPath, uri)) {
+        if (!CollectionUtils.isEmpty(permissionDtos)) {
+            for (PermissionDto permissionDto : permissionDtos) {
+                if (StringUtils.equalsIgnoreCase(urlPath, permissionDto.getUri())) {
                     if (datasourceJsonStr != null) {
                         request.getSession().setAttribute("datasource", datasourceJsonStr);
                     }
