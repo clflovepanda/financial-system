@@ -72,6 +72,7 @@ public class ProjectController {
             return result;
         }
         List<DataSourceEntity> dataSourceEntities = userDao.getDataSource(userId);
+        boolean flag = true;
         if (CollectionUtils.isEmpty(dataSourceEntities)) {
             result.put("code", 7001);
             result.put("msg", "无立项权限");
@@ -81,11 +82,14 @@ public class ProjectController {
                 if (dataSourceEntity.getDataSourceId() - Integer.parseInt(projectDto.getDataSourceId()) == 0) {
                     break;
                 } else {
-                    result.put("code", 7001);
-                    result.put("msg", "无立项权限");
-                    return result;
+                    flag = false;
                 }
             }
+        }
+        if (!flag) {
+            result.put("code", 7001);
+            result.put("msg", "无立项权限");
+            return result;
         }
         // 解析项目关联类目
         ProjectDataSourceDto projectDataSourceDto = new ProjectDataSourceDto();
