@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -32,4 +33,7 @@ public interface ProjectTaskDao extends BaseMapper<ProjectTaskEntity> {
     List<ProjectTaskEntity> getListByProjectIds(List<Integer> projectIds);
 
     List<ProjectTaskEntity> gettask(@Param("projectId") Integer projectId, @Param("userId") Integer userId, @Param("taskRelationId") Integer taskRelationId);
+
+    @Select("SELECT SUM(amount * take_time) FROM project_task WHERE task_relation_id IN (SELECT task_relation_id FROM project_task_relation WHERE project_id = #{projectId}) AND `status` = 0 AND task_status = '00'")
+    BigDecimal getProjectTakeTimeByProjectId(@Param("projectId") Integer projectId);
 }

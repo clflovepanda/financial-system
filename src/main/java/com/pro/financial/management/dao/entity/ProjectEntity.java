@@ -90,4 +90,8 @@ public class ProjectEntity {
     @TableField(exist = false)
     private BigDecimal settlementIncome;
 
+    //花费工时
+    @TableField(exist = false)
+    private BigDecimal takeTime;
+
 }

@@ -439,6 +439,7 @@ public class ProjectController {
                 projectDto.setPaymentExpenses(paymentExpenses);
                 projectDto.setSettlementIncome(settlementIncome);
                 projectDto.setSettlementExpenses(settlementExpenses);
+                projectDto.setTakeTime(projectTaskBiz.getProjectTakeTimeByProjectId(projectDto.getProjectId()));
             }
         }
 
@@ -539,9 +540,6 @@ public class ProjectController {
         }
         projectUserBiz.deleteByProjectId(projectId);
         projectUserBiz.batchUpdateProjectUser(projectUserDtos);
-
-        // 处理项目关联工时 TODO
-
         result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;

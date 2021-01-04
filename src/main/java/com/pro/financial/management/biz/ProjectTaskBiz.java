@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -239,5 +240,9 @@ public class ProjectTaskBiz extends ServiceImpl<ProjectTaskDao, ProjectTaskEntit
         List<ProjectTaskEntity> projectTaskEntities = projectTaskDao.gettask(projectId, userId, taskRelationId);
 
         return ConvertUtil.convert(ProjectTaskEntity2Dto.instance, projectTaskEntities);
+    }
+
+    public BigDecimal getProjectTakeTimeByProjectId(Integer projectId) {
+         return projectTaskDao.getProjectTakeTimeByProjectId(projectId);
     }
 }
