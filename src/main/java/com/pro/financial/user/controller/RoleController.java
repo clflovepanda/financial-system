@@ -45,7 +45,13 @@ public class RoleController {
     public JSONObject addRole(@RequestBody JSONObject jsonInfo) {
         JSONObject result = new JSONObject();
         RoleDto roleDto = jsonInfo.getJSONObject("role").toJavaObject(RoleDto.class);
-        roleBiz.addRole(roleDto);
+        try {
+            roleBiz.addRole(roleDto);
+        } catch (Exception e) {
+            result.put("code", 9001);
+            result.put("msg", "角色名字重复");
+            return result;
+        }
         result.put("code", 0);
         result.put("msg", "");
         return result;
