@@ -87,10 +87,12 @@ public class LoginBiz {
                 String permissionCookieEncode = null;
                 String datasourceCookieEncode = null;
                 String userCookieEncode = null;
+                String userNameEncode = null;
                 try {
                     permissionCookieEncode = URLEncoder.encode(permissionJsonStr, "utf-8");
                     datasourceCookieEncode = URLEncoder.encode(datasourceJsonStr, "utf-8");
                     userCookieEncode = URLEncoder.encode(userJsonStr, "utf-8");
+                    userNameEncode = URLEncoder.encode(userDto.getUsername(), "utf-8");
 
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
@@ -108,7 +110,7 @@ public class LoginBiz {
 //                // 数据权限存入cookie
 //                CookieUtil.addCookie(response, datasourceCookieName, datasourceCookieEncode, 36000);
                 CookieUtil.addCookie(response, CommonConst.cookie_user_head, userDto.getUserId() + "", 36000);
-                CookieUtil.addCookie(response, CommonConst.cookie_user_name_head, userDto.getUsername(), 36000);
+                CookieUtil.addCookie(response, CommonConst.cookie_user_name_head, userNameEncode, 36000);
                 request.getSession().setAttribute(permissionCookieName, permissionJsonStr);
                 request.getSession().setAttribute(datasourceCookieName, datasourceJsonStr);
                 result.put("code", 0);
