@@ -85,7 +85,7 @@ public interface RoleDao {
     int deleRoleDataSource(@Param("roleId") Integer roleId);
 
     @Select({"<script>" +
-            "SELECT * FROM data_source\n" +
+            "SELECT * FROM data_source " +
             "LEFT JOIN role_datasource_relation USING (data_source_id) " +
             "WHERE role_id in " +
             "<foreach collection='list' item='item' index='index' separator=',' open='(' close=')'>" +
@@ -94,8 +94,22 @@ public interface RoleDao {
             "</script>"})
     List<DataSourceEntity> getDatasourceByRoleIds(@Param("list") List<Integer> roleIds);
 
-    @Select("SELECT * FROM data_source\n" +
+    @Select("SELECT * FROM data_source " +
             "LEFT JOIN role_datasource_relation USING (data_source_id) " +
             "WHERE role_id = #{roleId} ")
     List<DataSourceEntity> getPermissionByRoleId(@Param("roleId") int roleId);
+
+    @Select("SELECT " +
+            " *  " +
+            "FROM " +
+            " data_source  " +
+            "WHERE " +
+            " data_source_id IN ( " +
+            " SELECT " +
+            "  data_source_id  " +
+            " FROM " +
+            "  role_datasource_relation  " +
+            "WHERE " +
+            " role_id IN ( SELECT role_id FROM user_role_relation WHERE user_id = 8 ))")
+    List<DataSourceEntity> getDatasourceByUserIds(Integer userId);
 }

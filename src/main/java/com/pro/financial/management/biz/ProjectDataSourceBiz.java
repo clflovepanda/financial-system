@@ -9,7 +9,13 @@ import com.pro.financial.management.dao.ProjectDataSourceDao;
 import com.pro.financial.management.dao.ProjectUserDao;
 import com.pro.financial.management.dao.entity.ProjectDataSourceEntity;
 import com.pro.financial.management.dto.ProjectDataSourceDto;
+import com.pro.financial.user.converter.DataSourceEntity2Dto;
+import com.pro.financial.user.dao.RoleDao;
+import com.pro.financial.user.dao.UserDao;
+import com.pro.financial.user.dao.entity.DataSourceEntity;
 import com.pro.financial.user.dto.DataSourceDto;
+import com.pro.financial.user.dto.RoleDto;
+import com.pro.financial.utils.ConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -31,6 +37,10 @@ public class ProjectDataSourceBiz extends ServiceImpl<ProjectDataSourceDao, Proj
     private ProjectDataSourceDao projectDataSourceDao;
     @Autowired
     private ProjectUserDao projectUserDao;
+    @Autowired
+    private RoleDao roleDao;
+    @Autowired
+    private UserDao userDao;
 
     public int addProjectDataSource(ProjectDataSourceDto projectDataSourceDto) {
         ProjectDataSourceEntity projectDataSourceEntity = ProjectDataSourceDto2Entity.instance.convert(projectDataSourceDto);
@@ -44,12 +54,9 @@ public class ProjectDataSourceBiz extends ServiceImpl<ProjectDataSourceDao, Proj
      * @param request
      * @return
      */
-    public List<Integer> getProjectIdsByCookie(HttpServletRequest request) {
-        String datasourceJsonStr = request.getSession().getAttribute("datasource").toString();
-        if (StringUtils.isEmpty(datasourceJsonStr)) {
-            return null;
-        }
-        List<DataSourceDto> sourceDtos = JSONArray.parseArray(datasourceJsonStr, DataSourceDto.class);
+    public List<Integer> getProjectIdsByCookie(HttpServletRequest request, Integer userId) {
+        List<DataSourceEntity> dataSourceEntities = roleDao.getDatasourceByUserIds(userId);
+        List<DataSourceDto> sourceDtos = ConvertUtil.convert(DataSourceEntity2Dto.instance, dataSourceEntities);
         if (CollectionUtils.isEmpty(sourceDtos)) {
             return null;
         }
@@ -63,18 +70,6 @@ public class ProjectDataSourceBiz extends ServiceImpl<ProjectDataSourceDao, Proj
         List<ProjectDataSourceEntity> projectDataSourceEntities = projectDataSourceDao.selectList(queryWrapper);
         for (ProjectDataSourceEntity projectDataSourceEntity : projectDataSourceEntities) {
             projectIds.add(Integer.parseInt(projectDataSourceEntity.getProjectId()));
-        }
-        Cookie[] cookies = request.getCookies();
-        int userId = 0;
-        for (Cookie cookie : cookies) {
-            if (org.apache.commons.lang3.StringUtils.equals(cookie.getName(), CommonConst.cookie_user_head)) {
-                try {
-                    String userJsonStr = URLDecoder.decode(cookie.getValue(), "utf-8");
-                    userId = Integer.parseInt(userJsonStr);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
         }
         List<Integer> userProjectId = projectUserDao.getProjectIdByUserId(userId);
         projectIds.addAll(userProjectId);

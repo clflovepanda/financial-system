@@ -160,10 +160,10 @@ public class ProjectController {
      * 查看项目列表页
      */
     @RequestMapping("/project_list")
-    public JSONObject getProjectList(HttpServletRequest request) {
+    public JSONObject getProjectList(HttpServletRequest request, @CookieValue("user_id") Integer userId) {
         JSONObject result = new JSONObject();
         // 权限过滤，过滤出所有可见项目ID
-        List<Integer> projectIds = projectDataSourceBiz.getProjectIdsByCookie(request);
+        List<Integer> projectIds = projectDataSourceBiz.getProjectIdsByCookie(request, userId);
         if (CollectionUtils.isEmpty(projectIds)) {
             result.put("code", 1001);
             result.put("msg", "无项目权限");
@@ -371,10 +371,10 @@ public class ProjectController {
      * 查看项目列表页
      */
     @RequestMapping("/list")
-    public JSONObject getList(HttpServletRequest request) {
+    public JSONObject getList(HttpServletRequest request,@CookieValue("user_id") Integer userId) {
         JSONObject result = new JSONObject();
         // 权限过滤，过滤出所有可见项目ID
-        List<Integer> projectIds = projectDataSourceBiz.getProjectIdsByCookie(request);
+        List<Integer> projectIds = projectDataSourceBiz.getProjectIdsByCookie(request, userId);
         if (CollectionUtils.isEmpty(projectIds)) {
             result.put("code", 1001);
             result.put("msg", "无项目权限");
