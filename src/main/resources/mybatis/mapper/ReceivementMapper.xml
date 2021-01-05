@@ -76,10 +76,6 @@
             and receive_date <![CDATA[ < ]]> #{endDate}
         </if>
         and receivement.state <![CDATA[ <> ]]> 5
-        order by id desc
-        <if test="offset != null and limit != 0">
-            LIMIT ${offset} , ${limit}
-        </if>
     </select>
     <update id="update">
         update receivement set company_id = #{entity.companyId}, receivement_type_id = #{entity.receivementTypeId}, receivement_money = #{entity.receivementMoney},
