@@ -79,6 +79,25 @@ public class UserController {
         result.put("data", userDtos);
         return result;
     }
+
+    @RequestMapping("/list/temp")
+    public JSONObject userListTmp(HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        String username = request.getParameter("username");
+        String mobile = request.getParameter("mobile");
+        String role = request.getParameter("role");
+        String state = request.getParameter("state");
+        String depId = request.getParameter("depId");
+        String startDt = request.getParameter("startDt");
+        String endDt = request.getParameter("endDt");
+        Integer limit = StringUtils.isEmpty(request.getParameter("limit")) ? null : Integer.parseInt(request.getParameter("limit"));
+        Integer offset = StringUtils.isEmpty(request.getParameter("offset")) ? null : Integer.parseInt(request.getParameter("offset"));
+        List<UserDto> userDtos = userBiz.userList(username, mobile, role, state, depId, startDt, endDt, limit, offset);
+        result.put("code", 0);
+        result.put("msg", "");
+        result.put("data", userDtos);
+        return result;
+    }
     @RequestMapping("/update")
     public JSONObject updateUser(@RequestBody JSONObject jsonInfo) {
         JSONObject result = new JSONObject();

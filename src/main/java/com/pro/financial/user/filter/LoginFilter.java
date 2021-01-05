@@ -14,6 +14,7 @@ import lombok.Getter;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -32,6 +33,9 @@ public class LoginFilter implements Filter {
 
     @Autowired
     private UserDao userDao;
+
+    @Value("${login.filter.uri}")
+    private String filterUri;
 
     @Autowired
     private PermissionDao permissionDao;
@@ -53,11 +57,12 @@ public class LoginFilter implements Filter {
         String permissionJsonStr = null;
         String datasourceJsonStr = null;
         String urlPath = request.getServletPath();
-        //登录等不拦截
-        if (urlPath.indexOf("/login") != -1) {
-//        if (true) {
-            filterChain.doFilter(request, response);
-            return;
+        //自定义不拦截的请求
+        for (String uri : filterUri.split(",")) {
+            if (StringUtils.equalsIgnoreCase(uri, urlPath)) {
+                filterChain.doFilter(request, response);
+                return;
+            }
         }
         if (request.getSession().getAttribute(CommonConst.cookie_user_head) != null) {
             userDto = JSONObject.parseObject(request.getSession().getAttribute(CommonConst.cookie_user_head).toString(), UserDto.class);

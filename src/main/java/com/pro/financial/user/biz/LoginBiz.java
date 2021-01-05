@@ -45,14 +45,14 @@ public class LoginBiz {
         JSONObject result = new JSONObject();
         if (validateCode == null || validateCode < 1 || StringUtils.isEmpty(code)) {
             result.put("code", 1002);
-            result.put("msg", "验证码错误1");
+            result.put("msg", "验证码错误");
             return result;
         }
         ValidateEntity validateEntity = validateDao.selectById(validateCode);
         //无视大小写
         if (validateEntity == null || !StringUtils.equalsIgnoreCase(code, validateEntity.getValidateCode())) {
             result.put("code", 1002);
-            result.put("msg", "验证码错误2");
+            result.put("msg", "验证码错误");
             return result;
         }
         //获取用户信息
