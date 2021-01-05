@@ -48,6 +48,42 @@
       </if>
       and receivement.state <![CDATA[ <> ]]> 5
         order by id desc
+        <if test="offset != null and limit != 0">
+            LIMIT ${offset} , ${limit}
+        </if>
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(*) from receivement
+        left join company using(company_id)
+        left join receivement_type using(receivement_type_id)
+        left join remitter_method using(remitter_method_id)
+        where 1=1
+        <if test="ids != null and ids !=''">
+            id in
+            <foreach item='item' index='index' collection='ids' open='(' separator=',' close=')'>#{item}</foreach>
+        </if>
+        <if test="companyId != null and companyId != ''">
+            AND company_id = #{companyId}
+        </if>
+        <if test="receivementTypeId != null and receivementTypeId != ''">
+            AND receivement_type_id = #{receivementTypeId}
+        </if>
+        <if test="remitterMethodId != null and remitterMethodId != ''">
+            AND remitter_method_id = #{remitterMethodId}
+        </if>
+        <if test="remitter != null and remitter != ''">
+            AND remitter like "%${remitter}%"
+        </if>
+        <if test="startDate !=  null and endDate != null">
+            and receive_date > #{startDate}
+            and receive_date <![CDATA[ < ]]> #{endDate}
+        </if>
+        and receivement.state <![CDATA[ <> ]]> 5
+        order by id desc
+        <if test="offset != null and limit != 0">
+            LIMIT ${offset} , ${limit}
+        </if>
     </select>
     <update id="update">
         update receivement set company_id = #{entity.companyId}, receivement_type_id = #{entity.receivementTypeId}, receivement_money = #{entity.receivementMoney},

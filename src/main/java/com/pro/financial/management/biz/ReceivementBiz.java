@@ -25,7 +25,7 @@ public class ReceivementBiz {
     }
 
     public List<ReceivementEntity> getListById(List<Integer> ids) {
-        return receivementDao.getList(ids, null, null, null, null, null, null);
+        return receivementDao.getList(ids, null, null, null, null, null, null, null, null);
     }
 
     public ReceivementEntity getById(Integer id) {
@@ -40,11 +40,16 @@ public class ReceivementBiz {
         return receivementDao.getAllList();
     }
 
-    public List<ReceivementEntity> getList(List<Integer> ids, String companyId, String receivementTypeId, String remitterMethodId, String remitter, Date startDate, Date endDate) {
-        return receivementDao.getList(ids, companyId, receivementTypeId, remitterMethodId, remitter, startDate, endDate);
+    public List<ReceivementEntity> getList(List<Integer> ids, String companyId, String receivementTypeId, String remitterMethodId,
+                                           String remitter, Date startDate, Date endDate, Integer limit, Integer offset) {
+        return receivementDao.getList(ids, companyId, receivementTypeId, remitterMethodId, remitter, startDate, endDate, limit, offset);
     }
 
     public List<ReceivementEntity> statistics(String dataSourceId, String revenueTypeId, String projectName, Date startDate, Date endDate) {
         return receivementDao.statistics(dataSourceId, revenueTypeId, projectName, startDate, endDate);
+    }
+
+    public int getCount(String companyId, String receivementTypeId, String remitterMethodId, String remitter, Date startDate, Date endDate) {
+        return receivementDao.getCount(companyId, receivementTypeId, remitterMethodId, remitter, startDate, endDate);
     }
 }

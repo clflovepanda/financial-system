@@ -93,7 +93,6 @@ public class ReceivementController {
         JSONObject result = new JSONObject();
         //根据用户权限获取到能看到的到款id列表
         List<ReceivementView> receivementViewList = new ArrayList<>();
-//        List<Integer> ids = projectDataSourceBiz.getProjectIdsByCookie(request);
         String companyId = request.getParameter("companyId");
         String receivementTypeId = request.getParameter("receivementTypeId");
         String remitterMethodId = request.getParameter("remitterMethodId");
@@ -102,7 +101,13 @@ public class ReceivementController {
         String endDt = request.getParameter("endDt");
         Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
         Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
-        List<ReceivementEntity> receivementEntities = receivementBiz.getList(null, companyId, receivementTypeId, remitterMethodId, remitter, startDate, endDate);
+        Integer limit = Integer.parseInt(StringUtils.isEmpty(request.getParameter("limit")) ? "1000" : request.getParameter("limit"));
+        Integer offset = Integer.parseInt(StringUtils.isEmpty(request.getParameter("offset")) ? "1" : request.getParameter("offset"));
+        offset = limit*(offset - 1);
+        List<ReceivementEntity> receivementEntities = receivementBiz.getList(null, companyId, receivementTypeId, remitterMethodId, remitter,
+                startDate, endDate, limit, offset);
+        int count = receivementBiz.getCount(companyId, receivementTypeId, remitterMethodId, remitter,
+                startDate, endDate);
         if (CollectionUtils.isEmpty(receivementEntities)) {
             result.put("code", 0);
             result.put("msg", HttpStatus.OK.getReasonPhrase());
@@ -111,6 +116,7 @@ public class ReceivementController {
         }
         List<Integer> receivementIds = receivementEntities.stream().map(ReceivementEntity::getId).collect(Collectors.toList());
         List<SubscriptionLogEntity> subscriptionLogEntities = subscriptionLogBiz.getListByReceivementIds(receivementIds);
+        //添加认款记录
         Map<Integer, List<SubscriptionLogEntity>> idAndSubscriptionLogEntitysMap = new HashMap<>();
         if (!CollectionUtils.isEmpty(subscriptionLogEntities)) {
             for (SubscriptionLogEntity entity : subscriptionLogEntities) {
@@ -166,6 +172,7 @@ public class ReceivementController {
         result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         result.put("data", receivementViewList);
+        result.put("count", count);
         return result;
     }
 
