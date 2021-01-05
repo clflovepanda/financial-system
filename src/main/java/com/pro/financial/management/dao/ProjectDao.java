@@ -53,7 +53,8 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
                                 @Param("managerName") String managerName, @Param("salesName") String salesName,
                                 @Param("userNames") String userNames, @Param("settlementState") String settlementState,
                                 @Param("state") String state, @Param("saleCommisState") String saleCommisState,
-                                @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("auditingState") String auditingState);
+                                @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("auditingState") String auditingState,
+                                @Param("limit") Integer limit, @Param("offset") Integer offset);
 
     @Select("select * from project " +
             "left join project_data_source " +
@@ -76,4 +77,11 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
 
     List<ProjectEntity> statistics(@Param("dataSourceId") String dataSourceId, @Param("keyWord") String keyWord,
                                    @Param("startDt") Date startDate, @Param("endDt") Date endDate, @Param("state") String state);
+
+
+    int getCount(@Param("ids") List<Integer> projectIds, @Param("projectNo") String projectNo, @Param("projectName") String projectName,
+                 @Param("managerName") String managerName, @Param("salesName") String salesName,
+                 @Param("userNames") String userNames, @Param("settlementState") String settlementState,
+                 @Param("state") String state, @Param("saleCommisState") String saleCommisState,
+                 @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("auditingState") String auditingState);
 }

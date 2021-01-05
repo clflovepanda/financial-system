@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import sun.jvm.hotspot.debugger.win32.coff.COFFSymbol;
 
 import java.util.Date;
 import java.util.List;
@@ -56,9 +57,10 @@ public class ProjectBiz extends ServiceImpl<ProjectDao, ProjectEntity> {
     }
 
     public List<ProjectEntity> getList(List<Integer> projectIds, String projectNo, String projectName, String managerName, String salesName, String userNames,
-                                       String settlementState, String state, String saleCommisState, Date startDate, Date endDate, String auditingState) {
+                                       String settlementState, String state, String saleCommisState, Date startDate, Date endDate, String auditingState,
+                                       Integer limit, Integer offset) {
         return projectDao.getList(projectIds, projectNo, projectName, managerName, salesName, userNames,
-                settlementState, state, saleCommisState, startDate, endDate, auditingState);
+                settlementState, state, saleCommisState, startDate, endDate, auditingState, limit, offset);
     }
 
     public List<ProjectDto> getProjectByKeywords(String keyWords) {
@@ -80,5 +82,10 @@ public class ProjectBiz extends ServiceImpl<ProjectDao, ProjectEntity> {
 
     public Integer getParentDSId(int dsId) {
         return dataSourceDao.getParentDSId(dsId);
+    }
+
+    public int getCount(List<Integer> projectIds, String projectNo, String projectName, String managerName, String salesName, String userNames, String settlementState, String state, String saleCommisState, Date startDate, Date endDate, String auditingState) {
+        return projectDao.getCount(projectIds, projectNo, projectName, managerName, salesName, userNames,
+                settlementState, state, saleCommisState, startDate, endDate, auditingState);
     }
 }

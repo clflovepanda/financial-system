@@ -395,11 +395,18 @@ public class ProjectController {
         //项目时间
         String startDt = request.getParameter("startDt");
         String endDt = request.getParameter("endDt");
+        Integer limit = Integer.parseInt(StringUtils.isEmpty(request.getParameter("limit")) ? "1000" : request.getParameter("limit"));
+        Integer offset = Integer.parseInt(StringUtils.isEmpty(request.getParameter("offset")) ? "1" : request.getParameter("offset"));
+        offset = limit*(offset - 1);
         //审核状态
         String auditingState = request.getParameter("auditing_state");
         Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
         Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
-        List<ProjectEntity> projectEntities = projectBiz.getList(projectIds, projectNo, projectName, managerName, salesName, userNames, settlementState, state, saleCommisState, startDate, endDate, auditingState);
+        List<ProjectEntity> projectEntities = projectBiz.getList(projectIds, projectNo, projectName, managerName, salesName,
+                userNames, settlementState, state, saleCommisState, startDate, endDate, auditingState, limit, offset);
+        //数量
+        int count = projectBiz.getCount(projectIds, projectNo, projectName, managerName, salesName,
+                userNames, settlementState, state, saleCommisState, startDate, endDate, auditingState);
         // 项目人员表
         List<ProjectUserEntity> projectUserEntities = projectUserBiz.getProjectUserList(projectIds);
         // 项目收入表
@@ -446,6 +453,7 @@ public class ProjectController {
         result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         result.put("data", projectDtos);
+        result.put("count", count);
         return result;
     }
 

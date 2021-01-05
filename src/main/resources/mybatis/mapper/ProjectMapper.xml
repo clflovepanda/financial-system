@@ -93,6 +93,79 @@
             and a.ctime <![CDATA[ < ]]> #{endDate}
         </if>
         order by a.project_id desc
+        <if test="offset != null and limit != 0">
+            LIMIT ${offset} , ${limit}
+        </if>
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(*) from (
+        SELECT
+        p.*,
+        u.username salesName,
+        u1.username managerName,
+        (SELECT SUM(amount * take_time) FROM project_task WHERE task_relation_id IN (SELECT task_relation_id FROM project_task_relation WHERE project_id = p.project_id) AND `status` = 0 AND task_status = "00") takeTime,
+        (
+        SELECT
+        GROUP_CONCAT( u.username )
+        FROM
+        project_user pu
+        LEFT JOIN `user` u ON pu.user_id = u.user_id
+        WHERE
+        pu.type = 3
+        AND pu.project_id = p.project_id
+        ) userNames
+        FROM
+        project p
+        LEFT JOIN project_user pu ON p.project_id = pu.project_id
+        AND pu.type = 1
+        LEFT JOIN `user` u ON pu.user_id = u.user_id
+        LEFT JOIN project_user pu1 ON p.project_id = pu1.project_id
+        AND pu1.type = 2
+        LEFT JOIN `user` u1 ON pu1.user_id = u1.user_id
+        <if test="ids != null">
+            where p.project_id in
+            <foreach collection='ids' item='id' index='index' separator=',' open='(' close=')'>
+                #{id}
+            </foreach>
+        </if>
+        ) a
+        where 1=1
+        <if test="projectNo !=  null and projectNo != ''">
+            and a.code LIKE "%${projectNo}%"
+        </if>
+        <if test="projectName !=  null and projectName != ''">
+            and a.name LIKE "%${projectName}%"
+        </if>
+        <if test="auditingState != null and auditingState != '' and auditingState == '1'">
+            and a.auditing_state = 1
+        </if>
+        <if test="auditingState != null and auditingState != '1'">
+            and a.auditing_state  <![CDATA[ <> ]]> 1
+        </if>
+        <if test="state !=  null and state != ''">
+            and a.state =#{state}
+        </if>
+        <if test="saleCommisState !=  null and saleCommisState != ''">
+            and a.sale_commis_state =#{saleCommisState}
+        </if>
+        <if test="settlementState !=  null and settlementState != ''">
+            and a.settlement_state =#{settlementState}
+        </if>
+        <if test="managerName !=  null and managerName != ''">
+            and a.managerName LIKE "%${managerName}%"
+        </if>
+        <if test="salesName !=  null and managerName != ''">
+            and a.salesName LIKE "%${salesName}%"
+        </if>
+        <if test="userNames !=  null and userNames != ''">
+            and a.userNames LIKE "%${userNames}%"
+        </if>
+        <if test="startDate !=  null and endDate != null">
+            and a.ctime > #{startDate}
+            and a.ctime <![CDATA[ < ]]> #{endDate}
+        </if>
+        order by a.project_id desc
     </select>
 
     <select id="statistics" resultType="com.pro.financial.management.dao.entity.ProjectEntity">
