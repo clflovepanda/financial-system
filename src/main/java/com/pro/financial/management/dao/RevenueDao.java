@@ -1,7 +1,9 @@
 package com.pro.financial.management.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.pro.financial.management.dao.entity.DepositStatisticEntity;
 import com.pro.financial.management.dao.entity.RevenueEntity;
+import com.pro.financial.management.dao.entity.RevenueStatisticEntity;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -44,4 +46,16 @@ public interface RevenueDao extends BaseMapper<RevenueEntity> {
                  @Param("companyId") String companyId, @Param("remitter") String remitter,
                  @Param("createUser") String createUser, @Param("startDt") Date startDate, @Param("endDt") Date endDate,
                  @Param("projectName") String projectName, @Param("projectNo") String projectNo, @Param("revenueTypeId") String revenueTypeId);
+
+    RevenueStatisticEntity getStatistic(@Param("projectId") String projectId, @Param("revenueNo") String revenueNo,
+                                        @Param("remitterMethodId") String remitterMethodId, @Param("receivementTypeId") String receivementTypeId,
+                                        @Param("companyId") String companyId, @Param("remitter") String remitter,
+                                        @Param("createUser") String createUser, @Param("startDt") Date startDate, @Param("endDt") Date endDate,
+                                        @Param("projectName") String projectName, @Param("projectNo") String projectNo, @Param("revenueTypeId") String revenueTypeId);
+
+    DepositStatisticEntity getDepositStatistic(@Param("projectId") String projectId, @Param("revenueNo") String revenueNo,
+                                               @Param("remitterMethodId") String remitterMethodId, @Param("receivementTypeId") String receivementTypeId,
+                                               @Param("companyId") String companyId, @Param("remitter") String remitter,
+                                               @Param("createUser") String createUser, @Param("startDt") Date startDate, @Param("endDt") Date endDate,
+                                               @Param("projectName") String projectName, @Param("projectNo") String projectNo, @Param("revenueTypeId") String revenueTypeId);
 }

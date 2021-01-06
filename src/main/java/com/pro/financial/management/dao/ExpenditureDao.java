@@ -2,6 +2,7 @@ package com.pro.financial.management.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pro.financial.management.dao.entity.ExpenditureEntity;
+import com.pro.financial.management.dao.entity.ExpenditureStatisticsEntity;
 import com.pro.financial.management.dto.ExpenditureDto;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
@@ -55,4 +56,11 @@ public interface ExpenditureDao extends BaseMapper<ExpenditureEntity> {
 
     @Select("select numbering from expenditure order by expenditure_id desc limit 0,1")
     String selectLastNo();
+
+    ExpenditureStatisticsEntity getStatistics(@Param("projectId") String projectId, @Param("companyId") String companyId,
+                                              @Param("numbering") String numbering, @Param("expenditureMethodId") String expenditureMethodId,
+                                              @Param("expenditureTypeId") String expenditureTypeId, @Param("beneficiaryUnit") String beneficiaryUnit, @Param("createUser") String createUser,
+                                              @Param("state") String state, @Param("expenditureAuditLog") String expenditureAuditLog,
+                                              @Param("expenditurePurposeId") String expenditurePurposeId, @Param("startDt") Date startDate, @Param("endDt") Date endDate,
+                                              @Param("keyWord") String keyWord, @Param("projectName") String projectName, @Param("projectNo") String projectNo);
 }

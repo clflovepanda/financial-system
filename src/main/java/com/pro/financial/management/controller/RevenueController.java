@@ -3,6 +3,7 @@ package com.pro.financial.management.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.pro.financial.management.biz.RevenueBiz;
 import com.pro.financial.management.biz.RevenueTypeBiz;
+import com.pro.financial.management.dao.entity.RevenueStatisticEntity;
 import com.pro.financial.management.dto.RevenueDto;
 import com.pro.financial.management.dto.RevenueTypeDto;
 import org.apache.commons.lang3.StringUtils;
@@ -74,10 +75,12 @@ public class RevenueController {
         offset = limit*(offset - 1);
         List<RevenueDto> revenueDtos = revenueBiz.searchList(projectId, revenueNo, remitterMethodId, receivementTypeId, companyId,
                 remitter, createUser, startDate, endDate, null, null, revenueTypeId, limit, offset);
-
+        RevenueStatisticEntity revenueStatisticEntity = revenueBiz.getStatistic(projectId, revenueNo, remitterMethodId, receivementTypeId, companyId,
+                remitter, createUser, startDate, endDate, null, null, revenueTypeId);
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", revenueDtos);
+        result.put("statistic", revenueStatisticEntity);
         return result;
     }
 }

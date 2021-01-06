@@ -9,6 +9,7 @@ import com.pro.financial.management.converter.ExpenditureTypeEntity2Dto;
 import com.pro.financial.management.dao.entity.AccountingLogEntity;
 import com.pro.financial.management.dao.entity.BeneficiaryUnitEntity;
 import com.pro.financial.management.dao.entity.DepositLogEntity;
+import com.pro.financial.management.dao.entity.ExpenditureStatisticsEntity;
 import com.pro.financial.management.dto.*;
 import com.pro.financial.utils.CommonUtil;
 import com.pro.financial.utils.ConvertUtil;
@@ -165,10 +166,14 @@ public class ExpenditureController {
             expenditureDto.setAuditType(expenditureAuditLogBiz.getLastLog(expenditureDto.getExpenditureId()));
             expenditureDto.setExpenditureAuditLogs(expenditureAuditLogBiz.getLogByEId(expenditureDto.getExpenditureId()));
         }
+        ExpenditureStatisticsEntity expenditureStatisticsEntity = expenditureBiz.getStatistics(projectId, companyId, numbering, expenditureMethodId, expenditureTypeId,
+                beneficiaryUnit, createUser, state, expenditureAuditLog, expenditurePurposeId, startDate, endDate, keyWord, projectName, projectNo);
 
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", expenditureDtos);
+        result.put("count", count);
+        result.put("statistics", expenditureStatisticsEntity);
         return result;
     }
 

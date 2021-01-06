@@ -6,9 +6,7 @@ import com.pro.financial.management.converter.RevenueEntity2Dto;
 import com.pro.financial.management.dao.DepositLogDao;
 import com.pro.financial.management.dao.ProjectDao;
 import com.pro.financial.management.dao.RevenueDao;
-import com.pro.financial.management.dao.entity.DepositLogEntity;
-import com.pro.financial.management.dao.entity.ProjectEntity;
-import com.pro.financial.management.dao.entity.RevenueEntity;
+import com.pro.financial.management.dao.entity.*;
 import com.pro.financial.management.dto.RevenueDto;
 import com.pro.financial.management.dto.SubscriptionLogDto;
 import com.pro.financial.utils.CommonUtil;
@@ -87,5 +85,20 @@ public class RevenueBiz {
                 receivementTypeId, companyId, remitter, createUser, startDate, endDate,
                 projectName, projectNo, revenueTypeId);
 
+    }
+
+    public RevenueStatisticEntity getStatistic(String projectId, String revenueNo, String remitterMethodId, String receivementTypeId, String companyId,
+                                               String remitter, String createUser, Date startDate, Date endDate, String projectName, String projectNo, String revenueTypeId) {
+        return revenueDao.getStatistic(projectId, revenueNo, remitterMethodId,
+                receivementTypeId, companyId, remitter, createUser, startDate, endDate,
+                projectName, projectNo, revenueTypeId);
+    }
+
+    public DepositStatisticEntity getDepositStatistic(String projectId, String revenueNo, String remitterMethodId, String receivementTypeId,
+                                                      String companyId, String remitter, String createUser, Date startDate, Date endDate,
+                                                      String projectName, String projectNo, String revenueTypeId) {
+        return revenueDao.getDepositStatistic(projectId, revenueNo, remitterMethodId,
+                receivementTypeId, companyId, remitter, createUser, startDate, endDate,
+                projectName, projectNo, revenueTypeId);
     }
 }

@@ -5,6 +5,7 @@ import com.pro.financial.management.converter.ExpenditureDto2Entity;
 import com.pro.financial.management.converter.ExpenditureEntity2Dto;
 import com.pro.financial.management.dao.ExpenditureDao;
 import com.pro.financial.management.dao.entity.ExpenditureEntity;
+import com.pro.financial.management.dao.entity.ExpenditureStatisticsEntity;
 import com.pro.financial.management.dto.ExpenditureDto;
 import com.pro.financial.user.dao.CompanyDao;
 import com.pro.financial.user.dao.UserDao;
@@ -99,4 +100,8 @@ public class ExpenditureBiz {
     }
 
 
+    public ExpenditureStatisticsEntity getStatistics(String projectId, String companyId, String numbering, String expenditureMethodId, String expenditureTypeId, String beneficiaryUnit, String createUser, String state, String expenditureAuditLog, String expenditurePurposeId, Date startDate, Date endDate, String keyWord, String projectName, String projectNo) {
+        return expenditureDao.getStatistics(projectId, companyId, numbering, expenditureMethodId, expenditureTypeId,
+                beneficiaryUnit, createUser, state, expenditureAuditLog, expenditurePurposeId, startDate, endDate, keyWord,projectName, projectNo);
+    }
 }

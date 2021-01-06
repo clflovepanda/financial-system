@@ -9,6 +9,7 @@ import com.pro.financial.management.biz.ExpenditureBiz;
 import com.pro.financial.management.biz.RevenueBiz;
 import com.pro.financial.management.dao.DepositLogDao;
 import com.pro.financial.management.dao.entity.DepositLogEntity;
+import com.pro.financial.management.dao.entity.DepositStatisticEntity;
 import com.pro.financial.management.dao.entity.ExpenditureAuditLogEntity;
 import com.pro.financial.management.dao.entity.ExpenditureEntity;
 import com.pro.financial.management.dto.ExpenditureAuditLogDto;
@@ -83,9 +84,9 @@ public class DepositController {
             returned = returned.add(revenueDto.getReturned() == null ? new BigDecimal(0) : revenueDto.getReturned());
             returning = returning.add(revenueDto.getReturning() == null ? new BigDecimal(0) : revenueDto.getReturning());
         }
-        resutlMap.put("toBeReturned", toBeReturned);
-        resutlMap.put("returned", returned);
-        resutlMap.put("returning", returning);
+        DepositStatisticEntity depositStatisticEntity = revenueBiz.getDepositStatistic(projectId, revenueNo, null, receivementTypeId,
+                companyId, remitter, createUser, startDate, endDate, projectName, projectNo, revenueTypeId);
+        resutlMap.put("statistic", depositStatisticEntity);
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", resutlMap);
