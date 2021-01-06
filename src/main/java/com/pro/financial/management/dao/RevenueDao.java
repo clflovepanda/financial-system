@@ -31,10 +31,17 @@ public interface RevenueDao extends BaseMapper<RevenueEntity> {
                                    @Param("remitterMethodId") String remitterMethodId, @Param("receivementTypeId") String receivementTypeId,
                                    @Param("companyId") String companyId, @Param("remitter") String remitter,
                                    @Param("createUser") String createUser, @Param("startDt") Date startDate, @Param("endDt") Date endDate,
-                                   @Param("projectName") String projectName, @Param("projectNo") String projectNo, @Param("revenueTypeId") String revenueTypeId);
+                                   @Param("projectName") String projectName, @Param("projectNo") String projectNo, @Param("revenueTypeId") String revenueTypeId,
+                                   @Param("limit") Integer limit, @Param("offset") Integer offset);
     @Select("SELECT revenue_no FROM revenue ORDER BY id DESC LIMIT 0,1")
     String selectLastNo();
 
     @Update("update revenue set `delete` = 0 where receivement_id = #{id}")
     int deleteByReceivementId(@Param("id") Integer id);
+
+    int getCount(@Param("projectId") String projectId, @Param("revenueNo") String revenueNo,
+                 @Param("remitterMethodId") String remitterMethodId, @Param("receivementTypeId") String receivementTypeId,
+                 @Param("companyId") String companyId, @Param("remitter") String remitter,
+                 @Param("createUser") String createUser, @Param("startDt") Date startDate, @Param("endDt") Date endDate,
+                 @Param("projectName") String projectName, @Param("projectNo") String projectNo, @Param("revenueTypeId") String revenueTypeId);
 }

@@ -28,6 +28,10 @@ public interface ExpenditureDao extends BaseMapper<ExpenditureEntity> {
 
     List<ExpenditureEntity> statistics(@Param("attribute") String attribute, @Param("company") String company, @Param("projectNo") String projectNo,
                                        @Param("applyUser") String applyUser, @Param("purpose") String purpose, @Param("state") String state,
+                                       @Param("beneficiaryUnit") String beneficiaryUnit, @Param("startDt") Date startDate, @Param("endDt") Date endDate,
+                                       @Param("limit") Integer limit, @Param("offset") Integer offset);
+    int statisticsCount(@Param("attribute") String attribute, @Param("company") String company, @Param("projectNo") String projectNo,
+                                       @Param("applyUser") String applyUser, @Param("purpose") String purpose, @Param("state") String state,
                                        @Param("beneficiaryUnit") String beneficiaryUnit, @Param("startDt") Date startDate, @Param("endDt") Date endDate);
 
 //    @Update("update set company_id = #{entity.companyId}, expenditure_type = #{expenditureType},")

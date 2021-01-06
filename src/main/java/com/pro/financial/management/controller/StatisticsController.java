@@ -216,11 +216,14 @@ public class StatisticsController {
             startDate = new Date(Long.parseLong(startDt));
             endDate = new Date(Long.parseLong(entDt));
         }
-
-        List<ExpenditureDto> expenditureDtos = expenditureBiz.statistics(attribute, company, projectNo, applyUser, purpose, state, beneficiaryUnit, startDate, endDate);
+        Integer limit = Integer.parseInt(StringUtils.isEmpty(request.getParameter("limit")) ? "1000" : request.getParameter("limit"));
+        Integer offset = Integer.parseInt(StringUtils.isEmpty(request.getParameter("offset")) ? "1" : request.getParameter("offset"));
+        List<ExpenditureDto> expenditureDtos = expenditureBiz.statistics(attribute, company, projectNo, applyUser, purpose, state, beneficiaryUnit, startDate, endDate, limit, offset);
+        int count = expenditureBiz.statisticsCount(attribute, company, projectNo, applyUser, purpose, state, beneficiaryUnit, startDate, endDate);
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", expenditureDtos);
+        result.put("count", count);
         return result;
     }
 
@@ -240,9 +243,13 @@ public class StatisticsController {
         Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
         Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
         String state = request.getParameter("state");
-        List<ProjectDto> projectDtos = projectBiz.statistics(dataSourceId, keyWord, startDate, endDate, state);
+        Integer limit = Integer.parseInt(StringUtils.isEmpty(request.getParameter("limit")) ? "1000" : request.getParameter("limit"));
+        Integer offset = Integer.parseInt(StringUtils.isEmpty(request.getParameter("offset")) ? "1" : request.getParameter("offset"));
+        List<ProjectDto> projectDtos = projectBiz.statistics(dataSourceId, keyWord, startDate, endDate, state, limit, offset);
+        int count = projectBiz.statisticsCount(dataSourceId, keyWord, startDate, endDate, state);
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("projcet", projectDtos);
+        resultMap.put("count", count);
 
         //报价收入
         BigDecimal estincome = new BigDecimal(0);
@@ -265,19 +272,6 @@ public class StatisticsController {
         result.put("msg", "");
         result.put("data", resultMap);
         return result;
-    }
-
-    @RequestMapping("/receivementnew")
-    public JSONObject receivementnew(HttpServletRequest request) {
-        Integer companyId = Integer.valueOf(request.getParameter("companyId") == null ? "0" : request.getParameter("companyId"));
-        int staType = Integer.valueOf(request.getParameter("staType"));
-        // 年
-        int year = Integer.valueOf(request.getParameter("year") == null ? "0" : request.getParameter("year"));
-        // 季度
-        int quarter = Integer.valueOf(request.getParameter("quarter") == null ? "0" : request.getParameter("quarter"));
-        // 月
-        int month = Integer.valueOf(request.getParameter("month") == null ? "0" : request.getParameter("month"));
-        return null;
     }
 
 }

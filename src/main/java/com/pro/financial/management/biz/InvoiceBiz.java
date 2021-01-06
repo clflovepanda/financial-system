@@ -27,8 +27,8 @@ public class InvoiceBiz extends ServiceImpl<InvoiceDao, InvoiceEntity> {
     @Autowired
     private InvoiceDao invoiceDao;
 
-    public List<InvoiceDto> getList(String keyWord, String username, Date startDate, Date endDate) {
-        List<InvoiceEntity> invoiceEntities = invoiceDao.getList(keyWord, username, startDate, endDate);
+    public List<InvoiceDto> getList(String keyWord, String username, Date startDate, Date endDate, Integer limit, Integer offset) {
+        List<InvoiceEntity> invoiceEntities = invoiceDao.getList(keyWord, username, startDate, endDate, limit, offset);
         return ConvertUtil.convert(InvoiceEntity2Dto.instance, invoiceEntities);
     }
 
@@ -42,5 +42,9 @@ public class InvoiceBiz extends ServiceImpl<InvoiceDao, InvoiceEntity> {
 
     public String selectLastNo() {
         return invoiceDao.selectLastNo();
+    }
+
+    public int getCount(String keyWord, String username, Date startDate, Date endDate) {
+        return invoiceDao.getCount(keyWord, username, startDate, endDate);
     }
 }

@@ -81,6 +81,52 @@
       AND e.ctime <![CDATA[ < ]]> #{endDt}
     </if>
     order by expenditure_id desc
+    <if test="offset != null and limit != 0">
+      LIMIT ${offset} , ${limit}
+    </if>
+  </select>
+  <select id="statisticsCount" resultMap="BaseResultMap">
+    select count(*) from expenditure e
+    left join expenditure_method em
+    using (expenditure_method_id)
+    left join expenditure_purpose epu
+    using (expenditure_purpose_id)
+    left join expenditure_type pt
+    using (expenditure_type_id)
+    left join project p
+    on p.project_id = e.project_id
+    left join project_data_source pds
+    on p.project_id = pds.project_id
+    left join data_source dt
+    using (data_source_id)
+    left join company c on e.company_id = c.company_id
+    left join `user` u on e.create_user = u.user_id
+    where 1=1
+    <if test="applyUser != null and applyUser != ''">
+      AND e.create_user LIKE "%${applyUser}%"
+    </if>
+    <if test="attribute != null and attribute != ''">
+      AND dt.data_source_name = #{attribute}
+    </if>
+    <if test="company != null and company != ''">
+      AND e.company_id = #{company}
+    </if>
+    <if test="projectNo != null and projectNo != ''">
+      AND (e.numbering like "%${projectNo}%" or p.name like "%${projectNo}%")
+    </if>
+    <if test="purpose != null and purpose != ''">
+      AND epu.expenditure_purpose_name = #{purpose}
+    </if>
+    <if test="state != null and state != ''">
+      AND e.state = #{state}
+    </if>
+    <if test="beneficiaryUnit != null and beneficiaryUnit != ''">
+      AND e.beneficiary_unit = #{beneficiaryUnit}
+    </if>
+    <if test="startDt != null  and endDt != null">
+      AND e.ctime > #{startDt}
+      AND e.ctime <![CDATA[ < ]]> #{endDt}
+    </if>
   </select>
 
   <select id="searchList" resultType="com.pro.financial.management.dao.entity.ExpenditureEntity">

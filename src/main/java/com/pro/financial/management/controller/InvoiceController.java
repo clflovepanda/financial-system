@@ -40,12 +40,17 @@ public class InvoiceController {
         //项目时间
         String startDt = request.getParameter("startDt");
         String endDt = request.getParameter("endDt");
+        Integer limit = Integer.parseInt(StringUtils.isEmpty(request.getParameter("limit")) ? "1000" : request.getParameter("limit"));
+        Integer offset = Integer.parseInt(StringUtils.isEmpty(request.getParameter("offset")) ? "1" : request.getParameter("offset"));
+        offset = limit*(offset - 1);
         Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
         Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
-        List<InvoiceDto> invoiceDtos = invoiceBiz.getList(keyWord, username, startDate, endDate);
+        List<InvoiceDto> invoiceDtos = invoiceBiz.getList(keyWord, username, startDate, endDate, limit, offset);
+        int count = invoiceBiz.getCount(keyWord, username, startDate, endDate);
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", invoiceDtos);
+        result.put("count", count);
         return result;
     }
 

@@ -39,9 +39,15 @@ public class ExpenditureBiz {
         return expenditureDao.getExpenditureList(projectIds);
     }
 
-    public List<ExpenditureDto> statistics(String attribute, String company, String projectNo, String applyUser, String purpose, String state, String beneficiaryUnit, Date startDate, Date endDate) {
-        List<ExpenditureEntity> expenditureEntities = expenditureDao.statistics(attribute, company, projectNo, applyUser, purpose, state, beneficiaryUnit, startDate, endDate);
+    public List<ExpenditureDto> statistics(String attribute, String company, String projectNo, String applyUser, String purpose,
+                                           String state, String beneficiaryUnit, Date startDate, Date endDate, Integer limit, Integer offset) {
+        List<ExpenditureEntity> expenditureEntities = expenditureDao.statistics(attribute, company, projectNo, applyUser, purpose, state, beneficiaryUnit,
+                startDate, endDate, limit, offset);
         return ConvertUtil.convert(ExpenditureEntity2Dto.instance, expenditureEntities);
+    }
+
+    public int statisticsCount(String attribute, String company, String projectNo, String applyUser, String purpose, String state, String beneficiaryUnit, Date startDate, Date endDate) {
+        return expenditureDao.statisticsCount(attribute, company, projectNo, applyUser, purpose, state, beneficiaryUnit, startDate, endDate);
     }
 
     public int updateExpenditure(ExpenditureDto expenditureDto) {

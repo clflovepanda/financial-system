@@ -76,7 +76,8 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
     String selectLastNo();
 
     List<ProjectEntity> statistics(@Param("dataSourceId") String dataSourceId, @Param("keyWord") String keyWord,
-                                   @Param("startDt") Date startDate, @Param("endDt") Date endDate, @Param("state") String state);
+                                   @Param("startDt") Date startDate, @Param("endDt") Date endDate, @Param("state") String state,
+                                   @Param("limit") Integer limit, @Param("offset") Integer offset);
 
 
     int getCount(@Param("ids") List<Integer> projectIds, @Param("projectNo") String projectNo, @Param("projectName") String projectName,
@@ -84,4 +85,7 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
                  @Param("userNames") String userNames, @Param("settlementState") String settlementState,
                  @Param("state") String state, @Param("saleCommisState") String saleCommisState,
                  @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("auditingState") String auditingState);
+
+    int statisticsCount(@Param("dataSourceId") String dataSourceId, @Param("keyWord") String keyWord,
+                        @Param("startDt") Date startDate, @Param("endDt") Date endDate, @Param("state") String state);
 }

@@ -193,6 +193,30 @@
             and p.create_datetime <![CDATA[ < ]]> #{endDate}
         </if>
         order by p.project_id desc
+        <if test="offset != null and limit != 0">
+            LIMIT ${offset} , ${limit}
+        </if>
     </select>
-
+    <select id="statisticsCount" resultType="int">
+        SELECT count(*)
+        from project p
+        LEFT JOIN project_data_source pds USING(project_id)
+        LEFT JOIN data_source ds USING(data_source_id)
+        LEFT JOIN project_user pu ON pu.project_id = p.project_id AND type = 2
+        LEFT JOIN `user` u USING(user_id)
+        where 1=1
+        <if test="state !=  null and state != ''">
+            and p.state = #{state}
+        </if>
+        <if test="dataSourceId !=  null and dataSourceId != ''">
+            and pds.data_source_id = #{dataSourceId}
+        </if>
+        <if test="keyWord !=  null and keyWord != ''">
+            and (p.name like "%${keyWord}%" or p.code like "%${keyWord}%" or ds.data_source_name like "%${keyWord}%" or u.username like "%${keyWord}%")
+        </if>
+        <if test="startDt !=  null and endDt != null">
+            and p.create_datetime > #{startDate}
+            and p.create_datetime <![CDATA[ < ]]> #{endDate}
+        </if>
+    </select>
 </mapper>

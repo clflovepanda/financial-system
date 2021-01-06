@@ -69,8 +69,11 @@ public class RevenueController {
         String endDt = request.getParameter("endDt");
         Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
         Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
+        Integer limit = Integer.parseInt(StringUtils.isEmpty(request.getParameter("limit")) ? "1000" : request.getParameter("limit"));
+        Integer offset = Integer.parseInt(StringUtils.isEmpty(request.getParameter("offset")) ? "1" : request.getParameter("offset"));
+        offset = limit*(offset - 1);
         List<RevenueDto> revenueDtos = revenueBiz.searchList(projectId, revenueNo, remitterMethodId, receivementTypeId, companyId,
-                remitter, createUser, startDate, endDate, null, null, revenueTypeId);
+                remitter, createUser, startDate, endDate, null, null, revenueTypeId, limit, offset);
 
         result.put("code", 0);
         result.put("msg", "");

@@ -21,6 +21,29 @@
             AND i.create_datetime <![CDATA[ < ]]> #{endDate}
         </if>
         order by i.invoice_id desc
+        <if test="offset != null and limit != 0">
+            LIMIT ${offset} , ${limit}
+        </if>
+    </select>
+
+    <select id="getCount" resultType="int">
+        select count(*)
+        from invoice i
+        left join `user` u on u.user_id = i.operator
+        left join project p using (project_id)
+        left join company c using (company_id)
+        left join revenue_type rt using (revenue_type_id)
+        where 1=1
+        <if test="username != null and username != ''">
+            and u.username like "%${username}%"
+        </if>
+        <if test="keyWord != null and keyWord != ''">
+            and (i.invoice_no like "%${keyWord}%" or i.unitname like "%${keyWord}%")
+        </if>
+        <if test="startDate != null  and endDate != null">
+            AND i.create_datetime > #{startDate}
+            AND i.create_datetime <![CDATA[ < ]]> #{endDate}
+        </if>
     </select>
 
 </mapper>

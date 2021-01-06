@@ -63,12 +63,18 @@ public class DepositController {
 
         String startDt = request.getParameter("startDt");
         String endDt = request.getParameter("endDt");
+        Integer limit = Integer.parseInt(StringUtils.isEmpty(request.getParameter("limit")) ? "1000" : request.getParameter("limit"));
+        Integer offset = Integer.parseInt(StringUtils.isEmpty(request.getParameter("offset")) ? "1" : request.getParameter("offset"));
+        offset = limit*(offset - 1);
         Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
         Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
         List<RevenueDto> revenueDtos = revenueBiz.searchList(projectId, revenueNo, null, receivementTypeId,
+                companyId, remitter, createUser, startDate, endDate, projectName, projectNo, revenueTypeId, limit, offset);
+        int count = revenueBiz.getCount(projectId, revenueNo, null, receivementTypeId,
                 companyId, remitter, createUser, startDate, endDate, projectName, projectNo, revenueTypeId);
         Map<String, Object> resutlMap = new HashMap<>();
         resutlMap.put("deposit", revenueDtos);
+        resutlMap.put("count", count);
         BigDecimal toBeReturned = new BigDecimal(0);
         BigDecimal returned = new BigDecimal(0);
         BigDecimal returning = new BigDecimal(0);

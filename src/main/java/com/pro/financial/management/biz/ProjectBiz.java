@@ -70,9 +70,12 @@ public class ProjectBiz extends ServiceImpl<ProjectDao, ProjectEntity> {
         return projectDao.selectLastNo();
     }
 
-    public List<ProjectDto> statistics(String dataSourceId, String keyWord, Date startDate, Date endDate, String state) {
-        List<ProjectEntity> projectEntities = projectDao.statistics(dataSourceId, keyWord, startDate, endDate, state);
+    public List<ProjectDto> statistics(String dataSourceId, String keyWord, Date startDate, Date endDate, String state, Integer limit, Integer offset) {
+        List<ProjectEntity> projectEntities = projectDao.statistics(dataSourceId, keyWord, startDate, endDate, state, limit, offset);
         return ConvertUtil.convert(ProjectEntity2Dto.instance, projectEntities);
+    }
+    public int statisticsCount(String dataSourceId, String keyWord, Date startDate, Date endDate, String state) {
+        return projectDao.statisticsCount(dataSourceId, keyWord, startDate, endDate, state);
     }
 
     public Integer getParentDSId(int dsId) {
