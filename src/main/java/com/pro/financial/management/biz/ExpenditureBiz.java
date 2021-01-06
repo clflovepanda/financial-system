@@ -57,10 +57,17 @@ public class ExpenditureBiz {
     public List<ExpenditureDto> searchList(String projectId, String companyId, String numbering, String expenditureMethodId,
                                            String expenditureTypeId, String beneficiaryUnit, String createUser, String state,
                                            String expenditureAuditLog, String expenditurePurposeId, Date startDate, Date endDate, String keyWord,
-                                           String projectName, String projectNo) {
+                                           String projectName, String projectNo, Integer limit, Integer offset) {
         return ConvertUtil.convert(ExpenditureEntity2Dto.instance, expenditureDao.searchList(projectId, companyId, numbering, expenditureMethodId, expenditureTypeId,
-                beneficiaryUnit, createUser, state, expenditureAuditLog, expenditurePurposeId, startDate, endDate, keyWord,projectName, projectNo));
+                beneficiaryUnit, createUser, state, expenditureAuditLog, expenditurePurposeId, startDate, endDate, keyWord,projectName, projectNo,
+                limit, offset));
     }
+
+    public int searchListCount(String projectId, String companyId, String numbering, String expenditureMethodId, String expenditureTypeId, String beneficiaryUnit, String createUser, String state, String expenditureAuditLog, String expenditurePurposeId, Date startDate, Date endDate, String keyWord, String projectName, String projectNo) {
+        return expenditureDao.searchListCount(projectId, companyId, numbering, expenditureMethodId, expenditureTypeId,
+                beneficiaryUnit, createUser, state, expenditureAuditLog, expenditurePurposeId, startDate, endDate, keyWord,projectName, projectNo);
+    }
+
 
     public String selectLastNo() {
         return expenditureDao.selectLastNo();
@@ -90,4 +97,6 @@ public class ExpenditureBiz {
         expenditureEntity.setIsEffective(0);
         return expenditureDao.updateById(expenditureEntity);
     }
+
+
 }

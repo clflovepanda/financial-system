@@ -85,7 +85,7 @@
       LIMIT ${offset} , ${limit}
     </if>
   </select>
-  <select id="statisticsCount" resultMap="BaseResultMap">
+  <select id="statisticsCount" resultType="int">
     select count(*) from expenditure e
     left join expenditure_method em
     using (expenditure_method_id)
@@ -131,6 +131,65 @@
 
   <select id="searchList" resultType="com.pro.financial.management.dao.entity.ExpenditureEntity">
     select * from expenditure e
+    left join `user` u on e.create_user = u.user_id
+    left join expenditure_method using (expenditure_method_id)
+    left join expenditure_purpose using (expenditure_purpose_id)
+    left join expenditure_type using (expenditure_type_id)
+    left join company using (company_id)
+    left join project p using (project_id)
+    where 1=1
+    and is_effective = 1
+    <if test="projectId != null and projectId != ''">
+      and e.project_id = #{projectId}
+    </if>
+    <if test="companyId != null and companyId !=''">
+      and e.company_id = #{companyId}
+    </if>
+    <if test="numbering != null and numbering !=''">
+      and e.numbering like "%${numbering}%"
+    </if>
+    <if test="expenditureMethodId != null and expenditureMethodId !=''">
+      and e.expenditure_method_id = #{expenditureMethodId}
+    </if>
+    <if test="expenditureTypeId != null and expenditureTypeId !=''">
+      and e.expenditure_type_id = #{expenditureTypeId}
+    </if>
+    <if test="beneficiaryUnit != null and beneficiaryUnit !=''">
+      and e.beneficiary_unit like "%${beneficiaryUnit}%"
+    </if>
+    <if test="state != null and state !=''">
+      and e.state = #{state}
+    </if>
+    <if test="expenditureAuditLog != null and expenditureAuditLog !=''">
+      and e.expenditure_audit_log = #{expenditureAuditLog}
+    </if>
+    <if test="expenditurePurposeId != null and expenditurePurposeId !=''">
+      and e.expenditure_purpose_id = #{expenditurePurposeId}
+    </if>
+    <if test="createUser != null and createUser !=''">
+      and u.username like "%${createUser}%
+    </if>
+    <if test="projectName != null and projectName !=''">
+      and p.name like "%${projectName}%
+    </if>
+    <if test="projectNo != null and projectNo !=''">
+      and p.code like "%${projectNo}%
+    </if>
+    <if test="keyWord != null and keyWord != ''">
+      and (u.username like "%${keyWord}% or e.numbering like "%${keyWord}% or p.name like "%${keyWord}% )
+    </if>
+    <if test="startDt != null  and endDt != null">
+      AND e.ctime > #{startDt}
+      AND e.ctime <![CDATA[ < ]]> #{endDt}
+    </if>
+    order by expenditure_id desc
+    <if test="offset != null and limit != 0">
+      LIMIT ${offset} , ${limit}
+    </if>
+  </select>
+
+  <select id="searchListCount" resultType="int">
+    select count(*) from expenditure e
     left join `user` u on e.create_user = u.user_id
     left join expenditure_method using (expenditure_method_id)
     left join expenditure_purpose using (expenditure_purpose_id)

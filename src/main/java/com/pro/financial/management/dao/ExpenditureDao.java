@@ -30,19 +30,28 @@ public interface ExpenditureDao extends BaseMapper<ExpenditureEntity> {
                                        @Param("applyUser") String applyUser, @Param("purpose") String purpose, @Param("state") String state,
                                        @Param("beneficiaryUnit") String beneficiaryUnit, @Param("startDt") Date startDate, @Param("endDt") Date endDate,
                                        @Param("limit") Integer limit, @Param("offset") Integer offset);
+
     int statisticsCount(@Param("attribute") String attribute, @Param("company") String company, @Param("projectNo") String projectNo,
-                                       @Param("applyUser") String applyUser, @Param("purpose") String purpose, @Param("state") String state,
-                                       @Param("beneficiaryUnit") String beneficiaryUnit, @Param("startDt") Date startDate, @Param("endDt") Date endDate);
+                        @Param("applyUser") String applyUser, @Param("purpose") String purpose, @Param("state") String state,
+                        @Param("beneficiaryUnit") String beneficiaryUnit, @Param("startDt") Date startDate, @Param("endDt") Date endDate);
 
 //    @Update("update set company_id = #{entity.companyId}, expenditure_type = #{expenditureType},")
 //    int update(@Param("entity") ExpenditureEntity entity);
 
     List<ExpenditureEntity> searchList(@Param("projectId") String projectId, @Param("companyId") String companyId,
                                        @Param("numbering") String numbering, @Param("expenditureMethodId") String expenditureMethodId,
-                                    @Param("expenditureTypeId") String expenditureTypeId, @Param("beneficiaryUnit") String beneficiaryUnit, @Param("createUser") String createUser,
-                                    @Param("state") String state, @Param("expenditureAuditLog") String expenditureAuditLog,
-                                    @Param("expenditurePurposeId") String expenditurePurposeId, @Param("startDt") Date startDate, @Param("endDt") Date endDate,
-                                       @Param("keyWord") String keyWord,@Param("projectName") String projectName,@Param("projectNo") String projectNo);
+                                       @Param("expenditureTypeId") String expenditureTypeId, @Param("beneficiaryUnit") String beneficiaryUnit, @Param("createUser") String createUser,
+                                       @Param("state") String state, @Param("expenditureAuditLog") String expenditureAuditLog,
+                                       @Param("expenditurePurposeId") String expenditurePurposeId, @Param("startDt") Date startDate, @Param("endDt") Date endDate,
+                                       @Param("keyWord") String keyWord, @Param("projectName") String projectName, @Param("projectNo") String projectNo,
+                                       @Param("limit") Integer limit, @Param("offset") Integer offset);
+
+    int searchListCount(@Param("projectId") String projectId, @Param("companyId") String companyId,
+                        @Param("numbering") String numbering, @Param("expenditureMethodId") String expenditureMethodId,
+                        @Param("expenditureTypeId") String expenditureTypeId, @Param("beneficiaryUnit") String beneficiaryUnit, @Param("createUser") String createUser,
+                        @Param("state") String state, @Param("expenditureAuditLog") String expenditureAuditLog,
+                        @Param("expenditurePurposeId") String expenditurePurposeId, @Param("startDt") Date startDate, @Param("endDt") Date endDate,
+                        @Param("keyWord") String keyWord, @Param("projectName") String projectName, @Param("projectNo") String projectNo);
 
     @Select("select numbering from expenditure order by expenditure_id desc limit 0,1")
     String selectLastNo();

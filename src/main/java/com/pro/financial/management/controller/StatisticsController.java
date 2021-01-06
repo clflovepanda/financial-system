@@ -218,6 +218,7 @@ public class StatisticsController {
         }
         Integer limit = Integer.parseInt(StringUtils.isEmpty(request.getParameter("limit")) ? "1000" : request.getParameter("limit"));
         Integer offset = Integer.parseInt(StringUtils.isEmpty(request.getParameter("offset")) ? "1" : request.getParameter("offset"));
+        offset = limit*(offset - 1);
         List<ExpenditureDto> expenditureDtos = expenditureBiz.statistics(attribute, company, projectNo, applyUser, purpose, state, beneficiaryUnit, startDate, endDate, limit, offset);
         int count = expenditureBiz.statisticsCount(attribute, company, projectNo, applyUser, purpose, state, beneficiaryUnit, startDate, endDate);
         result.put("code", 0);
@@ -245,6 +246,7 @@ public class StatisticsController {
         String state = request.getParameter("state");
         Integer limit = Integer.parseInt(StringUtils.isEmpty(request.getParameter("limit")) ? "1000" : request.getParameter("limit"));
         Integer offset = Integer.parseInt(StringUtils.isEmpty(request.getParameter("offset")) ? "1" : request.getParameter("offset"));
+        offset = limit*(offset - 1);
         List<ProjectDto> projectDtos = projectBiz.statistics(dataSourceId, keyWord, startDate, endDate, state, limit, offset);
         int count = projectBiz.statisticsCount(dataSourceId, keyWord, startDate, endDate, state);
         Map<String, Object> resultMap = new HashMap<>();
