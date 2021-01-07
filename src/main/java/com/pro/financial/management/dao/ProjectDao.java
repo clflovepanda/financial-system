@@ -46,7 +46,7 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
             "left join project_data_source " +
             "using(project_id) " +
             "left join data_source " +
-            "using(data_source_id) ")
+            "using(data_source_id) limit 0,100")
     List<ProjectEntity> getAllProjectList();
 
     List<ProjectEntity> getList(@Param("ids") List<Integer> projectIds, @Param("projectNo") String projectNo, @Param("projectName") String projectName,
