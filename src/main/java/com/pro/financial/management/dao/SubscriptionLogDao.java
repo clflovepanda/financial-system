@@ -44,6 +44,6 @@ public interface SubscriptionLogDao {
     @Update("update subscription_log set state = 0 where receivement_id = #{id}")
     int deleteByReceivementId(@Param("id") Integer id);
 
-    @Select("SELECT (SELECT receivement_money FROM receivement where id = #{id}) - (SELECT sum(receivement_money) FROM subscription_log where receivement_id = #{id} AND state = 1)")
+    @Select("SELECT sum(receivement_money) FROM subscription_log where receivement_id = #{id} AND state = 1")
     BigDecimal gethadSubscriptionTotalMoneyByRId(@Param("id") Integer id);
 }

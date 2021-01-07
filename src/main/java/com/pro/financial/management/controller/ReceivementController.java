@@ -76,7 +76,6 @@ public class ReceivementController {
         } else {
             //获取已经认款金额
             BigDecimal updateMonye = subscriptionLogBiz.gethadSubscriptionTotalMoneyByRId(receivementDto.getId());
-            int x = receivementDto.getReceivementMoney().compareTo(updateMonye);
             if (receivementDto.getReceivementMoney().compareTo(updateMonye) == -1 ) {
                 result.put("code", 8001);
                 result.put("msg", "剩余金额不足");
