@@ -153,7 +153,7 @@ public class DepositController {
             expenditureAuditLogBiz.deleteExpenditureByid(expenditureId);
             //删除押金流程
             QueryWrapper<DepositLogEntity> wrapper  = new QueryWrapper<>();
-            wrapper.eq("expenditure", expenditureId);
+            wrapper.eq("expenditure_id", expenditureId);
             depositLogBiz.remove(wrapper);
         }
         result.put("code", 0);
