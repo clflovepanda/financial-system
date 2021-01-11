@@ -110,6 +110,6 @@ public interface RoleDao {
             " FROM " +
             "  role_datasource_relation  " +
             "WHERE " +
-            " role_id IN ( SELECT role_id FROM user_role_relation WHERE user_id = 8 ))")
-    List<DataSourceEntity> getDatasourceByUserIds(Integer userId);
+            " role_id IN ( SELECT role_id FROM user_role_relation WHERE user_id = #{userId} ))")
+    List<DataSourceEntity> getDatasourceByUserIds(@Param("userId") Integer userId);
 }

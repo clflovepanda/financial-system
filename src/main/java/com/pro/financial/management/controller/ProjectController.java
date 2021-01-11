@@ -107,7 +107,8 @@ public class ProjectController {
         if (StringUtils.isEmpty(lastNo)) {
             lastNo = "001";
         }
-        projectNo = CommonUtil.generatorNO(CommonConst.initials_project, projectDto.getDataSourceName(), lastNo);
+//        projectNo = CommonUtil.generatorNO(CommonConst.initials_project, projectDto.getDataSourceName(), lastNo);
+        projectNo = System.currentTimeMillis()/1000 + "";
         projectDto.setCode(projectNo);
         projectDto.setCreateUser(userId);
         projectDto.setCtime(new Date());
@@ -378,6 +379,7 @@ public class ProjectController {
         if (CollectionUtils.isEmpty(projectIds)) {
             result.put("code", 1001);
             result.put("msg", "无项目权限");
+            return result;
         }
         String projectNo = request.getParameter("projectNo");
         String projectName = request.getParameter("projectName");
