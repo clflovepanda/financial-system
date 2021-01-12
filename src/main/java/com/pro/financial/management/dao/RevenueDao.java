@@ -58,4 +58,7 @@ public interface RevenueDao extends BaseMapper<RevenueEntity> {
                                                @Param("companyId") String companyId, @Param("remitter") String remitter,
                                                @Param("createUser") String createUser, @Param("startDt") Date startDate, @Param("endDt") Date endDate,
                                                @Param("projectName") String projectName, @Param("projectNo") String projectNo, @Param("revenueTypeId") String revenueTypeId);
+
+    @Select("select * from revenue where id = #{revenueId}")
+    RevenueEntity getById(@Param("revenueId") Integer revenueId);
 }

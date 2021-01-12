@@ -17,6 +17,7 @@ import com.pro.financial.utils.SimpleMoneyFormat;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -88,7 +89,7 @@ public class ExpenditureController {
             //这笔押金总款
             BigDecimal revenueMoney =  revenueDto.getCnyMoney();
             //已经退回款项和退回中款项
-            BigDecimal depositMoney = new BigDecimal(0);
+            BigDecimal depositMoney = expenditureDto.getExpenditureMoney();
             List<DepositLogEntity> depositLogEntities = depositLogBiz.getListByRevenueId(depositId);
             for (DepositLogEntity entity : depositLogEntities) {
                 depositMoney = depositMoney.add(entity.getExpenditureMoney() == null ? new BigDecimal(0) : entity.getExpenditureMoney());
@@ -194,6 +195,7 @@ public class ExpenditureController {
     }
 
     @RequestMapping("/approval")
+    @Transactional
     public JSONObject approval(HttpServletRequest request, @RequestBody ExpenditureAuditLogDto expenditureAuditLogDto, @CookieValue("user_id") Integer userId) {
         JSONObject result = new JSONObject();
         if (expenditureAuditLogDto.getExpenditureId() == null || expenditureAuditLogDto.getExpenditureId() < 1) {
@@ -228,7 +230,10 @@ public class ExpenditureController {
                     queryWrapper.eq("expenditure_id", expenditureAuditLogDto.getExpenditureId());
                     DepositLogEntity depositLogEntity = new DepositLogEntity();
                     depositLogEntity.setState(1);
+                    depositLogEntity.setAuditUser(userId);
                     depositLogBiz.update(depositLogEntity, queryWrapper);
+                    //判断是否是押金  押金转收入
+                    depositLogBiz.toRevenue(expenditureAuditLogDto.getExpenditureId());
                 }
             }
         }
@@ -262,7 +267,6 @@ public class ExpenditureController {
             expenditureDto.setExpenditureId(expenditureAuditLogDto.getExpenditureId());
             expenditureDto.setState(nextLog.getAuditType());
             expenditureBiz.updateExpenditure(expenditureDto);
-
             //已经支付 如果更改押金表记录
             if (expenditureAuditLogDto.getAuditType() - CommonConst.expenditure_audit_type_paid == 0) {
                 QueryWrapper<DepositLogEntity> queryWrapper = new QueryWrapper<>();

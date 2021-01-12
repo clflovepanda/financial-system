@@ -140,7 +140,7 @@ public class DepositController {
         if (CollectionUtils.isEmpty(expenditureAuditLogDtos)) {
             expenditureBiz.deleteExpenditureByid(expenditureId);
             QueryWrapper<DepositLogEntity> wrapper  = new QueryWrapper<>();
-            wrapper.eq("expenditure", expenditureId);
+            wrapper.eq("expenditure_id", expenditureId);
             depositLogBiz.remove(wrapper);
         } else {
             if (expenditureAuditLogDtos.get(0).getAuditType() - CommonConst.expenditure_audit_type_paid == 0) {
