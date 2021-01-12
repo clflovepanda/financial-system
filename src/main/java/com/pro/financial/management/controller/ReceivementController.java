@@ -78,7 +78,7 @@ public class ReceivementController {
             BigDecimal updateMonye = subscriptionLogBiz.gethadSubscriptionTotalMoneyByRId(receivementDto.getId());
             if (updateMonye != null && receivementDto.getReceivementMoney().compareTo(updateMonye) == -1 ) {
                 result.put("code", 8001);
-                result.put("msg", "剩余金额不足");
+                result.put("msg", "到款金额不能小于认款金额");
                 return result;
             }
             int count = receivementBiz.updateReceivement(receivementDto);

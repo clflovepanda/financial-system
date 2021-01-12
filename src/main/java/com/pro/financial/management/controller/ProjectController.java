@@ -496,14 +496,17 @@ public class ProjectController {
             result.put("msg", "无立项权限");
             return result;
         } else {
+            boolean dataFl = false;
             for (DataSourceEntity dataSourceEntity : dataSourceEntities) {
                 if (dataSourceEntity.getDataSourceId() - Integer.parseInt(projectDto.getDataSourceId()) == 0) {
+                    dataFl = true;
                     break;
-                } else {
-                    result.put("code", 7001);
-                    result.put("msg", "无立项权限");
-                    return result;
                 }
+            }
+            if (! dataFl) {
+                result.put("code", 7001);
+                result.put("msg", "无立项权限");
+                return result;
             }
         }
         // 解析项目关联类目

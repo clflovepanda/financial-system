@@ -43,6 +43,6 @@ public interface UserDao extends BaseMapper<UserEntity> {
     @Delete("delete from user_role_relation where user_id = #{userId}")
     int deleteRole(@Param("userId") Integer userId);
 
-    @Select("SELECT * FROM data_source WHERE data_source_id IN (SELECT data_source_id FROM role_datasource_relation WHERE role_id = (select role_id from user_role_relation WHERE user_id = 8)) AND parent_id != 0")
-    List<DataSourceEntity> getDataSource(Integer userId);
+    @Select("SELECT * FROM data_source WHERE data_source_id IN (SELECT data_source_id FROM role_datasource_relation WHERE role_id = (select role_id from user_role_relation WHERE user_id = #{userId})) AND parent_id != 0")
+    List<DataSourceEntity> getDataSource(@Param("userId") Integer userId);
 }
