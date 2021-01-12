@@ -198,7 +198,7 @@ public class ExpenditureController {
     @Transactional
     public JSONObject approval(HttpServletRequest request, @RequestBody ExpenditureAuditLogDto expenditureAuditLogDto, @CookieValue("user_id") Integer userId) {
         JSONObject result = new JSONObject();
-        if (expenditureAuditLogDto.getExpenditureId() == null || expenditureAuditLogDto.getExpenditureId() < 1) {
+        if (expenditureAuditLogDto.getExpenditureId() == null || expenditureAuditLogDto.getExpenditureId() < 1 || expenditureAuditLogDto.getAuditType() == null) {
             result.put("code", 1001);
             result.put("msg", "传入参数有误");
             return result;
@@ -257,7 +257,7 @@ public class ExpenditureController {
         }
         if (expenditureAuditLogDtos.size() == 1 || lastLog.getAuditType() - CommonConst.expenditure_audit_type_submit == 0) {
             result.put("code", 4001);
-            result.put("msg", "无法删除提交记录");
+            result.put("msg", "无法删除已提交记录");
             return result;
         }
         if (lastLog.getId() - expenditureAuditLogDto.getId() == 0 && expenditureAuditLogDto.getCreateUser() - userId == 0) {
