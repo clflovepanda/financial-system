@@ -19,6 +19,6 @@ public interface ProjectAuditLogDao {
             "left join user " +
             "on user_id = create_user " +
             "where project_id = #{projectId} " +
-            "and project_audit_log.state = 1")
+            "and project_audit_log.state = 1 order by ctime desc limit 0 , 1")
     ProjectAuditLogDto getProjectAuditByProjectId(@Param("projectId") Integer projectId);
 }

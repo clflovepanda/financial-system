@@ -349,10 +349,14 @@ public class ProjectController {
         JSONObject result = new JSONObject();
         Integer id = Integer.valueOf(request.getParameter("id"));
         Integer auditState = Integer.valueOf(request.getParameter("audit_state"));
+        ProjectAuditLogDto projectAuditLog = projectAuditLogBiz.getProjectAuditByProjectId(id);
+        if (projectAuditLog != null) {
+            result.put("code", 0);
+            result.put("msg", "项目已经审核");
+            return result;
+        }
         int updateResult = projectBiz.updateAuditState(id, auditState);
         if (updateResult == 1) {
-            result.put("code", 0);
-            result.put("msg", HttpStatus.OK.getReasonPhrase());
             ProjectAuditLogDto projectAuditLogDto = new ProjectAuditLogDto();
             projectAuditLogDto.setProjectId(id);
             projectAuditLogDto.setAuditType(auditState);
@@ -360,6 +364,8 @@ public class ProjectController {
             projectAuditLogDto.setCtime(new Date());
             projectAuditLogDto.setState(1);
             projectAuditLogBiz.addProjectAuditLog(projectAuditLogDto);
+            result.put("code", 0);
+            result.put("msg", HttpStatus.OK.getReasonPhrase());
             return result;
         }
         result.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
