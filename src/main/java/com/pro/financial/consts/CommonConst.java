@@ -57,4 +57,7 @@ public class CommonConst {
     public static final Integer expenditure_audit_type_paid = 4;
     public static final Integer expenditure_audit_type_cancel = 5;
     public static final Integer expenditure_audit_type_flat = 6;
+
+    //押金导出表头
+    public static final String[] export_deposit = new String[]{"序号","押金编号","到款账户","到款种类","汇款方","认款类型","认款金额/元","认款人","认款时间","待退回金额/元","退回中押金/元","已退回押金/元"};
 }
