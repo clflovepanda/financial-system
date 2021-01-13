@@ -6,6 +6,7 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.aliyun.oss.model.PutObjectResult;
 import com.pro.financial.consts.CommonConst;
+import com.pro.financial.management.dto.ExpenditureDto;
 import com.pro.financial.management.dto.RevenueDto;
 import com.pro.financial.utils.ExportUtil;
 import org.apache.commons.csv.CSVFormat;
@@ -27,7 +28,7 @@ public class ExportBiz {
     private final static String OSS_BUKET = "yxms";
     private final static String OSS_URL = "http://yxms.oss-cn-beijing.aliyuncs.com/export/";
 
-    public JSONObject exportDepositCSV(List<RevenueDto> revenueDtos, String flag) {
+    public JSONObject exportDepositCSV(List<RevenueDto> revenueDtos) {
         JSONObject result = new JSONObject();
         String fileName = "deposit_" + System.currentTimeMillis() + ".csv";
 
@@ -38,6 +39,33 @@ public class ExportBiz {
                        ,revenueDto.getRemitter(),revenueDto.getRemitterMethodName()
                        ,revenueDto.getCnyMoney()+"",revenueDto.getUsername(),revenueDto.getCtime()+""
                        ,revenueDto.getToBeReturned()+"",revenueDto.getReturning()+"",revenueDto.getReturned()+""};
+                printer.printRecord(line);
+                i++ ;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("code", 8001);
+            result.put("msg", 8001);
+            return result;
+        }
+        String url = this.upload2OSS(fileName);
+        result.put("code", 0);
+        result.put("msg", "");
+        result.put("url", url);
+        return result;
+    }
+
+    public JSONObject exportExpenditureCSV(List<ExpenditureDto> expenditureDtos) {
+        JSONObject result = new JSONObject();
+        String fileName = "deposit_" + System.currentTimeMillis() + ".csv";
+
+        try ( CSVPrinter printer = ExportUtil.getCsvPrinter(fileName, CommonConst.export_expenditure)){
+            int i = 1;
+            for (ExpenditureDto expenditureDto : expenditureDtos) {
+                String[] line = new String[]{i+"", expenditureDto.getNumbering(), expenditureDto.getCoName(), expenditureDto.getExpenditureMethodName(),
+                        expenditureDto.getExpenditureTypeName(), expenditureDto.getExpenditurePurposeName(), expenditureDto.getBeneficiaryUnit(), expenditureDto.getExpenditureMoney()+"",
+                        expenditureDto.getUsername(), expenditureDto.getCtime()+"", expenditureDto.getState()+"", expenditureDto.getUtime()+"", expenditureDto.getAuditType()};
                 printer.printRecord(line);
                 i++ ;
             }
