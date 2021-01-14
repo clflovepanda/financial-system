@@ -361,23 +361,28 @@ public class ProjectController {
     @RequestMapping("/project_audit")
     public JSONObject approveProjectAudit(HttpServletRequest request, @CookieValue("user_id") Integer userId) {
         JSONObject result = new JSONObject();
-        Integer id = Integer.valueOf(request.getParameter("id"));
+        Integer projectId = Integer.valueOf(request.getParameter("id"));
         Integer auditState = Integer.valueOf(request.getParameter("auditing_state"));
-        ProjectAuditLogDto projectAuditLog = projectAuditLogBiz.getProjectAuditByProjectId(id);
+        ProjectAuditLogDto projectAuditLog = projectAuditLogBiz.getProjectAuditByProjectId(projectId);
         if (projectAuditLog != null) {
             result.put("code", 0);
             result.put("msg", "项目已经审核");
             return result;
         }
-        int updateResult = projectBiz.updateAuditState(id, auditState);
+        int updateResult = projectBiz.updateAuditState(projectId, auditState);
         if (updateResult == 1) {
             ProjectAuditLogDto projectAuditLogDto = new ProjectAuditLogDto();
-            projectAuditLogDto.setProjectId(id);
+            projectAuditLogDto.setProjectId(projectId);
             projectAuditLogDto.setAuditType(auditState);
             projectAuditLogDto.setCreateUser(userId);
             projectAuditLogDto.setCtime(new Date());
             projectAuditLogDto.setState(1);
             projectAuditLogBiz.addProjectAuditLog(projectAuditLogDto);
+            //修改项目状态
+            ProjectEntity projectEntity = new ProjectEntity();
+            projectEntity.setProjectId(projectId);
+            projectEntity.setState(auditState + 1);
+            projectBiz.updateById(projectEntity);
             result.put("code", 0);
             result.put("msg", HttpStatus.OK.getReasonPhrase());
             return result;
