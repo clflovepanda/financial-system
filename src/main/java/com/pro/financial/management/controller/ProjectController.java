@@ -1,6 +1,7 @@
 package com.pro.financial.management.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.pro.financial.consts.CommonConst;
 import com.pro.financial.management.biz.*;
 import com.pro.financial.management.converter.ProjectCompanyDto2Entity;
@@ -527,7 +528,9 @@ public class ProjectController {
         // 处理项目关联类目表
         projectDataSourceDto.setProjectId(projectId + "");
         projectDataSourceDto.setCtime(new Date());
-        projectDataSourceBiz.updateById(ProjectDataSourceDto2Entity.instance.convert(projectDataSourceDto));
+        QueryWrapper<ProjectDataSourceEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("project_id", projectId);
+        projectDataSourceBiz.update(ProjectDataSourceDto2Entity.instance.convert(projectDataSourceDto), queryWrapper);
         // 处理项目关联公司表
         projectCompanyDto.setProjectId(projectId);
         projectCompanyDto.setCtime(new Date());

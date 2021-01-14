@@ -3,10 +3,12 @@ package com.pro.financial.management.biz;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.pro.financial.management.converter.ProjectDto2Entity;
 import com.pro.financial.management.converter.ProjectUserDto2Entity;
+import com.pro.financial.management.converter.ProjectUserEntity2Dto;
 import com.pro.financial.management.dao.ProjectUserDao;
 import com.pro.financial.management.dao.entity.ProjectEntity;
 import com.pro.financial.management.dao.entity.ProjectUserEntity;
 import com.pro.financial.management.dto.ProjectUserDto;
+import com.pro.financial.utils.ConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,13 +43,7 @@ public class ProjectUserBiz {
 
     public int batchUpdateProjectUser(List<ProjectUserDto> projectUserDtos) {
         int count = 0;
-        for (ProjectUserDto projectUserDto : projectUserDtos) {
-            ProjectUserEntity projectUserEntity = ProjectUserDto2Entity.instance.convert(projectUserDto);
-            QueryWrapper<ProjectUserEntity> wrapper = new QueryWrapper<>();
-            wrapper.eq("project_id", projectUserDto.getProjectId()).eq("type", projectUserDto.getType());
-            projectUserDao.update(projectUserEntity, wrapper);
-            count ++;
-        }
+        projectUserDao.batchInsert(ConvertUtil.convert(ProjectUserDto2Entity.instance, projectUserDtos));
         return count;
     }
 
