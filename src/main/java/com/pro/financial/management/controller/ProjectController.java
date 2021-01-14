@@ -2,7 +2,6 @@ package com.pro.financial.management.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.pro.financial.consts.CommonConst;
 import com.pro.financial.management.biz.*;
 import com.pro.financial.management.converter.ProjectCompanyDto2Entity;
 import com.pro.financial.management.converter.ProjectDataSourceDto2Entity;
@@ -12,11 +11,9 @@ import com.pro.financial.management.dao.entity.*;
 import com.pro.financial.management.dto.*;
 import com.pro.financial.user.dao.UserDao;
 import com.pro.financial.user.dao.entity.DataSourceEntity;
-import com.pro.financial.utils.CommonUtil;
 import com.pro.financial.utils.ConvertUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -25,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.util.*;
 
