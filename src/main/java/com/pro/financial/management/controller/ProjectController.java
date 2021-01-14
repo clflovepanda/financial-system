@@ -365,7 +365,7 @@ public class ProjectController {
         Integer auditState = Integer.valueOf(request.getParameter("auditing_state"));
         ProjectAuditLogDto projectAuditLog = projectAuditLogBiz.getProjectAuditByProjectId(projectId);
         if (projectAuditLog != null) {
-            result.put("code", 0);
+            result.put("code", 1001);
             result.put("msg", "项目已经审核");
             return result;
         }

@@ -59,7 +59,7 @@ public class InvoiceController {
         JSONObject result = new JSONObject();
         if (userId == null) {
             result.put("code", 1001);
-            result.put("msg", "为获取到登录信息");
+            result.put("msg", "未获取到登录信息");
             return result;
         }
         invoiceDto.setOperator(userId);
