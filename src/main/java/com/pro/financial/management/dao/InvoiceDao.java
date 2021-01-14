@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -27,4 +28,7 @@ public interface InvoiceDao extends BaseMapper<InvoiceEntity> {
     String selectLastNo();
 
     int getCount(String keyWord, String username, Date startDate, Date endDate);
+
+    @Select("SELECT sum(cny_money) FROM invoice WHERE project_id = #{projectId}")
+    BigDecimal getreByProjectId(@Param("projectId") Integer projectId);
 }

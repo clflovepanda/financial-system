@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -61,4 +62,17 @@ public interface RevenueDao extends BaseMapper<RevenueEntity> {
 
     @Select("select * from revenue where id = #{revenueId}")
     RevenueEntity getById(@Param("revenueId") Integer revenueId);
+
+    @Select("SELECT SUM(cny_money) FROM revenue  " +
+            "LEFT JOIN revenue_type rt USING (revenue_type_id) " +
+            "WHERE project_id = #{projectId} and `delete` = 1  " +
+            "AND rt.remark = #{flag}")
+    BigDecimal getdeByProject(@Param("projectId") Integer projectId, @Param("flag") String flag);
+
+    @Select("SELECT SUM(cny_money) FROM revenue  " +
+            "LEFT JOIN revenue_type rt USING (revenue_type_id) " +
+            "WHERE project_id = #{projectId} and `delete` = 1  " +
+            "AND rt.remark <> 'Y' " +
+            "AND rt.remark <> 'S'")
+    BigDecimal getreByProject(@Param("projectId") Integer projectId);
 }

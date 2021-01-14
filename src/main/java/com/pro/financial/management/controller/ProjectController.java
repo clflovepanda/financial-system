@@ -57,6 +57,8 @@ public class ProjectController {
     private ProjectTaskBiz projectTaskBiz;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private InvoiceBiz invoiceBiz;
 
 
     @RequestMapping("/add")
@@ -213,9 +215,9 @@ public class ProjectController {
     @RequestMapping("/project_detail")
     public JSONObject getProjectDetail(HttpServletRequest request) {
         JSONObject result = new JSONObject();
-        Integer id = Integer.valueOf(request.getParameter("id"));
+        Integer projectId = Integer.valueOf(request.getParameter("id"));
         List<Integer> projectIds = new ArrayList<>();
-        projectIds.add(id);
+        projectIds.add(projectId);
         // 项目表
         List<ProjectEntity> projectEntities = projectBiz.getProjectList(projectIds);
         if (CollectionUtils.isEmpty(projectEntities)) {
@@ -240,9 +242,9 @@ public class ProjectController {
         // 应收单
         List<ReceivableEntity> receivableEntities = receivableBiz.getListByProjectIds(projectIds);
         //审核人
-        ProjectAuditLogDto projectAuditLogDto = projectAuditLogBiz.getProjectAuditByProjectId(id);
+        ProjectAuditLogDto projectAuditLogDto = projectAuditLogBiz.getProjectAuditByProjectId(projectId);
         ProjectEntity projectEntity = projectEntities.get(0);
-        String company = projectCompanyBiz.getCompanyByProjectId(id);
+        String company = projectCompanyBiz.getCompanyByProjectId(projectId);
         projectEntity.setCompany(company);
         int createUser = projectEntity.getCreateUser();
         projectEntity.setCreateUserName(userDao.getUserById(createUser).getUsername());
@@ -252,23 +254,38 @@ public class ProjectController {
         projectFinancialStatisticsDto.setEstincome(projectEntity.getEstincome());
         projectFinancialStatisticsDto.setBudget(projectEntity.getBudget());
         //实际收入
-        projectFinancialStatisticsDto.setActualIncome(new BigDecimal(0));
+        BigDecimal realRevenue = revenueBiz.getreByProjectId(projectId, "");
+        projectFinancialStatisticsDto.setActualIncome(realRevenue);
         //实际支出
-        projectFinancialStatisticsDto.setActualExpenditure(new BigDecimal(0));
+        BigDecimal realExpenditure = expenditureBiz.getexByProjectId(projectId);
+        projectFinancialStatisticsDto.setActualExpenditure(realExpenditure);
         //预收押金
-        projectFinancialStatisticsDto.setDeposit(new BigDecimal(0));
+        BigDecimal deposit = revenueBiz.getreByProjectId(projectId, "Y");
+        projectFinancialStatisticsDto.setDeposit(deposit);
         //押金转收入
-        projectFinancialStatisticsDto.setDepositIncome(new BigDecimal(0));
+        BigDecimal deposit2Re = revenueBiz.getreByProjectId(projectId, "S");
+        projectFinancialStatisticsDto.setDepositIncome(deposit2Re);
         //项目利润
         projectFinancialStatisticsDto.setProfit(new BigDecimal(0));
         //毛利率
-        projectFinancialStatisticsDto.setRate(new Double(0));
-        //支出比
-        projectFinancialStatisticsDto.setExpenditureRatio(new Double(0));
+        BigDecimal rate = new BigDecimal(0);
+        if (!(realRevenue.compareTo(new BigDecimal(0)) == 0)) {
+            rate = realRevenue.add(realExpenditure);
+            rate = rate.divide(realRevenue);
+        }
+        projectFinancialStatisticsDto.setRate(rate.doubleValue());
+
+        //支出比 = 实际支出 （提交的+ 已支付+平借款的）/  实际收入（收回押金+预收押金+认款 ）
+        BigDecimal ratio = new BigDecimal(0);
+        BigDecimal re = realRevenue.add(deposit).add(deposit2Re);
+        if (!(re.compareTo(new BigDecimal(0)) == 0)) {
+            ratio = realExpenditure.multiply(re);
+        }
+        projectFinancialStatisticsDto.setExpenditureRatio(ratio.doubleValue());
         //结算收入
-        projectFinancialStatisticsDto.setSettlement(new BigDecimal(0));
+        projectFinancialStatisticsDto.setSettlement(settlementBiz.getreByProjectId(projectId));
         //应收收入
-        projectFinancialStatisticsDto.setReceivable(new BigDecimal(0));
+        projectFinancialStatisticsDto.setReceivable(invoiceBiz.getreByProjectId(projectId));
 
         result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
@@ -451,6 +468,26 @@ public class ProjectController {
                 projectDto.setPaymentExpenses(paymentExpenses);
                 projectDto.setSettlementIncome(settlementIncome);
                 projectDto.setSettlementExpenses(settlementExpenses);
+
+//                //实际收入
+//                BigDecimal realRevenue = revenueBiz.getreByProjectId(projectId, "");
+//                //预收押金
+//                BigDecimal deposit = revenueBiz.getreByProjectId(projectId, "Y");
+//                //押金转收入
+//                BigDecimal deposit2Re = revenueBiz.getreByProjectId(projectId, "S");
+//                //实际支出
+//                BigDecimal realExpenditure = expenditureBiz.getexByProjectId(projectId);
+                //利润率
+                projectDto.setPaymentProfit(paymentIncome.subtract(paymentExpenses).doubleValue());
+                //毛利率
+
+
+                BigDecimal rate = new BigDecimal(0);
+                if (!(paymentIncome.compareTo(new BigDecimal(0)) == 0)) {
+                    rate = paymentIncome.subtract(paymentExpenses);
+                    rate = rate.divide(paymentIncome);
+                }
+                projectDto.setProjectRate(rate.doubleValue());
             }
         }
 

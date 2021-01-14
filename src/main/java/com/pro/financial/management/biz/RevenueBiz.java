@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -100,5 +101,19 @@ public class RevenueBiz {
         return revenueDao.getDepositStatistic(projectId, revenueNo, remitterMethodId,
                 receivementTypeId, companyId, remitter, createUser, startDate, endDate,
                 projectName, projectNo, revenueTypeId);
+    }
+
+    /**
+     *
+     * @param projectId
+     * @param flag flag = "" 查询收入  ="Y" 押金类型  ="S" 押金转收入
+     * @return
+     */
+    public BigDecimal getreByProjectId(Integer projectId, String flag) {
+        if (StringUtils.isEmpty(flag)) {
+            return revenueDao.getreByProject(projectId);
+        } else {
+            return revenueDao.getdeByProject(projectId, flag);
+        }
     }
 }

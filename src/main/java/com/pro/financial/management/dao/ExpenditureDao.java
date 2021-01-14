@@ -7,6 +7,7 @@ import com.pro.financial.management.dto.ExpenditureDto;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -63,4 +64,7 @@ public interface ExpenditureDao extends BaseMapper<ExpenditureEntity> {
                                               @Param("state") String state, @Param("expenditureAuditLog") String expenditureAuditLog,
                                               @Param("expenditurePurposeId") String expenditurePurposeId, @Param("startDt") Date startDate, @Param("endDt") Date endDate,
                                               @Param("keyWord") String keyWord, @Param("projectName") String projectName, @Param("projectNo") String projectNo);
+
+    @Select("SELECT SUM(expenditure_money) FROM expenditure WHERE project_id = #{projectId} AND state = 4")
+    BigDecimal getexByProjectId(@Param("projectId") Integer projectId);
 }

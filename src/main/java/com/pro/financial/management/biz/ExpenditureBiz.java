@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -103,5 +104,9 @@ public class ExpenditureBiz {
     public ExpenditureStatisticsEntity getStatistics(String projectId, String companyId, String numbering, String expenditureMethodId, String expenditureTypeId, String beneficiaryUnit, String createUser, String state, String expenditureAuditLog, String expenditurePurposeId, Date startDate, Date endDate, String keyWord, String projectName, String projectNo) {
         return expenditureDao.getStatistics(projectId, companyId, numbering, expenditureMethodId, expenditureTypeId,
                 beneficiaryUnit, createUser, state, expenditureAuditLog, expenditurePurposeId, startDate, endDate, keyWord,projectName, projectNo);
+    }
+
+    public BigDecimal getexByProjectId(Integer projectId) {
+        return expenditureDao.getexByProjectId(projectId);
     }
 }

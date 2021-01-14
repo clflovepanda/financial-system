@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
@@ -39,4 +40,7 @@ public interface SettlementDao {
             "</foreach>" +
             "</script>")
     List<SettlementEntity> getListByProjectIds(@Param("projectIds") List<Integer> projectIds);
+
+    @Select("SELECT sum(settlement_income) FROM settlement WHERE project_id = #{projectId} AND state = 1")
+    BigDecimal getreByProjectId(@Param("projectId") Integer projectId);
 }

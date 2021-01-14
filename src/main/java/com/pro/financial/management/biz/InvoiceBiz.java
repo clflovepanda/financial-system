@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -46,5 +47,9 @@ public class InvoiceBiz extends ServiceImpl<InvoiceDao, InvoiceEntity> {
 
     public int getCount(String keyWord, String username, Date startDate, Date endDate) {
         return invoiceDao.getCount(keyWord, username, startDate, endDate);
+    }
+
+    public BigDecimal getreByProjectId(Integer projectId) {
+        return invoiceDao.getreByProjectId(projectId);
     }
 }
