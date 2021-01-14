@@ -39,7 +39,6 @@
     LEFT JOIN revenue_type rt USING(revenue_type_id)
     where 1=1
     and re.delete = 1
-    and r.state = 4
 --     非押金类型
     <if test="revenueTypeId != null and revenueTypeId != ''">
       and rt.remark != "Y"
