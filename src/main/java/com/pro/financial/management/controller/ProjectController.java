@@ -348,7 +348,7 @@ public class ProjectController {
     public JSONObject approveProjectAudit(HttpServletRequest request, @CookieValue("user_id") Integer userId) {
         JSONObject result = new JSONObject();
         Integer id = Integer.valueOf(request.getParameter("id"));
-        Integer auditState = Integer.valueOf(request.getParameter("audit_state"));
+        Integer auditState = Integer.valueOf(request.getParameter("auditing_state"));
         ProjectAuditLogDto projectAuditLog = projectAuditLogBiz.getProjectAuditByProjectId(id);
         if (projectAuditLog != null) {
             result.put("code", 0);
