@@ -254,16 +254,16 @@ public class ProjectController {
         projectFinancialStatisticsDto.setEstincome(projectEntity.getEstincome());
         projectFinancialStatisticsDto.setBudget(projectEntity.getBudget());
         //实际收入
-        BigDecimal realRevenue = revenueBiz.getreByProjectId(projectId, "");
+        BigDecimal realRevenue = revenueBiz.getreByProjectId(projectId, "") == null ? new BigDecimal(0) : revenueBiz.getreByProjectId(projectId, "");
         projectFinancialStatisticsDto.setActualIncome(realRevenue);
         //实际支出
-        BigDecimal realExpenditure = expenditureBiz.getexByProjectId(projectId);
+        BigDecimal realExpenditure = expenditureBiz.getexByProjectId(projectId) == null ? new BigDecimal(0) : expenditureBiz.getexByProjectId(projectId);
         projectFinancialStatisticsDto.setActualExpenditure(realExpenditure);
         //预收押金
-        BigDecimal deposit = revenueBiz.getreByProjectId(projectId, "Y");
+        BigDecimal deposit = revenueBiz.getreByProjectId(projectId, "Y") == null ? new BigDecimal(0) : revenueBiz.getreByProjectId(projectId, "Y");
         projectFinancialStatisticsDto.setDeposit(deposit);
         //押金转收入
-        BigDecimal deposit2Re = revenueBiz.getreByProjectId(projectId, "S");
+        BigDecimal deposit2Re = revenueBiz.getreByProjectId(projectId, "S") == null ? new BigDecimal(0) : revenueBiz.getreByProjectId(projectId, "S");
         projectFinancialStatisticsDto.setDepositIncome(deposit2Re);
         //项目利润
         projectFinancialStatisticsDto.setProfit(new BigDecimal(0));
@@ -483,6 +483,8 @@ public class ProjectController {
 //                //实际支出
 //                BigDecimal realExpenditure = expenditureBiz.getexByProjectId(projectId);
                 //利润率
+                paymentIncome = paymentIncome == null ? new BigDecimal(0) : paymentIncome;
+                paymentExpenses = paymentExpenses == null ? new BigDecimal(0) : paymentExpenses;
                 projectDto.setPaymentProfit(paymentIncome.subtract(paymentExpenses).doubleValue());
                 //毛利率
 
