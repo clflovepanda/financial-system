@@ -271,7 +271,7 @@ public class ProjectController {
         BigDecimal rate = new BigDecimal(0);
         if (!(realRevenue.compareTo(new BigDecimal(0)) == 0)) {
             rate = realRevenue.add(realExpenditure);
-            rate = rate.divide(realRevenue);
+            rate = rate.divide(realRevenue, 2, BigDecimal.ROUND_HALF_UP);
         }
         projectFinancialStatisticsDto.setRate(rate.doubleValue());
 
@@ -490,7 +490,7 @@ public class ProjectController {
                 BigDecimal rate = new BigDecimal(0);
                 if (!(paymentIncome.compareTo(new BigDecimal(0)) == 0)) {
                     rate = paymentIncome.subtract(paymentExpenses);
-                    rate = rate.divide(paymentIncome);
+                    rate = rate.divide(paymentIncome, 2, BigDecimal.ROUND_HALF_UP);
                 }
                 projectDto.setProjectRate(rate.doubleValue());
             }
