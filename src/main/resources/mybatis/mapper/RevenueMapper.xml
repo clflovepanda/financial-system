@@ -30,7 +30,7 @@
       </if>
     from revenue re
     left join receivement r on re.receivement_id = r.id
-    left join `user` u on r.create_user = u.user_id
+    left join `user` u on re.create_user = u.user_id
     LEFT JOIN company USING (company_id)
     LEFT JOIN remitter_method USING (remitter_method_id)
     LEFT JOIN receivement_type USING (receivement_type_id)
@@ -88,7 +88,7 @@
         select count(*)
         from revenue re
         left join receivement r on re.receivement_id = r.id
-        left join `user` u on r.create_user = u.user_id
+        left join `user` u on re.create_user = u.user_id
         LEFT JOIN company USING (company_id)
         LEFT JOIN remitter_method USING (remitter_method_id)
         LEFT JOIN receivement_type USING (receivement_type_id)
@@ -145,7 +145,7 @@
         sum(CASE WHEN re.revenue_type_id='5' THEN cny_money END) AS deposit
         from revenue re
         left join receivement r on re.receivement_id = r.id
-        left join `user` u on r.create_user = u.user_id
+        left join `user` u on re.create_user = u.user_id
         LEFT JOIN company USING (company_id)
         LEFT JOIN remitter_method USING (remitter_method_id)
         LEFT JOIN receivement_type USING (receivement_type_id)
@@ -202,7 +202,7 @@
         sum((SELECT SUM(expenditure_money) FROM deposit_log LEFT JOIN expenditure USING(expenditure_id) WHERE revenue_id = re.id and deposit_log.state=0)) returned
         from revenue re
         left join receivement r on re.receivement_id = r.id
-        left join `user` u on r.create_user = u.user_id
+        left join `user` u on re.create_user = u.user_id
         LEFT JOIN company USING (company_id)
         LEFT JOIN remitter_method USING (remitter_method_id)
         LEFT JOIN receivement_type USING (receivement_type_id)
