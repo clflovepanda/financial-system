@@ -364,13 +364,18 @@ public class ProjectController {
         Integer projectId = Integer.valueOf(request.getParameter("id"));
         Integer auditState = Integer.valueOf(request.getParameter("auditing_state"));
         ProjectAuditLogDto projectAuditLog = projectAuditLogBiz.getProjectAuditByProjectId(projectId);
-        if (projectAuditLog != null) {
-            result.put("code", 1001);
-            result.put("msg", "项目已经审核");
-            return result;
-        }
-        int updateResult = projectBiz.updateAuditState(projectId, auditState);
-        if (updateResult == 1) {
+//        if (projectAuditLog != null) {
+//            result.put("code", 1001);
+//            result.put("msg", "项目已经审核");
+//            return result;
+//        }
+        //修改项目状态
+        ProjectEntity projectEntity = new ProjectEntity();
+        projectEntity.setProjectId(projectId);
+        projectEntity.setState(auditState + 1);
+        projectEntity.setAuditingState(auditState);
+        boolean updateResult = projectBiz.updateById(projectEntity);
+        if (updateResult) {
             ProjectAuditLogDto projectAuditLogDto = new ProjectAuditLogDto();
             projectAuditLogDto.setProjectId(projectId);
             projectAuditLogDto.setAuditType(auditState);
@@ -378,11 +383,7 @@ public class ProjectController {
             projectAuditLogDto.setCtime(new Date());
             projectAuditLogDto.setState(1);
             projectAuditLogBiz.addProjectAuditLog(projectAuditLogDto);
-            //修改项目状态
-            ProjectEntity projectEntity = new ProjectEntity();
-            projectEntity.setProjectId(projectId);
-            projectEntity.setState(auditState + 1);
-            projectBiz.updateById(projectEntity);
+
             result.put("code", 0);
             result.put("msg", HttpStatus.OK.getReasonPhrase());
             return result;
