@@ -1,6 +1,7 @@
 package com.pro.financial.management.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
@@ -39,9 +40,14 @@ public class SubscriptionLogEntity {
 
     private Date ctime;
 
+    @TableField(exist = false)
     private String username;
+    @TableField(exist = false)
     private String projectName;
+    @TableField(exist = false)
     private String dataSourceName;
+    @TableField(exist = false)
     private String revenueTypeName;
+    @TableField(exist = false)
     private String revenueRemark;
 }
