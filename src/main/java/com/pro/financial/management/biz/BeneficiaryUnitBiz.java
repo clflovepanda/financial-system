@@ -26,7 +26,9 @@ public class BeneficiaryUnitBiz extends ServiceImpl<BeneficiaryUnitDao, Benefici
 
     public List<BeneficiaryUnitEntity> selectByKeyWords(String keyWords) {
         if (StringUtils.isEmpty(keyWords)) {
-            return beneficiaryUnitDao.selectList(new QueryWrapper<BeneficiaryUnitEntity>());
+            QueryWrapper<BeneficiaryUnitEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.orderByDesc("beneficiary_unit_id").last("limit 0 , 10");
+            return beneficiaryUnitDao.selectList(queryWrapper);
         } else {
             QueryWrapper<BeneficiaryUnitEntity> queryWrapper = new QueryWrapper<>();
             queryWrapper.like("beneficiary_unit", keyWords);
