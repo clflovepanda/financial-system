@@ -7,6 +7,7 @@ import com.pro.financial.management.controller.view.ReceivementView;
 import com.pro.financial.management.dao.entity.*;
 import com.pro.financial.management.dto.AccountingLogDto;
 import com.pro.financial.management.dto.ReceivementDto;
+import com.pro.financial.management.dto.RevenueDto;
 import com.pro.financial.management.dto.SubscriptionLogDto;
 import com.pro.financial.user.dao.entity.CompanyEntity;
 import com.pro.financial.utils.CommonUtil;
@@ -81,7 +82,6 @@ public class ReceivementController {
                 result.put("msg", "到款金额不能小于认款金额");
                 return result;
             }
-            //todo 如果剩余金额还有需要改状态
             if (updateMonye != null && receivementDto.getReceivementMoney().compareTo(updateMonye) == 1 ) {
                 receivementDto.setState(2);
             }
@@ -325,6 +325,23 @@ public class ReceivementController {
         result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         return result;
+    }
+
+    /**
+     * 删除认款纪录
+     * @return
+     */
+    @RequestMapping("/delsublog")
+    public JSONObject delSublog(HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        Integer id = Integer.parseInt(StringUtils.isEmpty(request.getParameter("id")) ? "0" : request.getParameter("id"));
+        if (id < 1) {
+            result.put("code", 1001);
+            result.put("msg", "传入参数有误");
+            return result;
+        }
+
+        return subscriptionLogBiz.delSublog(id);
     }
 
 }

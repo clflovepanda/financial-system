@@ -1,5 +1,6 @@
 package com.pro.financial.management.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pro.financial.management.dao.entity.SubscriptionLogEntity;
 import com.pro.financial.management.dto.SubscriptionLogDto;
 import org.apache.ibatis.annotations.*;
@@ -9,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
-public interface SubscriptionLogDao {
+public interface SubscriptionLogDao extends BaseMapper<SubscriptionLogEntity> {
 
 //    @Options(useGeneratedKeys = true, keyProperty = "id" , keyColumn = "id")
 //    @Insert("insert into subscription_log (`receivement_id`, `revenue_type_id`, project_id, `receivement_money`, `subscription_date`, `state`, `remark`, `create_user`, `ctime`) VALUES " +

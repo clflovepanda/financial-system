@@ -1,17 +1,24 @@
 package com.pro.financial.management.dao.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.*;
 import org.apache.ibatis.annotations.Select;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Data
+@EqualsAndHashCode(callSuper = false)
+@TableName("subscription_log")
 @ToString
 @Getter
 @Setter
 public class SubscriptionLogEntity {
+    private static final long serialVersionUID = 1L;
+
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     private Integer receivementId;
