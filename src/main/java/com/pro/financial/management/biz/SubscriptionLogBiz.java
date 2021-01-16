@@ -90,6 +90,12 @@ public class SubscriptionLogBiz {
             result.put("msg", "未查询到关联收入或押金");
             return result;
         }
+        ReceivementEntity receivementEntity = receivementDao.getById(subscriptionLogEntity.getReceivementId());
+        if (receivementEntity.getState() > 3) {
+            result.put("code", 0);
+            result.put("msg", "该认款已经做账,无法删除");
+            return result;
+        }
         subscriptionLogEntity.setState(0);
         //删除认款记录
         subscriptionLogDao.updateById(subscriptionLogEntity);
@@ -98,7 +104,7 @@ public class SubscriptionLogBiz {
         revenueEntity.setDelete(0);
         revenueDao.update(revenueEntity, queryWrapper);
         //修改到款状态
-        ReceivementEntity receivementEntity = receivementDao.getById(subscriptionLogEntity.getReceivementId());
+
         BigDecimal updateMonye = this.gethadSubscriptionTotalMoneyByRId(receivementEntity.getId());
         if (updateMonye == null || updateMonye.compareTo(new BigDecimal(0)) == 0 ) {
             receivementEntity.setState(0);
