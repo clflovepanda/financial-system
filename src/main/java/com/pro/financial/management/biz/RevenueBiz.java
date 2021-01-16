@@ -1,5 +1,6 @@
 package com.pro.financial.management.biz;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.pro.financial.consts.CommonConst;
 import com.pro.financial.management.converter.RevenueDto2Entity;
 import com.pro.financial.management.converter.RevenueEntity2Dto;
@@ -115,5 +116,11 @@ public class RevenueBiz {
         } else {
             return revenueDao.getdeByProject(projectId, flag);
         }
+    }
+
+    public List<RevenueEntity> getByReceivementId(Integer id) {
+        QueryWrapper<RevenueEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("receivement_id", id).eq("delete", 1);
+        return revenueDao.selectList(queryWrapper);
     }
 }

@@ -46,7 +46,7 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
             "left join project_data_source " +
             "using(project_id) " +
             "left join data_source " +
-            "using(data_source_id) limit 0,100")
+            "using(data_source_id) where project.auditing_state = 1 limit 0,100")
     List<ProjectEntity> getAllProjectList();
 
     List<ProjectEntity> getList(@Param("ids") List<Integer> projectIds, @Param("projectNo") String projectNo, @Param("projectName") String projectName,
@@ -69,7 +69,7 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
             "using(project_id) " +
             "left join data_source " +
             "using(data_source_id) " +
-            "where name like #{keyWords}" )
+            "where name like #{keyWords} and project.auditing_state = 1" )
     List<ProjectEntity> getProjectByKeywords(@Param("keyWords") String keyWords);
 
     @Select("SELECT code FROM project ORDER BY project_id DESC LIMIT 0,1")

@@ -30,23 +30,20 @@ public class ReceivementController {
 
     @Autowired
     private ReceivementBiz receivementBiz;
-
     @Autowired
     private SubscriptionLogBiz subscriptionLogBiz;
-
     @Autowired
     private ReceivementTypeBiz receivementTypeBiz;
-
     @Autowired
     private RemitterMethodBiz remitterMethodBiz;
-
     @Autowired
     private AccountingLogBiz accountingLogBiz;
     @Autowired
-    private ProjectDataSourceBiz projectDataSourceBiz;
-
-    @Autowired
     private RevenueBiz revenueBiz;
+    @Autowired
+    private DepositLogBiz depositLogBiz;
+    @Autowired
+    private ExpenditureBiz expenditureBiz;
 
     /**
      *
@@ -214,13 +211,51 @@ public class ReceivementController {
     public JSONObject delete(HttpServletRequest request) {
         JSONObject result = new JSONObject();
         Integer id = Integer.valueOf(request.getParameter("id"));
+        List<RevenueEntity> revenueEntities = revenueBiz.getByReceivementId(id);
+        List<RevenueEntity> deposit = new ArrayList<>();
+        //判断是否有预收押金 并且退押金已经支付
+        if (!CollectionUtils.isEmpty(revenueEntities)) {
+            for (RevenueEntity revenueEntity : revenueEntities) {
+                //7是预收押金判断是否支付
+                if (revenueEntity.getRevenueTypeId() == 7) {
+                    deposit.add(revenueEntity);
+                    List<DepositLogEntity> depositLogEntities = depositLogBiz.getListByRevenueId(revenueEntity.getId());
+                    if (!CollectionUtils.isEmpty(depositLogEntities)) {
+                        for (DepositLogEntity depositLogEntity : depositLogEntities) {
+                            ExpenditureEntity expenditureEntity = expenditureBiz.getById(depositLogEntity.getExpenditureId());
+                            //已经支付了 返回错误信息
+                            if (expenditureEntity.getState() == 4) {
+                                result.put("code", 8001);
+                                result.put("msg", "含有已经退回的押金无法删除");
+                            }
+                        }
+                    }
+                }
+            }
+        }
         int count = receivementBiz.updateReceivementState(id, 5);
         if (count == 1) {
             result.put("code", 0);
             result.put("msg", HttpStatus.OK.getReasonPhrase());
+            //删除押金以及相关记录
+            if (!CollectionUtils.isEmpty(deposit)) {
+                for (RevenueEntity revenueEntity : deposit) {
+                    List<DepositLogEntity> depositLogEntities = depositLogBiz.getListByRevenueId(revenueEntity.getId());
+                    if (!CollectionUtils.isEmpty(depositLogEntities)) {
+                        for (DepositLogEntity depositLogEntity : depositLogEntities) {
+                            depositLogEntity.setState(0);
+                            //修改押金记录表状态
+                            depositLogBiz.updateById(depositLogEntity);
+                            //修改支出表状态
+                            expenditureBiz.deleteExpenditureByid(depositLogEntity.getExpenditureId());
+                        }
+                    }
+                }
+            }
             //删除成功删除认款日志和收入
             revenueBiz.deleteByReceivementId(id);
             subscriptionLogBiz.deleteByReceivementId(id);
+
             return result;
         }
         result.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());

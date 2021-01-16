@@ -5,7 +5,7 @@
     <select id="getListByRevenueId" resultType="com.pro.financial.management.dao.entity.DepositLogEntity">
         select * from deposit_log
         left join expenditure using (expenditure_id)
-        where revenue_id = #{depositId}
+        where revenue_id = #{depositId} and deposit_log.state = 1
     </select>
 
 </mapper>
