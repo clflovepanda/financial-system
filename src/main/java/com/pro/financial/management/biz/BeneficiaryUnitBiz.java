@@ -31,7 +31,7 @@ public class BeneficiaryUnitBiz extends ServiceImpl<BeneficiaryUnitDao, Benefici
             return beneficiaryUnitDao.selectList(queryWrapper);
         } else {
             QueryWrapper<BeneficiaryUnitEntity> queryWrapper = new QueryWrapper<>();
-            queryWrapper.like("beneficiary_unit", keyWords);
+            queryWrapper.like("beneficiary_unit", keyWords).last("limit 0 , 10");
             return beneficiaryUnitDao.selectList(queryWrapper);
         }
     }
