@@ -46,10 +46,9 @@ public class ReceivementController {
     private ExpenditureBiz expenditureBiz;
 
     /**
-     *
      * @param jsonInfo
      * @param userId
-     * @param flag 1 add 2 modify
+     * @param flag     1 add 2 modify
      * @return
      */
     @RequestMapping("/add")
@@ -74,15 +73,15 @@ public class ReceivementController {
         } else {
             //获取已经认款金额
             BigDecimal updateMonye = subscriptionLogBiz.gethadSubscriptionTotalMoneyByRId(receivementDto.getId());
-            if (updateMonye != null && receivementDto.getReceivementMoney().compareTo(updateMonye) == -1 ) {
+            if (updateMonye != null && receivementDto.getReceivementMoney().compareTo(updateMonye) == -1) {
                 result.put("code", 8001);
                 result.put("msg", "到款金额不能小于认款金额");
                 return result;
             }
-            if (updateMonye != null && receivementDto.getReceivementMoney().compareTo(updateMonye) == 1 ) {
+            if (updateMonye != null && receivementDto.getReceivementMoney().compareTo(updateMonye) == 1) {
                 receivementDto.setState(2);
             }
-            if (updateMonye != null && receivementDto.getReceivementMoney().compareTo(updateMonye) == 0 ) {
+            if (updateMonye != null && receivementDto.getReceivementMoney().compareTo(updateMonye) == 0) {
                 receivementDto.setState(3);
             }
             int count = receivementBiz.updateReceivement(receivementDto);
@@ -109,7 +108,7 @@ public class ReceivementController {
         Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
         Integer limit = Integer.parseInt(StringUtils.isEmpty(request.getParameter("limit")) ? "1000" : request.getParameter("limit"));
         Integer offset = Integer.parseInt(StringUtils.isEmpty(request.getParameter("offset")) ? "1" : request.getParameter("offset"));
-        offset = limit*(offset - 1);
+        offset = limit * (offset - 1);
         List<ReceivementEntity> receivementEntities = receivementBiz.getList(null, companyId, receivementTypeId, remitterMethodId, remitter,
                 startDate, endDate, limit, offset);
         int count = receivementBiz.getCount(companyId, receivementTypeId, remitterMethodId, remitter,
@@ -204,6 +203,7 @@ public class ReceivementController {
 
     /**
      * 删除  表state=5
+     *
      * @param request
      * @return
      */
@@ -221,27 +221,28 @@ public class ReceivementController {
                     deposit.add(revenueEntity);
                     List<DepositLogEntity> depositLogEntities = depositLogBiz.getListByRevenueId(revenueEntity.getId());
                     if (!CollectionUtils.isEmpty(depositLogEntities)) {
-                        for (DepositLogEntity depositLogEntity : depositLogEntities) {
-                            ExpenditureEntity expenditureEntity = expenditureBiz.getById(depositLogEntity.getExpenditureId());
-                            //已经支付了 返回错误信息
-                            if (expenditureEntity.getState() == 4) {
-                                result.put("code", 8001);
-                                result.put("msg", "含有已经退回的押金无法删除");
-                                return result;
-                            }
-                        }
+                        result.put("code", 8001);
+                        result.put("msg", "含有已经退回的押金无法删除");
+                        return result;
+//                        for (DepositLogEntity depositLogEntity : depositLogEntities) {
+//                            ExpenditureEntity expenditureEntity = expenditureBiz.getById(depositLogEntity.getExpenditureId());
+//                            //已经支付了 返回错误信息
+//                            if (expenditureEntity.getState() == 4) {
+//                                result.put("code", 8001);
+//                                result.put("msg", "含有已经退回的押金无法删除");
+//                                return result;
+//                            }
+//                        }
                     }
                 }
             }
         }
         int count = receivementBiz.updateReceivementState(id, 5);
         if (count == 1) {
-            result.put("code", 0);
-            result.put("msg", HttpStatus.OK.getReasonPhrase());
             //删除押金以及相关记录
             if (!CollectionUtils.isEmpty(deposit)) {
                 for (RevenueEntity revenueEntity : deposit) {
-                    List<DepositLogEntity> depositLogEntities = depositLogBiz.getListByRevenueId(revenueEntity.getId());
+                    List<DepositLogEntity> depositLogEntities = depositLogBiz.getListByRevenueIdWithoutState(revenueEntity.getId());
                     if (!CollectionUtils.isEmpty(depositLogEntities)) {
                         for (DepositLogEntity depositLogEntity : depositLogEntities) {
                             depositLogEntity.setState(0);
@@ -256,16 +257,18 @@ public class ReceivementController {
             //删除成功删除认款日志和收入
             revenueBiz.deleteByReceivementId(id);
             subscriptionLogBiz.deleteByReceivementId(id);
-
+            result.put("code", 0);
+            result.put("msg", "");
             return result;
         }
-        result.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        result.put("msg", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+        result.put("code", 7009);
+        result.put("msg", "删除失败,未知错误!");
         return result;
     }
 
     /**
      * 做账
+     *
      * @param request
      * @return
      */
@@ -306,6 +309,7 @@ public class ReceivementController {
         result.put("msg", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
         return result;
     }
+
     @RequestMapping("/getsublog")
     public JSONObject getSubLog(HttpServletRequest request) {
         JSONObject result = new JSONObject();
@@ -346,7 +350,7 @@ public class ReceivementController {
             return result;
         }
         Integer state = jsonInfo.getInteger("state");
-        if (state == null || state !=3) {
+        if (state == null || state != 3) {
             state = 2;
         }
         subscriptionLogDto.setState(1);
@@ -365,6 +369,7 @@ public class ReceivementController {
 
     /**
      * 删除认款纪录
+     *
      * @return
      */
     @RequestMapping("/delsublog")
@@ -386,21 +391,24 @@ public class ReceivementController {
                     deposit.add(revenueEntity);
                     List<DepositLogEntity> depositLogEntities = depositLogBiz.getListByRevenueId(revenueEntity.getId());
                     if (!CollectionUtils.isEmpty(depositLogEntities)) {
-                        for (DepositLogEntity depositLogEntity : depositLogEntities) {
-                            ExpenditureEntity expenditureEntity = expenditureBiz.getById(depositLogEntity.getExpenditureId());
-                            //已经支付了 返回错误信息
-                            if (expenditureEntity.getState() == 4) {
-                                result.put("code", 8001);
-                                result.put("msg", "含有已经退回的押金无法删除");
-                                return result;
-                            }
-                        }
+                        result.put("code", 8001);
+                        result.put("msg", "含有已经退回的押金无法删除");
+                        return result;
+//                        for (DepositLogEntity depositLogEntity : depositLogEntities) {
+//                            ExpenditureEntity expenditureEntity = expenditureBiz.getById(depositLogEntity.getExpenditureId());
+//                            //已经支付了 返回错误信息
+//                            if (expenditureEntity.getState() == 4) {
+//                                result.put("code", 8001);
+//                                result.put("msg", "含有已经退回的押金无法删除");
+//                                return result;
+//                            }
                     }
                 }
             }
         }
 
-        return subscriptionLogBiz.delSublog(id);
+
+        return subscriptionLogBiz.delSublog(id, deposit);
     }
 
 }

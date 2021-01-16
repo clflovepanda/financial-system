@@ -19,4 +19,6 @@ import java.util.List;
 public interface DepositLogDao extends BaseMapper<DepositLogEntity> {
 
     List<DepositLogEntity> getListByRevenueId(@Param("depositId") Integer depositId);
+
+    List<DepositLogEntity> getListByRevenueIdWithoutState(@Param("depositId") Integer depositId);
 }

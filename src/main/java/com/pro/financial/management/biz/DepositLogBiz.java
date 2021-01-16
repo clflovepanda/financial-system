@@ -124,4 +124,8 @@ public class DepositLogBiz extends ServiceImpl<DepositLogDao, DepositLogEntity> 
             }
         }
     }
+
+    public List<DepositLogEntity> getListByRevenueIdWithoutState(Integer depositId) {
+        return depositLogDao.getListByRevenueIdWithoutState(depositId);
+    }
 }

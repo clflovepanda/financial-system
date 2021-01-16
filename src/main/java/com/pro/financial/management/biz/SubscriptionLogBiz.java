@@ -7,10 +7,10 @@ import com.pro.financial.management.converter.SubscriptionLogEntity2Dto;
 import com.pro.financial.management.dao.ReceivementDao;
 import com.pro.financial.management.dao.RevenueDao;
 import com.pro.financial.management.dao.SubscriptionLogDao;
+import com.pro.financial.management.dao.entity.DepositLogEntity;
 import com.pro.financial.management.dao.entity.ReceivementEntity;
 import com.pro.financial.management.dao.entity.RevenueEntity;
 import com.pro.financial.management.dao.entity.SubscriptionLogEntity;
-import com.pro.financial.management.dto.ReceivementDto;
 import com.pro.financial.management.dto.SubscriptionLogDto;
 import com.pro.financial.utils.ConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +31,10 @@ public class SubscriptionLogBiz {
     private RevenueDao revenueDao;
     @Autowired
     private ReceivementDao receivementDao;
+    @Autowired
+    private DepositLogBiz depositLogBiz;
+    @Autowired
+    private ExpenditureBiz expenditureBiz;
 
     public int addSubscriptionLog(SubscriptionLogDto subscriptionLogDto) {
         SubscriptionLogEntity subscriptionLogEntity = SubscriptionLogDto2Entity.instance.convert(subscriptionLogDto);
@@ -76,7 +80,7 @@ public class SubscriptionLogBiz {
     }
 
     @Transactional
-    public JSONObject delSublog(Integer id) {
+    public JSONObject delSublog(Integer id, List<RevenueEntity> deposit) {
         JSONObject result = new JSONObject();
         SubscriptionLogEntity subscriptionLogEntity = subscriptionLogDao.selectById(id);
         if (subscriptionLogEntity == null || subscriptionLogEntity.getState() == 0) {
@@ -97,6 +101,22 @@ public class SubscriptionLogBiz {
             result.put("code", 1004);
             result.put("msg", "该认款已经做账,无法删除");
             return result;
+        }
+
+        //如果有押金 删除押金的支出等记录
+        if (!CollectionUtils.isEmpty(deposit)) {
+            for (RevenueEntity revenueEntity : deposit) {
+                List<DepositLogEntity> depositLogEntities = depositLogBiz.getListByRevenueIdWithoutState(revenueEntity.getId());
+                if (!CollectionUtils.isEmpty(depositLogEntities)) {
+                    for (DepositLogEntity depositLogEntity : depositLogEntities) {
+                        depositLogEntity.setState(0);
+                        //修改押金记录表状态
+                        depositLogBiz.updateById(depositLogEntity);
+                        //修改支出表状态
+                        expenditureBiz.deleteExpenditureByid(depositLogEntity.getExpenditureId());
+                    }
+                }
+            }
         }
         subscriptionLogEntity.setState(0);
         //删除认款记录
