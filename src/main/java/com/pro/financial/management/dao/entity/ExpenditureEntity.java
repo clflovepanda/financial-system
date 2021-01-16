@@ -89,4 +89,8 @@ public class ExpenditureEntity {
     private String coName;
     @TableField(exist = false)
     private String name;
+    @TableField(exist = false)
+    private String provinceName;
+    @TableField(exist = false)
+    private String cityName;
 }

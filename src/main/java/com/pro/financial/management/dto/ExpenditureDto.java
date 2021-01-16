@@ -78,5 +78,8 @@ public class ExpenditureDto {
 
     private String auditType;
 
+    private String cityName;
+    private String provinceName;
+
     private List<ExpenditureAuditLogDto> expenditureAuditLogs;
 }

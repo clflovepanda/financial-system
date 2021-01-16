@@ -15,6 +15,7 @@ import com.pro.financial.management.dto.SubscriptionLogDto;
 import com.pro.financial.utils.ConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
@@ -74,6 +75,7 @@ public class SubscriptionLogBiz {
         return subscriptionLogDao.gethadSubscriptionTotalMoneyByRId(id);
     }
 
+    @Transactional
     public JSONObject delSublog(Integer id) {
         JSONObject result = new JSONObject();
         SubscriptionLogEntity subscriptionLogEntity = subscriptionLogDao.selectById(id);
@@ -86,13 +88,13 @@ public class SubscriptionLogBiz {
         queryWrapper.eq("subscription_log_id", id);
         List<RevenueEntity> revenueEntities = revenueDao.selectList(queryWrapper);
         if (CollectionUtils.isEmpty(revenueEntities)) {
-            result.put("code", 0);
+            result.put("code", 1003);
             result.put("msg", "未查询到关联收入或押金");
             return result;
         }
         ReceivementEntity receivementEntity = receivementDao.getById(subscriptionLogEntity.getReceivementId());
         if (receivementEntity.getState() > 3) {
-            result.put("code", 0);
+            result.put("code", 1004);
             result.put("msg", "该认款已经做账,无法删除");
             return result;
         }
