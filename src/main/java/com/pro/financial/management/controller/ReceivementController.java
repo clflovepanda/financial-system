@@ -227,6 +227,7 @@ public class ReceivementController {
                             if (expenditureEntity.getState() == 4) {
                                 result.put("code", 8001);
                                 result.put("msg", "含有已经退回的押金无法删除");
+                                return result;
                             }
                         }
                     }
@@ -374,6 +375,29 @@ public class ReceivementController {
             result.put("code", 1001);
             result.put("msg", "传入参数有误");
             return result;
+        }
+        List<RevenueEntity> revenueEntities = revenueBiz.getBySubId(id);
+        List<RevenueEntity> deposit = new ArrayList<>();
+        //判断是否有预收押金 并且退押金已经支付
+        if (!CollectionUtils.isEmpty(revenueEntities)) {
+            for (RevenueEntity revenueEntity : revenueEntities) {
+                //7是预收押金判断是否支付
+                if (revenueEntity.getRevenueTypeId() == 7) {
+                    deposit.add(revenueEntity);
+                    List<DepositLogEntity> depositLogEntities = depositLogBiz.getListByRevenueId(revenueEntity.getId());
+                    if (!CollectionUtils.isEmpty(depositLogEntities)) {
+                        for (DepositLogEntity depositLogEntity : depositLogEntities) {
+                            ExpenditureEntity expenditureEntity = expenditureBiz.getById(depositLogEntity.getExpenditureId());
+                            //已经支付了 返回错误信息
+                            if (expenditureEntity.getState() == 4) {
+                                result.put("code", 8001);
+                                result.put("msg", "含有已经退回的押金无法删除");
+                                return result;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         return subscriptionLogBiz.delSublog(id);

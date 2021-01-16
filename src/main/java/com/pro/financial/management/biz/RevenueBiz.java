@@ -120,7 +120,13 @@ public class RevenueBiz {
 
     public List<RevenueEntity> getByReceivementId(Integer id) {
         QueryWrapper<RevenueEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("receivement_id", id).eq("delete", 1);
+        queryWrapper.eq("receivement_id", id).eq("`delete`", 1);
+        return revenueDao.selectList(queryWrapper);
+    }
+
+    public List<RevenueEntity> getBySubId(Integer id) {
+        QueryWrapper<RevenueEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("subscription_log_id", id).eq("`delete`", 1);
         return revenueDao.selectList(queryWrapper);
     }
 }
