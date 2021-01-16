@@ -81,7 +81,16 @@ public class ReceivementController {
                 result.put("msg", "到款金额不能小于认款金额");
                 return result;
             }
+            //todo 如果剩余金额还有需要改状态
+            if (updateMonye != null && receivementDto.getReceivementMoney().compareTo(updateMonye) == 1 ) {
+                receivementDto.setState(2);
+            }
+            if (updateMonye != null && receivementDto.getReceivementMoney().compareTo(updateMonye) == 0 ) {
+                receivementDto.setState(3);
+            }
             int count = receivementBiz.updateReceivement(receivementDto);
+            receivementBiz.updateReceivementState(receivementDto.getId(), receivementDto.getState());
+
         }
         result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());

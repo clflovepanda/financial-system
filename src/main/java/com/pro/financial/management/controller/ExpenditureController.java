@@ -58,6 +58,11 @@ public class ExpenditureController {
         ExpenditureDto expenditureDto = JSONObject.parseObject(jsonInfo.toJSONString(), ExpenditureDto.class);
 //        Integer revenueId = jsonInfo.getInteger("revenueId");
 //        RevenueDto revenueDto =  revenueBiz.getByRevenueId(revenueId);
+        if (expenditureDto.getExpenditureMethodId() == null) {
+            result.put("code", 1001);
+            result.put("msg", "传入参数有误!");
+            return result;
+        }
         //生成编号
         String numbering;
         //获取最后一条数据的编号
@@ -249,37 +254,38 @@ public class ExpenditureController {
         if (!CollectionUtils.isEmpty(expenditureAuditLogDtos)) {
             List<ExpenditureAuditLogDto> sortList = expenditureAuditLogDtos.stream().sorted(Comparator.comparing(ExpenditureAuditLogDto::getCtime).reversed()).collect(Collectors.toList());
             lastLog = sortList.get(0);
-        }
-        if (lastLog.getId() - expenditureAuditLogDto.getId() != 0) {
-            result.put("code", 4001);
-            result.put("msg", "不是最新记录无法删除");
-            return result;
-        }
-        if (expenditureAuditLogDtos.size() == 1 || lastLog.getAuditType() - CommonConst.expenditure_audit_type_submit == 0) {
-            result.put("code", 4001);
-            result.put("msg", "无法删除已提交记录");
-            return result;
-        }
-        if (lastLog.getId() - expenditureAuditLogDto.getId() == 0 && expenditureAuditLogDto.getCreateUser() - userId == 0) {
-            expenditureAuditLogBiz.remove(expenditureAuditLogDto);
-            ExpenditureAuditLogDto nextLog = expenditureAuditLogDtos.get(1);
-            ExpenditureDto expenditureDto = new ExpenditureDto();
-            expenditureDto.setExpenditureId(expenditureAuditLogDto.getExpenditureId());
-            expenditureDto.setState(nextLog.getAuditType());
-            expenditureBiz.updateExpenditure(expenditureDto);
-            //已经支付 如果更改押金表记录
-            if (expenditureAuditLogDto.getAuditType() - CommonConst.expenditure_audit_type_paid == 0) {
-                QueryWrapper<DepositLogEntity> queryWrapper = new QueryWrapper<>();
-                queryWrapper.eq("expenditure_id", expenditureAuditLogDto.getExpenditureId());
-                DepositLogEntity depositLogEntity = new DepositLogEntity();
-                depositLogEntity.setState(0);
-                depositLogBiz.update(depositLogEntity, queryWrapper);
-            }
 
-        } else {
-            result.put("code", 4001);
-            result.put("msg", "非本人提交无法删除");
-            return result;
+            if (lastLog.getId() - expenditureAuditLogDto.getId() != 0) {
+                result.put("code", 4001);
+                result.put("msg", "不是最新记录无法删除");
+                return result;
+            }
+            if (expenditureAuditLogDtos.size() == 1 || lastLog.getAuditType() - CommonConst.expenditure_audit_type_submit == 0) {
+                result.put("code", 4001);
+                result.put("msg", "无法删除已提交记录");
+                return result;
+            }
+            if (lastLog.getId() - expenditureAuditLogDto.getId() == 0 && expenditureAuditLogDto.getCreateUser() - userId == 0) {
+                expenditureAuditLogBiz.remove(expenditureAuditLogDto);
+                ExpenditureAuditLogDto nextLog = sortList.get(1);
+                ExpenditureDto expenditureDto = new ExpenditureDto();
+                expenditureDto.setExpenditureId(expenditureAuditLogDto.getExpenditureId());
+                expenditureDto.setState(nextLog.getAuditType());
+                expenditureBiz.updateExpenditure(expenditureDto);
+                //已经支付 如果更改押金表记录
+                if (expenditureAuditLogDto.getAuditType() - CommonConst.expenditure_audit_type_paid == 0) {
+                    QueryWrapper<DepositLogEntity> queryWrapper = new QueryWrapper<>();
+                    queryWrapper.eq("expenditure_id", expenditureAuditLogDto.getExpenditureId());
+                    DepositLogEntity depositLogEntity = new DepositLogEntity();
+                    depositLogEntity.setState(0);
+                    depositLogBiz.update(depositLogEntity, queryWrapper);
+                }
+
+            } else {
+                result.put("code", 4001);
+                result.put("msg", "非本人提交无法删除");
+                return result;
+            }
         }
 
 
