@@ -15,12 +15,13 @@ public interface SubscriptionLogDao extends BaseMapper<SubscriptionLogEntity> {
 //    @Options(useGeneratedKeys = true, keyProperty = "id" , keyColumn = "id")
 //    @Insert("insert into subscription_log (`receivement_id`, `revenue_type_id`, project_id, `receivement_money`, `subscription_date`, `state`, `remark`, `create_user`, `ctime`) VALUES " +
 //            "(#{entity.receivementId}, #{entity.revenueTypeId}, #{entity.projectId}, #{entity.receivementMoney}, #{entity.subscriptionDate}, #{entity.state}, #{entity.remark}, #{entity.createUser}, #{entity.ctime})")
-    int insert(SubscriptionLogEntity entity);
+//    int insert(SubscriptionLogEntity entity);
 
     @Select("<script> " +
             "select * from subscription_log " +
             "where receivement_id " +
             "in <foreach item='item' index='index' collection='receivementIds' open='(' separator=',' close=')'> #{item} </foreach> " +
+            "and state = 1" +
             "</script>")
     List<SubscriptionLogEntity> getListByReceivementIds(@Param("receivementIds") List<Integer> receivementIds);
 

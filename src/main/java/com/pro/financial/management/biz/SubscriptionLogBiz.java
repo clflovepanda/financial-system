@@ -102,14 +102,13 @@ public class SubscriptionLogBiz {
         //删除认款记录
         subscriptionLogDao.updateById(subscriptionLogEntity);
         //删除收入
-        RevenueEntity revenueEntity = new RevenueEntity();
-        revenueEntity.setDelete(0);
-        revenueDao.update(revenueEntity, queryWrapper);
+        revenueDao.deleteBySubLogId(id);
+
         //修改到款状态
 
         BigDecimal updateMonye = this.gethadSubscriptionTotalMoneyByRId(receivementEntity.getId());
         if (updateMonye == null || updateMonye.compareTo(new BigDecimal(0)) == 0 ) {
-            receivementEntity.setState(0);
+            receivementDao.updatestate(receivementEntity.getId(), 0);
         }
         if (updateMonye != null && receivementEntity.getReceivementMoney().compareTo(updateMonye) == 1 ) {
             receivementDao.updatestate(receivementEntity.getId(), 2);

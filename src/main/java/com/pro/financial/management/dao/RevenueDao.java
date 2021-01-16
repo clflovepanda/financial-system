@@ -75,4 +75,7 @@ public interface RevenueDao extends BaseMapper<RevenueEntity> {
             "AND rt.remark <> 'Y' " +
             "AND rt.remark <> 'S'")
     BigDecimal getreByProject(@Param("projectId") Integer projectId);
+
+    @Update("update revenue set `delete` = 0 where subscription_log_id = #{id}")
+    int deleteBySubLogId(@Param("id") Integer id);
 }

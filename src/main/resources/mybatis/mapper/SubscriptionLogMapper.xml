@@ -17,10 +17,10 @@
     id, receivement_id, revenue_type_id, project_id, receivement_money, subscription_date, state,
     remark, create_user, ctime
   </sql>
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.pro.financial.management.dao.entity.ReceivementEntity">
-    insert into subscription_log (`receivement_id`, `revenue_type_id`, project_id, `receivement_money`, `subscription_date`, `state`, `remark`, `create_user`, `ctime`) VALUES
-            ( #{receivementId}, #{revenueTypeId}, #{projectId}, #{receivementMoney}, #{subscriptionDate}, #{state}, #{remark}, #{createUser}, #{ctime})
-  </insert>
+<!--    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.pro.financial.management.dao.entity.ReceivementEntity">-->
+<!--    insert into subscription_log (`receivement_id`, `revenue_type_id`, project_id, `receivement_money`, `subscription_date`, `state`, `remark`, `create_user`, `ctime`) VALUES-->
+<!--            ( #{receivementId}, #{revenueTypeId}, #{projectId}, #{receivementMoney}, #{subscriptionDate}, #{state}, #{remark}, #{createUser}, #{ctime})-->
+<!--  </insert>-->
 
     <select id="getListByReceivementIdsnew" resultType="com.pro.financial.management.dao.entity.SubscriptionLogEntity">
         select sl.*, rt.revenue_type_name, rt.remark revenueRemark from subscription_log sl
