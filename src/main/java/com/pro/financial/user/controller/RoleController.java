@@ -2,7 +2,9 @@ package com.pro.financial.user.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pro.financial.user.biz.RoleBiz;
+import com.pro.financial.user.dao.entity.PermissionEntity;
 import com.pro.financial.user.dto.DataSourceDto;
+import com.pro.financial.user.dto.PermissionDto;
 import com.pro.financial.user.dto.RoleDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @RestController
@@ -79,6 +83,17 @@ public class RoleController {
             return result;
         }
         RoleDto roleDto = roleBiz.getRoleByRoleId(roleId);
+        Iterator iterator = roleDto.getPermissions().iterator();
+        List<PermissionDto> permissionDtos = new ArrayList<>(roleDto.getPermissions());
+        while (iterator.hasNext()) {
+            PermissionDto permission = (PermissionDto) iterator.next();
+            for (PermissionDto permissionDto : permissionDtos) {
+                if (permission.getPermissionId() - permissionDto.getParentId() == 0) {
+                    iterator.remove();
+                    break;
+                }
+            }
+        }
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", roleDto);
