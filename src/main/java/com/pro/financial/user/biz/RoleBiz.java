@@ -21,6 +21,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class RoleBiz {
@@ -106,5 +107,14 @@ public class RoleBiz {
 
     public List<DataSourceDto> getDataSourceByParentId(Integer parentId) {
         return dataSourceDao.getDataSourceByParentId(parentId);
+    }
+
+    public JSONObject getMenu(Integer userId) {
+        Set<String> set = roleDao.getMenu(userId);
+        JSONObject result = new JSONObject();
+        result.put("code", 0);
+        result.put("msg", "");
+        result.put("data", set);
+        return result;
     }
 }

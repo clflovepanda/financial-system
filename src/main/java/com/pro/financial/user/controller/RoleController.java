@@ -7,6 +7,7 @@ import com.pro.financial.user.dto.RoleDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -167,5 +168,9 @@ public class RoleController {
             result.put("msg", "修改用户状态失败");
         }
         return result;
+    }
+    @RequestMapping("/getmenu")
+    public JSONObject getMenu(HttpServletRequest request, @CookieValue Integer userId) {
+        return roleBiz.getMenu(userId);
     }
 }
