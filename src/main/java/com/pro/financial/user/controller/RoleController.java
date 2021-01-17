@@ -106,11 +106,6 @@ public class RoleController {
             result.put("msg", "角色名字为空!");
             return result;
         }
-        if (CollectionUtils.isEmpty(roleDto.getPermissions())) {
-            result.put("code", 1001);
-            result.put("msg", "角色权限为空!");
-            return result;
-        }
         int count = roleBiz.update(roleDto);
         if (count == 0) {
             result.put("code", 2001);
