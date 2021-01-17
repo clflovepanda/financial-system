@@ -136,8 +136,9 @@ public class RoleBiz {
             RoleDto user = this.getRoleByRoleId(roleId);
             if (StringUtils.equals(CommonConst.common_invalid, user.getState())) {
                 roleDao.changeRoleState(roleId, CommonConst.common_valid);
+            } else {
+                roleDao.changeRoleState(roleId, CommonConst.common_invalid);
             }
-            roleDao.changeRoleState(roleId, CommonConst.common_invalid);
         } catch (Exception e) {
             e.printStackTrace();
             return !result;

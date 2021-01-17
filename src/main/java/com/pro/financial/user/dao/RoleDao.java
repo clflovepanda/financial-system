@@ -52,7 +52,7 @@ public interface RoleDao {
             @Result(property = "dataSources", column = "role_id", many = @Many(select = "com.pro.financial.user.dao.RoleDao.getPermissionByRoleId"))
     })
     @Select("SELECT " +
-            "r.role_id, r.role_name " +
+            "r.role_id, r.role_name, r.state " +
             "FROM " +
             "role r " +
             "WHERE " +
