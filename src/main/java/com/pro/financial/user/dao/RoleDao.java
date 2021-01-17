@@ -118,13 +118,13 @@ public interface RoleDao {
     Set<String> getMenu(@Param("userId") Integer userId);
 
     @Insert({
-            "<script> insert into role_datasource_relation (role_id, data_source_id)" +
+            "<script> insert into role_permission_relation (role_id, permission_id)" +
                     "values " +
-                    "<foreach collection=\"list\" item=\"item\" index=\"index\" separator=\",\" >" +
+                    "<foreach collection=\"collection\" item=\"item\" index=\"index\" separator=\",\" >" +
                     "(#{roleId}, #{item})" +
                     "</foreach>" +
                     "</script>"
     })
-    int addRolePermissionNew(@Param("roleId") Integer roleId, @Param("list") Set<Integer> allIds);
+    int addRolePermissionNew(@Param("roleId") Integer roleId, @Param("collection") Set<Integer> allIds);
 
 }
