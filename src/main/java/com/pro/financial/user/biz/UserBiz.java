@@ -112,8 +112,9 @@ public class UserBiz {
             UserDto user = this.getUserById(userId);
             if (StringUtils.equals(CommonConst.common_invalid, user.getState())) {
                 userDao.changeUserState(userId, CommonConst.common_valid);
+            } else {
+                userDao.changeUserState(userId, CommonConst.common_invalid);
             }
-            userDao.changeUserState(userId, CommonConst.common_invalid);
         } catch (Exception e) {
             e.printStackTrace();
             return !result;
