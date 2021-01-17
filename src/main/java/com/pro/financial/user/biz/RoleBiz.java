@@ -48,8 +48,12 @@ public class RoleBiz {
     public int addRole(RoleDto roleDto) {
         roleDto.setCreateDatetime(new Date());
         int role = roleDao.addRole(roleDto);
-        roleDao.addRolePermission(roleDto.getRoleId(), roleDto.getPermissions());
-        roleDao.addRoleDataSource(roleDto.getRoleId(), roleDto.getDataSources());
+        if (!CollectionUtils.isEmpty(roleDto.getPermissions())) {
+            roleDao.addRolePermission(roleDto.getRoleId(), roleDto.getPermissions());
+        }
+        if (!CollectionUtils.isEmpty(roleDto.getDataSources())) {
+            roleDao.addRoleDataSource(roleDto.getRoleId(), roleDto.getDataSources());
+        }
         return role;
     }
 
