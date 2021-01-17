@@ -91,10 +91,10 @@ public class RoleBiz {
         RoleEntity roleEntity = RoleDto2Entity.instance.convert(roleDto);
         //修改角色
         int count = 0;
+        //先删除之前的
+        roleDao.deleRolePermission(roleDto.getRoleId());
         if (!CollectionUtils.isEmpty(roleEntity.getPermissions())) {
             count = roleDao.update(roleEntity);
-            //先删除之前的
-            roleDao.deleRolePermission(roleDto.getRoleId());
             if (!CollectionUtils.isEmpty(roleEntity.getPermissions())) {
                 Set<Integer> allIds = new HashSet<>();
                 List<Integer> ids = roleDto.getPermissions().stream().map(permissionDto -> permissionDto.getPermissionId()).collect(Collectors.toList());
