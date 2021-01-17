@@ -73,9 +73,11 @@ public class RoleBiz {
             count = roleDao.update(roleEntity);
             //先删除之前的
             roleDao.deleRolePermission(roleDto.getRoleId());
-            roleDao.addRolePermission(roleDto.getRoleId(), roleDto.getPermissions());
+            if (!CollectionUtils.isEmpty(roleEntity.getPermissions())) {
+                roleDao.addRolePermission(roleDto.getRoleId(), roleDto.getPermissions());
+            }
+            roleDao.deleRoleDataSource(roleDto.getRoleId());
             if (!CollectionUtils.isEmpty(roleEntity.getDataSources())) {
-                roleDao.deleRoleDataSource(roleDto.getRoleId());
                 roleDao.addRoleDataSource(roleDto.getRoleId(), roleDto.getDataSources());
             }
         }

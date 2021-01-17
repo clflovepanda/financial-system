@@ -85,7 +85,9 @@ public class ReceivementController {
                 receivementDto.setState(3);
             }
             int count = receivementBiz.updateReceivement(receivementDto);
-            receivementBiz.updateReceivementState(receivementDto.getId(), receivementDto.getState());
+            if (receivementDto.getState() != null) {
+                receivementBiz.updateReceivementState(receivementDto.getId(), receivementDto.getState());
+            }
 
         }
         result.put("code", 0);
