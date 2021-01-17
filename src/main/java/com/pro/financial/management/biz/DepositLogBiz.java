@@ -128,4 +128,18 @@ public class DepositLogBiz extends ServiceImpl<DepositLogDao, DepositLogEntity> 
     public List<DepositLogEntity> getListByRevenueIdWithoutState(Integer depositId) {
         return depositLogDao.getListByRevenueIdWithoutState(depositId);
     }
+
+    public int deleteByExpenditureId(Integer id) {
+        QueryWrapper<DepositLogEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("expenditure_id", id);
+        DepositLogEntity depositLogEntity = new DepositLogEntity();
+        depositLogEntity.setState(0);
+        return depositLogDao.update(depositLogEntity, queryWrapper);
+    }
+
+    public List<DepositLogEntity> getByExpenditureId(Integer expenditureId) {
+        QueryWrapper<DepositLogEntity>  wrapper = new QueryWrapper();
+        wrapper.eq("expenditure_id", expenditureId).eq("state", 1);
+        return depositLogDao.selectList(wrapper);
+    }
 }

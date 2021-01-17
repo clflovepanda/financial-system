@@ -6,10 +6,7 @@ import com.pro.financial.consts.CommonConst;
 import com.pro.financial.management.biz.*;
 import com.pro.financial.management.converter.ExpenditurePurposeEntity2Dto;
 import com.pro.financial.management.converter.ExpenditureTypeEntity2Dto;
-import com.pro.financial.management.dao.entity.AccountingLogEntity;
-import com.pro.financial.management.dao.entity.BeneficiaryUnitEntity;
-import com.pro.financial.management.dao.entity.DepositLogEntity;
-import com.pro.financial.management.dao.entity.ExpenditureStatisticsEntity;
+import com.pro.financial.management.dao.entity.*;
 import com.pro.financial.management.dto.*;
 import com.pro.financial.utils.CommonUtil;
 import com.pro.financial.utils.ConvertUtil;
@@ -124,10 +121,42 @@ public class ExpenditureController {
     @RequestMapping("/update")
     public JSONObject updateExpenditure(@RequestBody JSONObject jsonInfo) {
         JSONObject result = new JSONObject();
+
         ExpenditureDto expenditureDto = JSONObject.parseObject(jsonInfo.toJSONString(), ExpenditureDto.class);
+        if (expenditureDto.getExpenditureId() == null || expenditureDto.getExpenditureId() < 0) {
+            result.put("code", 1001);
+            result.put("msg", "传入参数有误");
+            return result;
+        }
+        List<DepositLogEntity> depositLogEntities = depositLogBiz.getByExpenditureId(expenditureDto.getExpenditureId());
+        if (!CollectionUtils.isEmpty(depositLogEntities)) {
+            result.put("code", 1001);
+            result.put("msg", "退押金请在押金管理中删除");
+            return result;
+        }
         int count = expenditureBiz.updateExpenditure(expenditureDto);
         result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
+        return result;
+    }
+
+    @RequestMapping("/del")
+    public JSONObject delExpenditure(HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        Integer id = Integer.parseInt(StringUtils.isEmpty(request.getParameter("id")) ? "0" : request.getParameter("id"));
+        if (id < 1) {
+            result.put("code", 1001);
+            result.put("msg", "传入参数有误");
+            return result;
+        }
+        ExpenditureEntity expenditureEntity = expenditureBiz.selectById(id);
+        if (expenditureEntity.getState() > 3) {
+            result.put("code", 1001);
+            result.put("msg", "支出已经完成,无法删除");
+            return result;
+        }
+        expenditureBiz.deleteExpenditureByid(id);
+        depositLogBiz.deleteByExpenditureId(id);
         return result;
     }
 
@@ -303,6 +332,5 @@ public class ExpenditureController {
         result.put("msg", "");
         result.put("data", beneficiaryUnitEntities);
         return result;
-
     }
 }
