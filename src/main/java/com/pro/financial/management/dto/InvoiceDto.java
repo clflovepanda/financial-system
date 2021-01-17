@@ -115,4 +115,5 @@ public class InvoiceDto {
     private String companyName;
 
     private String revenueTypeName;
+    private String projectName;
 }

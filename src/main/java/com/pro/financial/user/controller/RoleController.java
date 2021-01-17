@@ -170,7 +170,7 @@ public class RoleController {
         return result;
     }
     @RequestMapping("/getmenu")
-    public JSONObject getMenu(HttpServletRequest request, @CookieValue Integer userId) {
+    public JSONObject getMenu(HttpServletRequest request, @CookieValue("user_id") Integer userId) {
         return roleBiz.getMenu(userId);
     }
 }
