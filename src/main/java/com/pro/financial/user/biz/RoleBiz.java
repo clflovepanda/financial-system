@@ -5,11 +5,13 @@ import com.pro.financial.consts.CommonConst;
 import com.pro.financial.user.converter.RoleDto2Entity;
 import com.pro.financial.user.converter.RoleEntity2Dto;
 import com.pro.financial.user.dao.DataSourceDao;
+import com.pro.financial.user.dao.PermissionDao;
 import com.pro.financial.user.dao.RoleDao;
 import com.pro.financial.user.dao.entity.DataSourceEntity;
 import com.pro.financial.user.dao.entity.PermissionEntity;
 import com.pro.financial.user.dao.entity.RoleEntity;
 import com.pro.financial.user.dto.DataSourceDto;
+import com.pro.financial.user.dto.PermissionDto;
 import com.pro.financial.user.dto.RoleDto;
 import com.pro.financial.user.dto.UserDto;
 import org.apache.commons.lang3.StringUtils;
@@ -18,10 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class RoleBiz {
@@ -30,6 +30,8 @@ public class RoleBiz {
     private RoleDao roleDao;
     @Autowired
     private DataSourceDao dataSourceDao;
+    @Autowired
+    private PermissionDao permissionDao;
 
     public List<RoleDto> getRole() {
         List<RoleDto> roleDtos = null;
@@ -49,7 +51,23 @@ public class RoleBiz {
         roleDto.setCreateDatetime(new Date());
         int role = roleDao.addRole(roleDto);
         if (!CollectionUtils.isEmpty(roleDto.getPermissions())) {
-            roleDao.addRolePermission(roleDto.getRoleId(), roleDto.getPermissions());
+            Set<Integer> allIds = new HashSet<>();
+            List<Integer> ids = roleDto.getPermissions().stream().map(permissionDto -> permissionDto.getPermissionId()).collect(Collectors.toList());
+            allIds.addAll(ids);
+            while (true) {
+                List<PermissionEntity> permissionEntities = permissionDao.getPermissionByIds(ids);
+                ids.clear();
+                for (PermissionEntity permissionEntity : permissionEntities) {
+                    if (permissionEntity.getParentId() != 0) {
+                        allIds.add(permissionEntity.getParentId());
+                        ids.add(permissionEntity.getParentId());
+                    }
+                }
+                if (CollectionUtils.isEmpty(ids)) {
+                    break;
+                }
+            }
+            roleDao.addRolePermissionNew(roleDto.getRoleId(), allIds);
         }
         if (!CollectionUtils.isEmpty(roleDto.getDataSources())) {
             roleDao.addRoleDataSource(roleDto.getRoleId(), roleDto.getDataSources());
@@ -78,7 +96,23 @@ public class RoleBiz {
             //先删除之前的
             roleDao.deleRolePermission(roleDto.getRoleId());
             if (!CollectionUtils.isEmpty(roleEntity.getPermissions())) {
-                roleDao.addRolePermission(roleDto.getRoleId(), roleDto.getPermissions());
+                Set<Integer> allIds = new HashSet<>();
+                List<Integer> ids = roleDto.getPermissions().stream().map(permissionDto -> permissionDto.getPermissionId()).collect(Collectors.toList());
+                allIds.addAll(ids);
+                while (true) {
+                    List<PermissionEntity> permissionEntities = permissionDao.getPermissionByIds(ids);
+                    ids.clear();
+                    for (PermissionEntity permissionEntity : permissionEntities) {
+                        if (permissionEntity.getParentId() != 0) {
+                            allIds.add(permissionEntity.getParentId());
+                            ids.add(permissionEntity.getParentId());
+                        }
+                    }
+                    if (CollectionUtils.isEmpty(ids)) {
+                        break;
+                    }
+                }
+                roleDao.addRolePermissionNew(roleDto.getRoleId(), allIds);
             }
             roleDao.deleRoleDataSource(roleDto.getRoleId());
             if (!CollectionUtils.isEmpty(roleEntity.getDataSources())) {

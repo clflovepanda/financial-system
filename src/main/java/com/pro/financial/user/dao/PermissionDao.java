@@ -64,4 +64,13 @@ public interface PermissionDao {
             "WHERE " +
             "user_id = #{userId}))")
     List<PermissionDto> getPermissionByUserId(@Param("userId") Integer userId);
+
+    @Select({"<script>" +
+            "SELECT * FROM permission " +
+            "WHERE permission_id in " +
+            "<foreach collection='list' item='item' index='index' separator=',' open='(' close=')'>" +
+            "#{item}" +
+            "</foreach>" +
+            "</script>"})
+    List<PermissionEntity> getPermissionByIds(@Param("list") List<Integer> ids);
 }

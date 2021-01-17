@@ -116,4 +116,15 @@ public interface RoleDao {
 
     @Select("SELECT distinct intro FROM permission WHERE permission_id IN (SELECT permission_id FROM role_permission_relation WHERE role_id IN (SELECT DISTINCT role_id FROM user_role_relation where user_id =#{userId})) ")
     Set<String> getMenu(@Param("userId") Integer userId);
+
+    @Insert({
+            "<script> insert into role_datasource_relation (role_id, data_source_id)" +
+                    "values " +
+                    "<foreach collection=\"list\" item=\"item\" index=\"index\" separator=\",\" >" +
+                    "(#{roleId}, #{item})" +
+                    "</foreach>" +
+                    "</script>"
+    })
+    int addRolePermissionNew(@Param("roleId") Integer roleId, @Param("list") Set<Integer> allIds);
+
 }
