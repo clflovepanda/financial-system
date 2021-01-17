@@ -16,8 +16,8 @@ public interface SettlementDao {
 
     List<SettlementEntity> getSettlement(@Param("projectId") String projectId, @Param("settlementName") String settlementName, @Param("settlementNo") String settlementNo, @Param("limit") Integer limit, @Param("offset") Integer offset);
 
-    @Insert("insert into settlement (`project_id`, `settlement_no`, `settlement_name`, `resource_name`, `resource_url`) VALUES " +
-            "(#{settlement.projectId}, #{settlement.settlementNo}, #{settlement.settlementName}, #{settlement.resourceName}, #{settlement.resourceUrl})")
+    @Insert("insert into settlement (`project_id`, `settlement_no`, `settlement_name`, `resource_name`, `resource_url`, `settlement_income`) VALUES " +
+            "(#{settlement.projectId}, #{settlement.settlementNo}, #{settlement.settlementName}, #{settlement.resourceName}, #{settlement.resourceUrl}, #{settlement.settlementIncome})")
     int addSettlement(@Param("settlement") SettlementEntity settlementEntity);
 
     @Select("select * from settlement where settlement_id = #{settlementId}")
