@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.pro.financial.consts.CommonConst;
+import com.pro.financial.management.converter.FileConverter;
 import com.pro.financial.management.dto.ExpenditureDto;
 import com.pro.financial.management.dto.ProjectDto;
 import com.pro.financial.management.dto.RevenueDto;
@@ -28,7 +29,7 @@ public class ExportBiz {
     public JSONObject exportDepositCSV(List<RevenueDto> revenueDtos) {
         JSONObject result = new JSONObject();
         String fileName = "deposit_" + System.currentTimeMillis() + ".csv";
-
+        String excelFileName = "deposit_" + System.currentTimeMillis() + ".xls";
         try ( CSVPrinter printer = ExportUtil.getCsvPrinter(fileName, CommonConst.export_deposit)){
             int i = 1;
             for (RevenueDto revenueDto : revenueDtos) {
@@ -46,16 +47,25 @@ public class ExportBiz {
             result.put("msg", 8001);
             return result;
         }
-        String url = this.upload2OSS(fileName);
+        //        String url = this.upload2OSS(fileName);
+        try {
+            String url = this.upload2OSSXls(fileName, excelFileName);
+            result.put("code", 0);
+            result.put("msg", "");
+            result.put("url", url);
+        } catch (Exception e) {
+            result.put("code", 1001);
+            result.put("msg", "生成文件失败");
+        }
         result.put("code", 0);
         result.put("msg", "");
-        result.put("url", url);
         return result;
     }
 
     public JSONObject exportExpenditureCSV(List<ExpenditureDto> expenditureDtos) {
         JSONObject result = new JSONObject();
         String fileName = "expenditure_" + System.currentTimeMillis() + ".csv";
+        String excelFileName = "expenditure_" + System.currentTimeMillis() + ".xls";
 
         try ( CSVPrinter printer = ExportUtil.getCsvPrinter(fileName, CommonConst.export_expenditure)){
             int i = 1;
@@ -73,10 +83,17 @@ public class ExportBiz {
             result.put("msg", 8001);
             return result;
         }
-        String url = this.upload2OSS(fileName);
-        result.put("code", 0);
-        result.put("msg", "");
-        result.put("url", url);
+//        String url = this.upload2OSS(fileName);
+        try {
+            String url = this.upload2OSSXls(fileName, excelFileName);
+            result.put("code", 0);
+            result.put("msg", "");
+            result.put("url", url);
+        } catch (Exception e) {
+            result.put("code", 1001);
+            result.put("msg", "生成文件失败");
+        }
+
         return result;
     }
 
@@ -103,28 +120,33 @@ public class ExportBiz {
      * @param fileName
      * @return
      */
-    private String upload2OSSXls(String fileName) {
+    private String upload2OSSXls(String fileName, String excelFileName) throws Exception {
         File file = new File(fileName);
+        FileConverter.ConvertCSVToXLS(fileName, excelFileName);
         if (!file.exists()) {
             return "";
         }
         try {
             InputStream inputStream = new FileInputStream(file);
             OSS client = new OSSClientBuilder().build(OSS_ENDPOINT, OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET);
-            client.putObject(OSS_BUKET, "export/" + fileName, inputStream);
+            client.putObject(OSS_BUKET, "export/" + excelFileName, inputStream);
             client.shutdown();
             file.delete();
+            File file1 = new File(excelFileName);
+            if (file1.exists()) {
+                file1.delete();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return "";
         }
-        return OSS_URL + fileName;
+        return OSS_URL + excelFileName;
     }
 
     public JSONObject exportStatisticsExpenditureCSV(List<ExpenditureDto> expenditureDtos) {
         JSONObject result = new JSONObject();
         String fileName = "statistics_expenditure_" + System.currentTimeMillis() + ".csv";
-
+        String excelFileName = "statistics_expenditure_" + System.currentTimeMillis() + ".xls";
         try ( CSVPrinter printer = ExportUtil.getCsvPrinter(fileName, CommonConst.export_statistics_expenditure)){
             int i = 1;
             for (ExpenditureDto expenditureDto : expenditureDtos) {
@@ -143,17 +165,25 @@ public class ExportBiz {
             result.put("msg", 8001);
             return result;
         }
-        String url = this.upload2OSS(fileName);
+        //        String url = this.upload2OSS(fileName);
+        try {
+            String url = this.upload2OSSXls(fileName, excelFileName);
+            result.put("code", 0);
+            result.put("msg", "");
+            result.put("url", url);
+        } catch (Exception e) {
+            result.put("code", 1001);
+            result.put("msg", "生成文件失败");
+        }
         result.put("code", 0);
         result.put("msg", "");
-        result.put("url", url);
         return result;
     }
 
     public JSONObject exportStatisticsProject(List<ProjectDto> projectDtos) {
         JSONObject result = new JSONObject();
         String fileName = "statistics_project_" + System.currentTimeMillis() + ".csv";
-
+        String excelFileName = "statistics_project_" + System.currentTimeMillis() + ".xls";
         try ( CSVPrinter printer = ExportUtil.getCsvPrinter(fileName, CommonConst.export_statistics_project)){
             int i = 1;
             for (ProjectDto projectDto : projectDtos) {
@@ -168,10 +198,18 @@ public class ExportBiz {
             result.put("msg", 8001);
             return result;
         }
-        String url = this.upload2OSS(fileName);
+        //        String url = this.upload2OSS(fileName);
+        try {
+            String url = this.upload2OSSXls(fileName, excelFileName);
+            result.put("code", 0);
+            result.put("msg", "");
+            result.put("url", url);
+        } catch (Exception e) {
+            result.put("code", 1001);
+            result.put("msg", "生成文件失败");
+        }
         result.put("code", 0);
         result.put("msg", "");
-        result.put("url", url);
         return result;
     }
 }
