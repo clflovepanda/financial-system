@@ -57,13 +57,12 @@ public class ProjectDataSourceBiz extends ServiceImpl<ProjectDataSourceDao, Proj
     public List<Integer> getProjectIdsByCookie(HttpServletRequest request, Integer userId) {
         List<DataSourceEntity> dataSourceEntities = roleDao.getDatasourceByUserIds(userId);
         List<DataSourceDto> sourceDtos = ConvertUtil.convert(DataSourceEntity2Dto.instance, dataSourceEntities);
-        if (CollectionUtils.isEmpty(sourceDtos)) {
-            return null;
-        }
         List<Integer> datasourceIds = new ArrayList<>();
         Set<Integer> projectIds = new HashSet<>();
-        for (DataSourceDto dataSourceDto : sourceDtos) {
-            datasourceIds.add(dataSourceDto.getDataSourceId());
+        if (! CollectionUtils.isEmpty(sourceDtos)) {
+            for (DataSourceDto dataSourceDto : sourceDtos) {
+                datasourceIds.add(dataSourceDto.getDataSourceId());
+            }
         }
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.in("data_source_id", datasourceIds);

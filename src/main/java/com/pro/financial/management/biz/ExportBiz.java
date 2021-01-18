@@ -5,6 +5,7 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.pro.financial.consts.CommonConst;
 import com.pro.financial.management.dto.ExpenditureDto;
+import com.pro.financial.management.dto.ProjectDto;
 import com.pro.financial.management.dto.RevenueDto;
 import com.pro.financial.utils.ExportUtil;
 import org.apache.commons.csv.CSVPrinter;
@@ -54,7 +55,7 @@ public class ExportBiz {
 
     public JSONObject exportExpenditureCSV(List<ExpenditureDto> expenditureDtos) {
         JSONObject result = new JSONObject();
-        String fileName = "deposit_" + System.currentTimeMillis() + ".csv";
+        String fileName = "expenditure_" + System.currentTimeMillis() + ".csv";
 
         try ( CSVPrinter printer = ExportUtil.getCsvPrinter(fileName, CommonConst.export_expenditure)){
             int i = 1;
@@ -95,5 +96,82 @@ public class ExportBiz {
             return "";
         }
         return OSS_URL + fileName;
+    }
+
+    /**
+     * csv转xls 并上传
+     * @param fileName
+     * @return
+     */
+    private String upload2OSSXls(String fileName) {
+        File file = new File(fileName);
+        if (!file.exists()) {
+            return "";
+        }
+        try {
+            InputStream inputStream = new FileInputStream(file);
+            OSS client = new OSSClientBuilder().build(OSS_ENDPOINT, OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET);
+            client.putObject(OSS_BUKET, "export/" + fileName, inputStream);
+            client.shutdown();
+            file.delete();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+        return OSS_URL + fileName;
+    }
+
+    public JSONObject exportStatisticsExpenditureCSV(List<ExpenditureDto> expenditureDtos) {
+        JSONObject result = new JSONObject();
+        String fileName = "statistics_expenditure_" + System.currentTimeMillis() + ".csv";
+
+        try ( CSVPrinter printer = ExportUtil.getCsvPrinter(fileName, CommonConst.export_statistics_expenditure)){
+            int i = 1;
+            for (ExpenditureDto expenditureDto : expenditureDtos) {
+                String[] line = new String[]{expenditureDto.getExpenditureId()+"", expenditureDto.getCoName(), expenditureDto.getNumbering(),
+                        expenditureDto.getProject() != null ? expenditureDto.getProject().getName() : "",
+                        expenditureDto.getBeneficiaryUnit(),
+                        expenditureDto.getExpenditureTypeEntity() != null ? expenditureDto.getExpenditureTypeEntity().getExpenditureTypeName() : "",
+                        expenditureDto.getExpenditurePurposeContent(), expenditureDto.getExpenditureMoney()+"", expenditureDto.getUsername(), expenditureDto.getState()+""};
+                printer.printRecord(line);
+                i++ ;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("code", 8001);
+            result.put("msg", 8001);
+            return result;
+        }
+        String url = this.upload2OSS(fileName);
+        result.put("code", 0);
+        result.put("msg", "");
+        result.put("url", url);
+        return result;
+    }
+
+    public JSONObject exportStatisticsProject(List<ProjectDto> projectDtos) {
+        JSONObject result = new JSONObject();
+        String fileName = "statistics_project_" + System.currentTimeMillis() + ".csv";
+
+        try ( CSVPrinter printer = ExportUtil.getCsvPrinter(fileName, CommonConst.export_statistics_project)){
+            int i = 1;
+            for (ProjectDto projectDto : projectDtos) {
+                String[] line = new String[]{projectDto.getProjectId()+"", projectDto.getCode(), projectDto.getName(), projectDto.getManagerName(), "", projectDto.getSettlementIncome()+"", projectDto.getRelRevenue()+"", projectDto.getReceivable()+""};
+                printer.printRecord(line);
+                i++ ;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("code", 8001);
+            result.put("msg", 8001);
+            return result;
+        }
+        String url = this.upload2OSS(fileName);
+        result.put("code", 0);
+        result.put("msg", "");
+        result.put("url", url);
+        return result;
     }
 }

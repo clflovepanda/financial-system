@@ -1,12 +1,10 @@
 package com.pro.financial.management.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pro.financial.management.biz.ExpenditureAuditLogBiz;
-import com.pro.financial.management.biz.ExpenditureBiz;
-import com.pro.financial.management.biz.ExportBiz;
-import com.pro.financial.management.biz.RevenueBiz;
+import com.pro.financial.management.biz.*;
 import com.pro.financial.management.dao.entity.ExpenditureStatisticsEntity;
 import com.pro.financial.management.dto.ExpenditureDto;
+import com.pro.financial.management.dto.ProjectDto;
 import com.pro.financial.management.dto.RevenueDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +28,8 @@ public class ExportController {
     private ExpenditureBiz expenditureBiz;
     @Autowired
     private ExpenditureAuditLogBiz expenditureAuditLogBiz;
+    @Autowired
+    private ProjectBiz projectBiz;
 
     @RequestMapping("/deposit")
     public JSONObject deposit(HttpServletRequest request) {
@@ -106,5 +106,52 @@ public class ExportController {
         ExpenditureStatisticsEntity expenditureStatisticsEntity = expenditureBiz.getStatistics(projectId, companyId, numbering, expenditureMethodId, expenditureTypeId,
                 beneficiaryUnit, createUser, state, expenditureAuditLog, expenditurePurposeId, startDate, endDate, keyWord, projectName, projectNo);
         return exportBiz.exportExpenditureCSV(expenditureDtos);
+    }
+
+    /**
+     * 支出统计
+     * @param request
+     * @return
+     */
+    @RequestMapping("/statistics/expenditure")
+    public JSONObject statistics(HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        //属性
+        String attribute = request.getParameter("attribute");
+        String company = request.getParameter("company");
+        String projectNo = request.getParameter("projectNo");
+        String applyUser = request.getParameter("applyUser");
+        //用途
+        String purpose = request.getParameter("purpose");
+        String state = request.getParameter("state");
+        //收款单位
+        String beneficiaryUnit = request.getParameter("beneficiaryUnit");
+        String startDt = request.getParameter("startDt");
+        String entDt = request.getParameter("entDt");
+        Date startDate = null;
+        Date endDate = null;
+        if (StringUtils.isNotEmpty(startDt) && StringUtils.isNotEmpty(entDt)) {
+            startDate = new Date(Long.parseLong(startDt));
+            endDate = new Date(Long.parseLong(entDt));
+        }
+        List<ExpenditureDto> expenditureDtos = expenditureBiz.statistics(attribute, company, projectNo, applyUser, purpose, state, beneficiaryUnit, startDate, endDate, null, null);
+        return exportBiz.exportStatisticsExpenditureCSV(expenditureDtos);
+    }
+
+    @RequestMapping("/statistics/project")
+    public JSONObject project(HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        String dataSourceId = request.getParameter("dataSourceId");
+        String keyWord = request.getParameter("keyword");
+        String startDt = request.getParameter("startDt");
+        String endDt = request.getParameter("endDt");
+        Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
+        Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
+        String state = request.getParameter("state");
+        Integer limit = Integer.parseInt(StringUtils.isEmpty(request.getParameter("limit")) ? "1000" : request.getParameter("limit"));
+        Integer offset = Integer.parseInt(StringUtils.isEmpty(request.getParameter("offset")) ? "1" : request.getParameter("offset"));
+        offset = limit * (offset - 1);
+        List<ProjectDto> projectDtos = projectBiz.statistics(dataSourceId, keyWord, startDate, endDate, state, limit, offset);
+        return exportBiz.exportStatisticsProject(projectDtos);
     }
 }
