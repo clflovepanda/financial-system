@@ -281,7 +281,7 @@ public class ProjectController {
         //支出比 = 实际支出 （提交的+ 已支付+平借款的）/  实际收入（收回押金+预收押金+认款 ）
         BigDecimal ratio = BigDecimal.ZERO;
         if (!(revenue.compareTo(new BigDecimal(0)) == 0)) {
-            ratio = realExpenditure.divide(revenue).multiply(new BigDecimal(100));;
+            ratio = realExpenditure.divide(revenue, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
         }
         projectFinancialStatisticsDto.setExpenditureRatio(ratio.doubleValue());
         //结算收入
