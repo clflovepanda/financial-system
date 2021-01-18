@@ -63,12 +63,12 @@ public class ProjectDataSourceBiz extends ServiceImpl<ProjectDataSourceDao, Proj
             for (DataSourceDto dataSourceDto : sourceDtos) {
                 datasourceIds.add(dataSourceDto.getDataSourceId());
             }
-        }
-        QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.in("data_source_id", datasourceIds);
-        List<ProjectDataSourceEntity> projectDataSourceEntities = projectDataSourceDao.selectList(queryWrapper);
-        for (ProjectDataSourceEntity projectDataSourceEntity : projectDataSourceEntities) {
-            projectIds.add(Integer.parseInt(projectDataSourceEntity.getProjectId()));
+            QueryWrapper queryWrapper = new QueryWrapper();
+            queryWrapper.in("data_source_id", datasourceIds);
+            List<ProjectDataSourceEntity> projectDataSourceEntities = projectDataSourceDao.selectList(queryWrapper);
+            for (ProjectDataSourceEntity projectDataSourceEntity : projectDataSourceEntities) {
+                projectIds.add(Integer.parseInt(projectDataSourceEntity.getProjectId()));
+            }
         }
         List<Integer> userProjectId = projectUserDao.getProjectIdByUserId(userId);
         projectIds.addAll(userProjectId);
