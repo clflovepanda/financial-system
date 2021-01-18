@@ -21,7 +21,7 @@
     ctime, update_user, utime
   </sql>
   <select id="searchList" resultType="com.pro.financial.management.dao.entity.RevenueEntity">
-    select re.id, re.revenue_no, co_name, remitter_method_name, r.remitter, rt.revenue_type_name receivement_type_name, data_source_name,
+    select re.id, re.revenue_no, co_name, remitter_method_name, r.remitter, receivement_type_name, data_source_name,
      re.cny_money, u.username, re.ctime, p.name projectName, p.code  projectNo, p.project_id
       <if test="revenueTypeId == null or revenueTypeId == ''">
           ,re.cny_money - (SELECT SUM(expenditure_money) FROM deposit_log LEFT JOIN expenditure USING(expenditure_id) WHERE revenue_id = re.id) toBeReturned
