@@ -153,7 +153,7 @@ public class ExportController {
         Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
         Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
         String state = request.getParameter("state");
-        Integer limit = Integer.parseInt(StringUtils.isEmpty(request.getParameter("limit")) ? "1000" : request.getParameter("limit"));
+        Integer limit = Integer.parseInt(StringUtils.isEmpty(request.getParameter("limit")) ? "10000" : request.getParameter("limit"));
         Integer offset = Integer.parseInt(StringUtils.isEmpty(request.getParameter("offset")) ? "1" : request.getParameter("offset"));
         offset = limit * (offset - 1);
         List<ProjectDto> projectDtos = projectBiz.statistics(dataSourceId, keyWord, startDate, endDate, state, limit, offset);
