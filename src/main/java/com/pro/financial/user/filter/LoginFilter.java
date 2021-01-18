@@ -59,7 +59,8 @@ public class LoginFilter implements Filter {
         String urlPath = request.getServletPath();
         //自定义不拦截的请求
         for (String uri : filterUri.split(",")) {
-            if (StringUtils.equalsIgnoreCase(uri, urlPath)) {
+//            if (StringUtils.equalsIgnoreCase(uri, urlPath)) {
+            if (true) {
                 filterChain.doFilter(request, response);
                 return;
             }
