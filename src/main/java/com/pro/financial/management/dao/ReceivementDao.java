@@ -49,5 +49,6 @@ public interface ReceivementDao {
                  @Param("receivementTypeId") String receivementTypeId, @Param("remitterMethodId") String remitterMethodId,
                  @Param("remitter") String remitter, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
-    List<ReceivementEntity> statisticsDetail(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+    List<ReceivementEntity> statisticsDetail(@Param("dataSourceId") String dataSourceId, @Param("revenueTypeId") String revenueTypeId, @Param("projectName") String projectName,
+                                             @Param("companyId") String companyId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

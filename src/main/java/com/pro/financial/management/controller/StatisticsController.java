@@ -278,8 +278,16 @@ public class StatisticsController {
             result.put("msg", "时间解析有误");
             return result;
         }
+        String dataSourceId = request.getParameter("dataSourceId");
+        String revenueTypeId = request.getParameter("revenueTypeId");
+        String projectName = request.getParameter("projectName");
+        String companyId = request.getParameter("companyId");
+//        String startDt = request.getParameter("startDt");
+//        String endDt = request.getParameter("endDt");
+//        Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
+//        Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
 
-        List<ReceivementEntity> receivementEntities = receivementBiz.statisticsDetail(startDate, endDate);
+        List<ReceivementEntity> receivementEntities = receivementBiz.statisticsDetail(dataSourceId, revenueTypeId, projectName, companyId, startDate, endDate);
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", ConvertUtil.convert(ReceivementEntity2Dto.instance, receivementEntities));

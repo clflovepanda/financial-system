@@ -53,7 +53,7 @@ public class ReceivementBiz {
         return receivementDao.getCount(companyId, receivementTypeId, remitterMethodId, remitter, startDate, endDate);
     }
 
-    public List<ReceivementEntity> statisticsDetail(Date startDate, Date endDate) {
-        return receivementDao.statisticsDetail(startDate, endDate);
+    public List<ReceivementEntity> statisticsDetail(String dataSourceId, String revenueTypeId, String projectName, String companyId, Date startDate, Date endDate) {
+        return receivementDao.statisticsDetail(dataSourceId, revenueTypeId, projectName, companyId, startDate, endDate);
     }
 }

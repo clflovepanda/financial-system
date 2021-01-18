@@ -93,10 +93,10 @@
             AND r.company_id = #{companyId}
         </if>
         <if test="dataSourceId != null and dataSourceId != ''">
-            AND r.data_source_id = #{dataSourceId}
+            AND re.data_source_id = #{dataSourceId}
         </if>
         <if test="revenueTypeId != null and revenueTypeId != ''">
-            AND r.revenue_type_id = #{revenueTypeId}
+            AND re.revenue_type_id = #{revenueTypeId}
         </if>
         <if test="projectName != null and projectName != ''">
             AND p.`name` like "%${projectName}%"
@@ -143,6 +143,18 @@
         where 1=1
         and re.id is not null
         and re.delete = 1
+        <if test="companyId != null and companyId != ''">
+            AND r.company_id = #{companyId}
+        </if>
+        <if test="dataSourceId != null and dataSourceId != ''">
+            AND re.data_source_id = #{dataSourceId}
+        </if>
+        <if test="revenueTypeId != null and revenueTypeId != ''">
+            AND re.revenue_type_id = #{revenueTypeId}
+        </if>
+        <if test="projectName != null and projectName != ''">
+            AND p.`name` like "%${projectName}%"
+        </if>
         <if test="startDate !=  null and endDate != null">
             and r.receive_date > #{startDate}
             and r.receive_date <![CDATA[ < ]]> #{endDate}
