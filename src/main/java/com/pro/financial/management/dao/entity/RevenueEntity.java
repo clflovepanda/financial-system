@@ -75,4 +75,7 @@ public class RevenueEntity {
     @TableField(exist = false)
     private BigDecimal returned;
 
+    @TableField(exist = false)
+    private String revenueTypeName;
+
 }
