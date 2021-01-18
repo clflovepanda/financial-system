@@ -199,7 +199,10 @@ public class ExportBiz {
         try ( CSVPrinter printer = ExportUtil.getCsvPrinter(fileName, CommonConst.export_statistics_project)){
             int i = 1;
             for (ProjectDto projectDto : projectDtos) {
-                String[] line = new String[]{projectDto.getProjectId()+"", projectDto.getCode(), projectDto.getName(), projectDto.getManagerName(), "", projectDto.getSettlementIncome()+"", projectDto.getRelRevenue()+"", projectDto.getReceivable()+""};
+                String[] line = new String[]{projectDto.getProjectId()+"", projectDto.getCode(), projectDto.getName(), projectDto.getManagerName(), "",
+                        projectDto.getSettlementIncome() == null ? "" : projectDto.getSettlementIncome()+"",
+                        projectDto.getRelRevenue() == null ? "" : projectDto.getRelRevenue()+"",
+                        projectDto.getReceivable() == null ? "" : projectDto.getReceivable()+""};
                 printer.printRecord(line);
                 i++ ;
             }
