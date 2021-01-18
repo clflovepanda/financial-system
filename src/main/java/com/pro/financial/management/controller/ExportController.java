@@ -185,7 +185,7 @@ public class ExportController {
             return result;
         }
 
-        List<ReceivementEntity> receivementEntities = receivementBiz.statisticsDetail(startDate, endDate);
+        List<ReceivementEntity> receivementEntities = receivementBiz.statisticsDetail(null, null, null, null, startDate, endDate);
 
         return exportBiz.exportStatisticsReceivement(receivementEntities);
     }
