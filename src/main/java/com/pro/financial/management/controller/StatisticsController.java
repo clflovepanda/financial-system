@@ -7,7 +7,6 @@ import com.pro.financial.management.biz.ReceivementBiz;
 import com.pro.financial.management.biz.SubscriptionLogBiz;
 import com.pro.financial.management.controller.view.ReceivementStatisticsView;
 import com.pro.financial.management.converter.ReceivementEntity2Dto;
-import com.pro.financial.management.dao.entity.ProjectEntity;
 import com.pro.financial.management.dao.entity.ReceivementEntity;
 import com.pro.financial.management.dao.entity.SubscriptionLogEntity;
 import com.pro.financial.management.dto.ExpenditureDto;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -63,13 +61,14 @@ public class StatisticsController {
         String dataSourceId = request.getParameter("dataSourceId");
         String revenueTypeId = request.getParameter("revenueTypeId");
         String projectName = request.getParameter("projectName");
+        String companyId = request.getParameter("companyId");
         String startDt = request.getParameter("startDt");
         String endDt = request.getParameter("endDt");
         Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
         Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
         List<ReceivementStatisticsView> views = new ArrayList<>();
 
-        List<ReceivementEntity> receivementEntities = receivementBiz.statistics(dataSourceId, revenueTypeId, projectName, startDate, endDate);
+        List<ReceivementEntity> receivementEntities = receivementBiz.statistics(companyId, dataSourceId, revenueTypeId, projectName, startDate, endDate);
         SimpleDateFormat yearformat = new SimpleDateFormat("yyyy");
         SimpleDateFormat monthformat = new SimpleDateFormat("MM");
         SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
@@ -233,13 +232,13 @@ public class StatisticsController {
         resultMap.put("count", count);
 
         //报价收入
-        BigDecimal estincome = new BigDecimal(0);
+        BigDecimal estincome = BigDecimal.ZERO;
         //结算收入
-        BigDecimal settlementIncome = new BigDecimal(0);
+        BigDecimal settlementIncome = BigDecimal.ZERO;
         //实际收入
-        BigDecimal relRevenue = new BigDecimal(0);
+        BigDecimal relRevenue = BigDecimal.ZERO;
         //应收收入
-        BigDecimal receivable = new BigDecimal(0);
+        BigDecimal receivable = BigDecimal.ZERO;
         for (ProjectDto projectDto : projectDtos) {
             estincome = estincome.add(projectDto.getEstincome() == null ? new BigDecimal(0) : projectDto.getEstincome());
         }

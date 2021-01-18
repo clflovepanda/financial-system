@@ -45,8 +45,8 @@ public class ReceivementBiz {
         return receivementDao.getList(ids, companyId, receivementTypeId, remitterMethodId, remitter, startDate, endDate, limit, offset);
     }
 
-    public List<ReceivementEntity> statistics(String dataSourceId, String revenueTypeId, String projectName, Date startDate, Date endDate) {
-        return receivementDao.statistics(dataSourceId, revenueTypeId, projectName, startDate, endDate);
+    public List<ReceivementEntity> statistics(String companyId, String dataSourceId, String revenueTypeId, String projectName, Date startDate, Date endDate) {
+        return receivementDao.statistics(companyId, dataSourceId, revenueTypeId, projectName, startDate, endDate);
     }
 
     public int getCount(String companyId, String receivementTypeId, String remitterMethodId, String remitter, Date startDate, Date endDate) {

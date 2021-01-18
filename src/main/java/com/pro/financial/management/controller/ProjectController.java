@@ -253,10 +253,10 @@ public class ProjectController {
         ProjectFinancialStatisticsDto projectFinancialStatisticsDto = new ProjectFinancialStatisticsDto();
         projectFinancialStatisticsDto.setEstincome(projectEntity.getEstincome());
         projectFinancialStatisticsDto.setBudget(projectEntity.getBudget());
-        //实际收入
+        //实际收入 (无押金和预收押金)
         BigDecimal realRevenue = revenueBiz.getreByProjectId(projectId, "") == null ? new BigDecimal(0) : revenueBiz.getreByProjectId(projectId, "");
         projectFinancialStatisticsDto.setActualIncome(realRevenue);
-        //实际支出
+        //实际支出(已经提交, 已经支付, 平借款)
         BigDecimal realExpenditure = expenditureBiz.getexByProjectId(projectId) == null ? new BigDecimal(0) : expenditureBiz.getexByProjectId(projectId);
         projectFinancialStatisticsDto.setActualExpenditure(realExpenditure);
         //预收押金
@@ -266,26 +266,44 @@ public class ProjectController {
         BigDecimal deposit2Re = revenueBiz.getreByProjectId(projectId, "S") == null ? new BigDecimal(0) : revenueBiz.getreByProjectId(projectId, "S");
         projectFinancialStatisticsDto.setDepositIncome(deposit2Re);
         //项目利润
-        projectFinancialStatisticsDto.setProfit(new BigDecimal(0));
+        BigDecimal profit = BigDecimal.ZERO;
+        //实际收入（收回押金+预收押金+认款 ）
+        BigDecimal revenue = profit.add(deposit).add(realRevenue);
+        profit = revenue.subtract(realExpenditure);
+        projectFinancialStatisticsDto.setProfit(profit);
         //毛利率
-        BigDecimal rate = new BigDecimal(0);
-        if (!(realRevenue.compareTo(new BigDecimal(0)) == 0)) {
-            rate = realRevenue.add(realExpenditure);
-            rate = rate.divide(realRevenue, 2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal rate = BigDecimal.ZERO;
+        if (!(revenue.compareTo(new BigDecimal(0)) == 0)) {
+            rate = profit.divide(revenue, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
         }
         projectFinancialStatisticsDto.setRate(rate.doubleValue());
 
         //支出比 = 实际支出 （提交的+ 已支付+平借款的）/  实际收入（收回押金+预收押金+认款 ）
-        BigDecimal ratio = new BigDecimal(0);
-        BigDecimal re = realRevenue.add(deposit).add(deposit2Re);
-        if (!(re.compareTo(new BigDecimal(0)) == 0)) {
-            ratio = realExpenditure.multiply(re);
+        BigDecimal ratio = BigDecimal.ZERO;
+        if (!(revenue.compareTo(new BigDecimal(0)) == 0)) {
+            ratio = realExpenditure.divide(revenue).multiply(new BigDecimal(100));;
         }
         projectFinancialStatisticsDto.setExpenditureRatio(ratio.doubleValue());
         //结算收入
-        projectFinancialStatisticsDto.setSettlement(settlementBiz.getreByProjectId(projectId));
+        BigDecimal settlementIncome = settlementBiz.getreByProjectId(projectId);
+        projectFinancialStatisticsDto.setSettlement(settlementIncome);
         //应收收入
-        projectFinancialStatisticsDto.setReceivable(invoiceBiz.getreByProjectId(projectId));
+        projectFinancialStatisticsDto.setReceivable(settlementIncome.subtract(realExpenditure));
+
+        //人工成本
+        BigDecimal timeMoney = BigDecimal.ZERO;
+        projectFinancialStatisticsDto.setTimeMoney(timeMoney);
+        //项目纯利润
+        BigDecimal relProfit = profit.subtract(timeMoney);
+        projectFinancialStatisticsDto.setRelProfit(relProfit);
+        //纯利率
+        BigDecimal relRate = BigDecimal.ZERO;
+        if (!(revenue.compareTo(new BigDecimal(0)) == 0)) {
+            relRate = relProfit.divide(revenue, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
+        }
+        projectFinancialStatisticsDto.setRelRate(relRate.doubleValue());
+
+
 
         result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
@@ -450,10 +468,10 @@ public class ProjectController {
             for (ProjectDto projectDto : projectDtos) {
                 //设置总支出和收入
                 Integer projectId = projectDto.getProjectId();
-                BigDecimal paymentIncome = new BigDecimal(0);
-                BigDecimal paymentExpenses = new BigDecimal(0);
-                BigDecimal settlementIncome = new BigDecimal(0);
-                BigDecimal settlementExpenses = new BigDecimal(0);
+                BigDecimal paymentIncome = BigDecimal.ZERO;
+                BigDecimal paymentExpenses = BigDecimal.ZERO;
+                BigDecimal settlementIncome = BigDecimal.ZERO;
+                BigDecimal settlementExpenses = BigDecimal.ZERO;
                 for (RevenueEntity revenueEntity : revenueEntities) {
                     if (revenueEntity.getProjectId() - projectId == 0) {
                         paymentIncome = paymentIncome.add(revenueEntity.getCnyMoney() == null ? new BigDecimal(0) : revenueEntity.getCnyMoney());
@@ -490,7 +508,7 @@ public class ProjectController {
                 //毛利率
 
 
-                BigDecimal rate = new BigDecimal(0);
+                BigDecimal rate = BigDecimal.ZERO;
                 if (!(paymentIncome.compareTo(new BigDecimal(0)) == 0)) {
                     rate = paymentIncome.subtract(paymentExpenses);
                     rate = rate.divide(paymentIncome, 2, BigDecimal.ROUND_HALF_UP);

@@ -84,10 +84,26 @@
     </update>
 
     <select id="statistics" resultType="com.pro.financial.management.dao.entity.ReceivementEntity">
-        select * from receivement
+        select r.* from receivement r
+        LEFT JOIN revenue re on r.id = re.receivement_id
+        LEFT JOIN project p USING (project_id)
+        WHERE 1=1
+        and re.`delete` = 1
+        <if test="companyId != null and companyId != ''">
+            AND r.company_id = #{companyId}
+        </if>
+        <if test="dataSourceId != null and dataSourceId != ''">
+            AND r.data_source_id = #{dataSourceId}
+        </if>
+        <if test="revenueTypeId != null and revenueTypeId != ''">
+            AND r.revenue_type_id = #{revenueTypeId}
+        </if>
+        <if test="projectName != null and projectName != ''">
+            AND p.`name` like "%${projectName}%"
+        </if>
         <if test="startDate !=  null and endDate != null">
-            and receive_date > #{startDate}
-            and receive_date <![CDATA[ < ]]> #{endDate}
+            and r.receive_date > #{startDate}
+            and r.receive_date <![CDATA[ < ]]> #{endDate}
         </if>
     </select>
     <select id="statisticsDetail" resultType="com.pro.financial.management.dao.entity.ReceivementEntity">

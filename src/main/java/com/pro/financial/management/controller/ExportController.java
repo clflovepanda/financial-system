@@ -62,9 +62,9 @@ public class ExportController {
         Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
         List<RevenueDto> revenueDtos = revenueBiz.searchList(projectId, revenueNo, null, receivementTypeId,
                 companyId, remitter, createUser, startDate, endDate, projectName, projectNo, revenueTypeId, null, null);
-        BigDecimal toBeReturned = new BigDecimal(0);
-        BigDecimal returned = new BigDecimal(0);
-        BigDecimal returning = new BigDecimal(0);
+        BigDecimal toBeReturned = BigDecimal.ZERO;
+        BigDecimal returned = BigDecimal.ZERO;
+        BigDecimal returning = BigDecimal.ZERO;
         for (RevenueDto revenueDto : revenueDtos) {
             toBeReturned = toBeReturned.add(revenueDto.getToBeReturned() == null ? new BigDecimal(0) : revenueDto.getToBeReturned());
             returned = returned.add(revenueDto.getReturned() == null ? new BigDecimal(0) : revenueDto.getReturned());

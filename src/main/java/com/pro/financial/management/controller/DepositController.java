@@ -76,9 +76,9 @@ public class DepositController {
         Map<String, Object> resutlMap = new HashMap<>();
         resutlMap.put("deposit", revenueDtos);
         resutlMap.put("count", count);
-        BigDecimal toBeReturned = new BigDecimal(0);
-        BigDecimal returned = new BigDecimal(0);
-        BigDecimal returning = new BigDecimal(0);
+        BigDecimal toBeReturned = BigDecimal.ZERO;
+        BigDecimal returned = BigDecimal.ZERO;
+        BigDecimal returning = BigDecimal.ZERO;
         for (RevenueDto revenueDto : revenueDtos) {
             toBeReturned = toBeReturned.add(revenueDto.getToBeReturned() == null ? new BigDecimal(0) : revenueDto.getToBeReturned());
             returned = returned.add(revenueDto.getReturned() == null ? new BigDecimal(0) : revenueDto.getReturned());

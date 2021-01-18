@@ -42,7 +42,7 @@ public interface ReceivementDao {
                                     @Param("remitter") String remitter, @Param("startDate") Date startDate, @Param("endDate") Date endDate,
                                     @Param("limit") Integer limit, @Param("offset") Integer offset);
 
-    List<ReceivementEntity> statistics(@Param("dataSourceId") String dataSourceId, @Param("revenueTypeId") String revenueTypeId,
+    List<ReceivementEntity> statistics(@Param("companyId") String companyId, @Param("dataSourceId") String dataSourceId, @Param("revenueTypeId") String revenueTypeId,
                                        @Param("projectName") String projectName,  @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
     int getCount(@Param("companyId") String companyId,

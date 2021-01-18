@@ -121,8 +121,8 @@ public class ProjectTaskController {
         List<ProjectTaskDto> projectTaskDtos =  projectTaskBiz.gettask(projectId, userId, taskRelationId);
         Map<String, Object> resultMap = new HashMap<>();;
         resultMap.put("task", projectTaskDtos);
-        BigDecimal total = new BigDecimal(0);
-        BigDecimal totalTime = new BigDecimal(0);
+        BigDecimal total = BigDecimal.ZERO;
+        BigDecimal totalTime = BigDecimal.ZERO;
         for (ProjectTaskDto projectTaskDto : projectTaskDtos) {
             totalTime = totalTime.add(new BigDecimal(projectTaskDto.getTakeTime()));
         }

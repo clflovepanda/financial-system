@@ -65,6 +65,6 @@ public interface ExpenditureDao extends BaseMapper<ExpenditureEntity> {
                                               @Param("expenditurePurposeId") String expenditurePurposeId, @Param("startDt") Date startDate, @Param("endDt") Date endDate,
                                               @Param("keyWord") String keyWord, @Param("projectName") String projectName, @Param("projectNo") String projectNo);
 
-    @Select("SELECT SUM(expenditure_money) FROM expenditure WHERE project_id = #{projectId} AND state = 4")
+    @Select("SELECT SUM(expenditure_money) FROM expenditure WHERE project_id = #{projectId} AND (state <> 3 or state <> 5)")
     BigDecimal getexByProjectId(@Param("projectId") Integer projectId);
 }

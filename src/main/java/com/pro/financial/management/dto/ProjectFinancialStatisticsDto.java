@@ -30,6 +30,12 @@ public class ProjectFinancialStatisticsDto {
     private double rate;
     //支出比
     private double expenditureRatio;
+    //项目纯利润
+    private BigDecimal relProfit;
+    //纯利率
+    private double relRate;
+    //人工成本
+    private BigDecimal timeMoney;
     //结算收入
     private BigDecimal settlement;
     //应收收入

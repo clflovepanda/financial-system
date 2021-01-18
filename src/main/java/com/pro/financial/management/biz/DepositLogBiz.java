@@ -94,7 +94,7 @@ public class DepositLogBiz extends ServiceImpl<DepositLogDao, DepositLogEntity> 
                 RevenueEntity revenueEntity = revenueDao.getById(revenueId);
                 //总押金金额
                 BigDecimal depositMoney = revenueEntity.getCnyMoney();
-                BigDecimal paidMoney = new BigDecimal(0);
+                BigDecimal paidMoney = BigDecimal.ZERO;
                 for (DepositLogEntity depositLogEntity : depositAll) {
                     paidMoney = paidMoney.add(depositLogEntity.getExpenditureMoney());
                 }

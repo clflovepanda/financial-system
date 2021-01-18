@@ -338,7 +338,7 @@ public class ReceivementController {
             return result;
         }
         //添加到认款记录的金额
-        BigDecimal logMoney = new BigDecimal(0);
+        BigDecimal logMoney = BigDecimal.ZERO;
         List<SubscriptionLogDto> subscriptionLogDtos = subscriptionLogBiz.getListByReceivementId(subscriptionLogDto.getReceivementId());
         if (!CollectionUtils.isEmpty(subscriptionLogDtos)) {
             for (SubscriptionLogDto dto : subscriptionLogDtos) {
