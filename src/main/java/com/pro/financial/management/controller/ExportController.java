@@ -2,10 +2,14 @@ package com.pro.financial.management.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pro.financial.management.biz.*;
+import com.pro.financial.management.converter.ReceivementEntity2Dto;
 import com.pro.financial.management.dao.entity.ExpenditureStatisticsEntity;
+import com.pro.financial.management.dao.entity.ReceivementEntity;
 import com.pro.financial.management.dto.ExpenditureDto;
 import com.pro.financial.management.dto.ProjectDto;
 import com.pro.financial.management.dto.RevenueDto;
+import com.pro.financial.utils.ConvertUtil;
+import com.pro.financial.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +34,8 @@ public class ExportController {
     private ExpenditureAuditLogBiz expenditureAuditLogBiz;
     @Autowired
     private ProjectBiz projectBiz;
+    @Autowired
+    private ReceivementBiz receivementBiz;
 
     @RequestMapping("/deposit")
     public JSONObject deposit(HttpServletRequest request) {
@@ -140,7 +146,6 @@ public class ExportController {
 
     @RequestMapping("/statistics/project")
     public JSONObject project(HttpServletRequest request) {
-        JSONObject result = new JSONObject();
         String dataSourceId = request.getParameter("dataSourceId");
         String keyWord = request.getParameter("keyword");
         String startDt = request.getParameter("startDt");
@@ -153,5 +158,35 @@ public class ExportController {
         offset = limit * (offset - 1);
         List<ProjectDto> projectDtos = projectBiz.statistics(dataSourceId, keyWord, startDate, endDate, state, limit, offset);
         return exportBiz.exportStatisticsProject(projectDtos);
+    }
+
+    @RequestMapping("/receivement/detail")
+    public JSONObject receivementDetail(HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        // 年
+        int year = Integer.valueOf(StringUtils.isEmpty(request.getParameter("year")) ? "0" : request.getParameter("year"));
+        // 季度
+        int quarter = Integer.valueOf(StringUtils.isEmpty(request.getParameter("quarter")) ? "0" : request.getParameter("quarter"));
+        // 月
+        int month = Integer.valueOf(StringUtils.isEmpty(request.getParameter("month")) ? "0" : request.getParameter("month"));
+        if (year < 1 || year/1000 < 1 || year/1000 > 10) {
+            result.put("code", 1001);
+            result.put("msg", "传入参数有误");
+            return result;
+        }
+        Date startDate = new Date();
+        Date endDate = new Date();
+        try {
+            startDate = DateUtil.getStartDateByQuarter(year, quarter, month);
+            endDate  = DateUtil.getEndDateByQuarter(year, quarter, month);
+        } catch (Exception e) {
+            result.put("code", 2001);
+            result.put("msg", "时间解析有误");
+            return result;
+        }
+
+        List<ReceivementEntity> receivementEntities = receivementBiz.statisticsDetail(startDate, endDate);
+
+        return exportBiz.exportStatisticsReceivement(receivementEntities);
     }
 }

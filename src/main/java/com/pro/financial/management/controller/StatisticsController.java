@@ -6,11 +6,14 @@ import com.pro.financial.management.biz.ProjectBiz;
 import com.pro.financial.management.biz.ReceivementBiz;
 import com.pro.financial.management.biz.SubscriptionLogBiz;
 import com.pro.financial.management.controller.view.ReceivementStatisticsView;
+import com.pro.financial.management.converter.ReceivementEntity2Dto;
 import com.pro.financial.management.dao.entity.ProjectEntity;
 import com.pro.financial.management.dao.entity.ReceivementEntity;
 import com.pro.financial.management.dao.entity.SubscriptionLogEntity;
 import com.pro.financial.management.dto.ExpenditureDto;
 import com.pro.financial.management.dto.ProjectDto;
+import com.pro.financial.utils.ConvertUtil;
+import com.pro.financial.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -71,7 +75,7 @@ public class StatisticsController {
         SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
         receivementEntities = receivementEntities.stream()
                 .filter(et -> year == 0 ? true : year == Integer.parseInt(yearformat.format(et.getReceiveDate())))
-                .filter(et -> quarter == 0 ? true : quarter == getQuarter(et.getReceiveDate()))
+                .filter(et -> quarter == 0 ? true : quarter == DateUtil.getQuarter(et.getReceiveDate()))
                 .filter(et -> month == 0 ? true : month == Integer.parseInt(monthformat.format(et.getReceiveDate())))
                 .collect(Collectors.toList());
 
@@ -82,7 +86,7 @@ public class StatisticsController {
         //设置到款金额和数量
         for (ReceivementEntity entity : receivementEntities) {
             int y = staType == 0 ? Integer.parseInt(yearformat.format(entity.getReceiveDate())) : staType == 1 ?
-                    Integer.parseInt(yearformat.format(entity.getReceiveDate()))*100 + getQuarter(entity.getReceiveDate()) : Integer.parseInt(yearformat.format(entity.getReceiveDate()))*10000 + getQuarter(entity.getReceiveDate())*100 + Integer.parseInt(monthformat.format(entity.getReceiveDate()));
+                    Integer.parseInt(yearformat.format(entity.getReceiveDate()))*100 + DateUtil.getQuarter(entity.getReceiveDate()) : Integer.parseInt(yearformat.format(entity.getReceiveDate()))*10000 + DateUtil.getQuarter(entity.getReceiveDate())*100 + Integer.parseInt(monthformat.format(entity.getReceiveDate()));
             if (map.containsKey(y)) {
                 ReceivementStatisticsView viewTemp = map.get(y);
                 viewTemp.setMoney(viewTemp.getMoney().add(entity.getReceivementMoney()));
@@ -98,7 +102,7 @@ public class StatisticsController {
         if (!CollectionUtils.isEmpty(subscriptionLogEntities)) {
             for (SubscriptionLogEntity entity : subscriptionLogEntities) {
                 int y = staType == 0 ? Integer.parseInt(yearformat.format(entity.getSubscriptionDate())) : staType == 1 ?
-                        Integer.parseInt(yearformat.format(entity.getSubscriptionDate()))*100 + getQuarter(entity.getSubscriptionDate()) : Integer.parseInt(yearformat.format(entity.getSubscriptionDate()))*10000 + getQuarter(entity.getSubscriptionDate())*100 + Integer.parseInt(monthformat.format(entity.getSubscriptionDate()));
+                        Integer.parseInt(yearformat.format(entity.getSubscriptionDate()))*100 + DateUtil.getQuarter(entity.getSubscriptionDate()) : Integer.parseInt(yearformat.format(entity.getSubscriptionDate()))*10000 + DateUtil.getQuarter(entity.getSubscriptionDate())*100 + Integer.parseInt(monthformat.format(entity.getSubscriptionDate()));
 
                 if (!map.containsKey(y)) {
                     continue;
@@ -163,31 +167,6 @@ public class StatisticsController {
         result.put("msg", HttpStatus.OK.getReasonPhrase());
         result.put("data", views);
         return result;
-    }
-
-    private static int getQuarter(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int month = calendar.get(Calendar.MONTH);
-        switch (month) {
-            case 0:
-            case 1:
-            case 2:
-                return 1;
-            case 3:
-            case 4:
-            case 5:
-                return 2;
-            case 6:
-            case 7:
-            case 8:
-                return 3;
-            case 9:
-            case 10:
-            case 11:
-                return 4;
-        }
-        return 0;
     }
 
     /**
@@ -275,5 +254,39 @@ public class StatisticsController {
         result.put("data", resultMap);
         return result;
     }
+
+    @RequestMapping("/receivement/detail")
+    public JSONObject receivementDetail(HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        // 年
+        int year = Integer.valueOf(StringUtils.isEmpty(request.getParameter("year")) ? "0" : request.getParameter("year"));
+        // 季度
+        int quarter = Integer.valueOf(StringUtils.isEmpty(request.getParameter("quarter")) ? "0" : request.getParameter("quarter"));
+        // 月
+        int month = Integer.valueOf(StringUtils.isEmpty(request.getParameter("month")) ? "0" : request.getParameter("month"));
+        if (year < 1 || year/1000 < 1 || year/1000 > 10) {
+            result.put("code", 1001);
+            result.put("msg", "传入参数有误");
+            return result;
+        }
+        Date startDate = new Date();
+        Date endDate = new Date();
+        try {
+           startDate = DateUtil.getStartDateByQuarter(year, quarter, month);
+           endDate  = DateUtil.getEndDateByQuarter(year, quarter, month);
+        } catch (Exception e) {
+            result.put("code", 2001);
+            result.put("msg", "时间解析有误");
+            return result;
+        }
+
+        List<ReceivementEntity> receivementEntities = receivementBiz.statisticsDetail(startDate, endDate);
+        result.put("code", 0);
+        result.put("msg", "");
+        result.put("data", ConvertUtil.convert(ReceivementEntity2Dto.instance, receivementEntities));
+        return result;
+    }
+
+    
 
 }

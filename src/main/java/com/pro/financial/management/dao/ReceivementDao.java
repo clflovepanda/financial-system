@@ -48,4 +48,6 @@ public interface ReceivementDao {
     int getCount(@Param("companyId") String companyId,
                  @Param("receivementTypeId") String receivementTypeId, @Param("remitterMethodId") String remitterMethodId,
                  @Param("remitter") String remitter, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+    List<ReceivementEntity> statisticsDetail(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

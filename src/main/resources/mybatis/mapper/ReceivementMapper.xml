@@ -31,22 +31,22 @@
             <foreach item='item' index='index' collection='ids' open='(' separator=',' close=')'>#{item}</foreach>
         </if>
         <if test="companyId != null and companyId != ''">
-          AND company_id = #{companyId}
+            AND company_id = #{companyId}
         </if>
-      <if test="receivementTypeId != null and receivementTypeId != ''">
-          AND receivement_type_id = #{receivementTypeId}
-      </if>
-      <if test="remitterMethodId != null and remitterMethodId != ''">
-          AND remitter_method_id = #{remitterMethodId}
-      </if>
-      <if test="remitter != null and remitter != ''">
-          AND remitter like "%${remitter}%"
-      </if>
-      <if test="startDate !=  null and endDate != null">
-        and receive_date > #{startDate}
-        and receive_date <![CDATA[ < ]]> #{endDate}
-      </if>
-      and receivement.state <![CDATA[ <> ]]> 5
+        <if test="receivementTypeId != null and receivementTypeId != ''">
+            AND receivement_type_id = #{receivementTypeId}
+        </if>
+        <if test="remitterMethodId != null and remitterMethodId != ''">
+            AND remitter_method_id = #{remitterMethodId}
+        </if>
+        <if test="remitter != null and remitter != ''">
+            AND remitter like "%${remitter}%"
+        </if>
+        <if test="startDate !=  null and endDate != null">
+            and receive_date > #{startDate}
+            and receive_date <![CDATA[ < ]]> #{endDate}
+        </if>
+        and receivement.state <![CDATA[ <> ]]> 5
         order by id desc
         <if test="offset != null and limit != 0">
             LIMIT ${offset} , ${limit}
@@ -88,6 +88,48 @@
         <if test="startDate !=  null and endDate != null">
             and receive_date > #{startDate}
             and receive_date <![CDATA[ < ]]> #{endDate}
+        </if>
+    </select>
+    <select id="statisticsDetail" resultType="com.pro.financial.management.dao.entity.ReceivementEntity">
+        SELECT
+        r.id,
+        c.co_name,
+        r.remitter,
+        rt.receivement_type_name,
+        r.receivement_money,
+        '0.00CNY' foreignMoney,
+        r.receive_date,
+        r.remark,
+        a.voucher_no,
+        p.`name` projectName,
+        p.code projectNo,
+        re.revenue_no,
+        ret.revenue_type_name,
+        ds.data_source_name,
+        'K' revenueDept,
+        (select cny_money FROM revenue LEFT JOIN revenue_type USING (revenue_type_id) WHERE id = re.id and
+        revenue_type.remark != 'Y') cny_money,
+        (select cny_money FROM revenue LEFT JOIN revenue_type USING (revenue_type_id) WHERE id = re.id and
+        revenue_type.remark = 'Y') deposit,
+        username,
+        '不开票' invoice,
+        re.ctime
+        FROM
+        receivement r
+        LEFT JOIN company c USING ( company_id )
+        LEFT JOIN receivement_type rt USING ( receivement_type_id )
+        LEFT JOIN revenue re ON re.receivement_id = r.id
+        LEFT JOIN project p USING ( project_id )
+        LEFT JOIN data_source ds USING ( data_source_id )
+        LEFT JOIN revenue_type ret USING ( revenue_type_id )
+        LEFT JOIN `user` ON re.create_user = `user`.user_id
+        LEFT JOIN accounting_log a ON r.id = a.receivement_id
+        where 1=1
+        and re.id is not null
+        and re.delete = 1
+        <if test="startDate !=  null and endDate != null">
+            and r.receive_date > #{startDate}
+            and r.receive_date <![CDATA[ < ]]> #{endDate}
         </if>
     </select>
 </mapper>

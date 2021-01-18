@@ -5,11 +5,13 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.pro.financial.consts.CommonConst;
 import com.pro.financial.management.converter.FileConverter;
+import com.pro.financial.management.dao.entity.ReceivementEntity;
 import com.pro.financial.management.dto.ExpenditureDto;
 import com.pro.financial.management.dto.ProjectDto;
 import com.pro.financial.management.dto.RevenueDto;
 import com.pro.financial.utils.ExportUtil;
 import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
@@ -21,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Service
@@ -127,17 +130,20 @@ public class ExportBiz {
      * @return
      */
     private String upload2OSSXls(String fileName, String excelFileName) throws Exception {
-        File file = new File(fileName);
-        FileConverter.ConvertCSVToXLS(fileName, excelFileName);
-        if (!file.exists()) {
-            return "";
-        }
         try {
-            InputStream inputStream = new FileInputStream(file);
+            InputStream inputStream = null;
+            if (StringUtils.isNotEmpty(fileName)) {
+                inputStream = new FileInputStream(fileName);
+            } else {
+                inputStream = new FileInputStream(excelFileName);
+            }
             OSS client = new OSSClientBuilder().build(OSS_ENDPOINT, OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET);
             client.putObject(OSS_BUKET, "export/" + excelFileName, inputStream);
             client.shutdown();
-            file.delete();
+            File file = new File(fileName);
+            if (file.exists()) {
+                file.delete();
+            }
             File file1 = new File(excelFileName);
             if (file1.exists()) {
                 file1.delete();
@@ -219,8 +225,9 @@ public class ExportBiz {
         return result;
     }
 
-    public static JSONObject exportStatisticsProject() {
+    public JSONObject exportStatisticsReceivement(List<ReceivementEntity> receivementEntities) {
         JSONObject result = new JSONObject();
+        String excelFileName = "receivement_" + System.currentTimeMillis() + ".xls";
         //设置到款统计的表头
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet sheet = wb.createSheet();
@@ -261,12 +268,43 @@ public class ExportBiz {
         row1.getCell(0).setCellStyle(style);
         row1.getCell(1).setCellStyle(style);
         row1.getCell(9).setCellStyle(style);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        for (int i = 0; i < receivementEntities.size(); i++) {
+            ReceivementEntity receivementEntity = receivementEntities.get(i);
+            //前两行是表头 从第三行还是写
+            HSSFRow row = sheet.createRow(i + 2);
+            row.createCell(0).setCellValue(receivementEntity.getId());
+            row.createCell(1).setCellValue(receivementEntity.getCoName());
+            row.createCell(2).setCellValue(receivementEntity.getRemitter());
+            row.createCell(3).setCellValue(receivementEntity.getReceivementTypeName());
+            row.createCell(4).setCellValue(receivementEntity.getReceivementMoney()+"");
+            row.createCell(5).setCellValue(receivementEntity.getForeignMoney());
+            row.createCell(6).setCellValue(simpleDateFormat.format(receivementEntity.getReceiveDate()));
+            row.createCell(7).setCellValue(receivementEntity.getRemark());
+            row.createCell(8).setCellValue(receivementEntity.getVoucherNo());
+            row.createCell(9).setCellValue(receivementEntity.getProjectName());
+            row.createCell(10).setCellValue(receivementEntity.getProjectNo());
+            row.createCell(11).setCellValue(receivementEntity.getRevenueTypeName());
+            row.createCell(12).setCellValue(receivementEntity.getDataSourceName());
+            row.createCell(13).setCellValue(receivementEntity.getRevenueDept());
+            row.createCell(14).setCellValue(receivementEntity.getCnyMoney() == null ? "" : receivementEntity.getCnyMoney()+"");
+            row.createCell(15).setCellValue(receivementEntity.getDeposit() == null ? "" : receivementEntity.getDeposit()+"");
+            row.createCell(16).setCellValue(receivementEntity.getUsername());
+            row.createCell(17).setCellValue(receivementEntity.getInvoice());
+            row.createCell(18).setCellValue(simpleDateFormat.format(receivementEntity.getCtime()));
+        }
         try {
-            FileOutputStream output=new FileOutputStream("expenditure.xls");
+            FileOutputStream output=new FileOutputStream(excelFileName);
             wb.write(output);
             output.flush();
+            String url = this.upload2OSSXls("", excelFileName);
+            result.put("code", 0);
+            result.put("msg", "");
+            result.put("url", url);
         } catch (Exception e) {
             e.printStackTrace();
+            result.put("code", 2001);
+            result.put("msg", "导出失败");
         }
 
         return result;

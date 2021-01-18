@@ -1,5 +1,6 @@
 package com.pro.financial.management.dao.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -40,4 +41,25 @@ public class ReceivementEntity {
     private String coName;
     private String receivementTypeName;
     private String remitterMethodName;
+
+    private String foreignMoney;
+    private String projectNo;
+    private String revenueTypeName;
+    //凭证号
+    private String voucherNo;
+
+    private BigDecimal deposit;
+
+    private String invoice;
+
+    private BigDecimal cnyMoney;
+
+    private String dataSourceName;
+
+    private String username;
+
+    private String projectName;
+
+    private String revenueDept;
+
 }
