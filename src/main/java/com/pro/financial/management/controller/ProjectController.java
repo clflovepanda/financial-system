@@ -455,6 +455,13 @@ public class ProjectController {
         int count = projectBiz.getCount(projectIds, projectNo, projectName, managerName, salesName,
                 userNames, settlementState, state, saleCommisState, startDate, endDate, auditingState);
         List<Integer> projectIds2 = projectEntities.stream().map(project -> project.getProjectId()).collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(projectIds2)) {
+            result.put("code", 0);
+            result.put("msg", HttpStatus.OK.getReasonPhrase());
+            result.put("data", null);
+            result.put("count", 0);
+            return result;
+        }
         // 项目人员表
         List<ProjectUserEntity> projectUserEntities = projectUserBiz.getProjectUserList(projectIds2);
         // 项目收入表
