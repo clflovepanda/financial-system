@@ -71,6 +71,12 @@ public class LoginBiz {
                 if (CollectionUtils.isEmpty(userEntities.get(0).getRoles())) {
                     result.put("code", 1003);
                     result.put("msg", "该用户没有配置角色");
+                    return result;
+                }
+                if (userEntities.get(0).getState() != 1) {
+                    result.put("code", 1003);
+                    result.put("msg", "用户已经被禁用");
+                    return result;
                 }
                 for (RoleEntity roleEntity : userEntities.get(0).getRoles()) {
                     roleIds.add(roleEntity.getRoleId());
