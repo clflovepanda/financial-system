@@ -11,11 +11,11 @@ import java.math.BigDecimal;
 @ToString
 public class DepositStatisticEntity {
     //全部押金金额
-    private BigDecimal allDeposit;
+    private BigDecimal allDeposit = BigDecimal.ZERO;
     // 待退回总押金
-    private BigDecimal toBeReturned;
+    private BigDecimal toBeReturned = BigDecimal.ZERO;
     // 退回审批中押金总金额
-    private BigDecimal approval;
+    private BigDecimal approval = BigDecimal.ZERO;
     // 已退回押金总金额
-    private BigDecimal returned;
+    private BigDecimal returned = BigDecimal.ZERO;
 }
