@@ -45,7 +45,12 @@ public class LoginBiz {
         JSONObject result = new JSONObject();
         if (StringUtils.isEmpty(userName)) {
             result.put("code", 1002);
-            result.put("msg", "未输入用户名");
+            result.put("msg", "请输入用户名");
+            return result;
+        }
+        if (StringUtils.isEmpty(password)) {
+            result.put("code", 1002);
+            result.put("msg", "请输入密码");
             return result;
         }
         if (validateCode == null || validateCode < 1 || StringUtils.isEmpty(code)) {
