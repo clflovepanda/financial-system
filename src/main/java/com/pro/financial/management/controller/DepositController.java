@@ -126,11 +126,6 @@ public class DepositController {
             return result;
         }
         ExpenditureEntity expenditureEntity = expenditureBiz.selectById(expenditureId);
-        if (expenditureEntity.getCreateUser() - userId != 0) {
-            result.put("code", 1001);
-            result.put("msg", "非本人无法删除");
-            return result;
-        }
         if (expenditureEntity.getState() - CommonConst.expenditure_audit_type_paid == 0) {
             result.put("code", 1001);
             result.put("msg", "已经支付无法删除");

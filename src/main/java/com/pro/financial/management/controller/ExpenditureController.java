@@ -91,12 +91,13 @@ public class ExpenditureController {
             //这笔押金总款
             BigDecimal revenueMoney =  revenueDto.getCnyMoney();
             //已经退回款项和退回中款项
-            BigDecimal depositMoney = expenditureDto.getExpenditureMoney();
-            List<DepositLogEntity> depositLogEntities = depositLogBiz.getListByRevenueId(depositId);
+            BigDecimal depositMoney = BigDecimal.ZERO;
+            List<DepositLogEntity> depositLogEntities = depositLogBiz.getListByRevenueIdWithoutState(depositId);
             for (DepositLogEntity entity : depositLogEntities) {
                 depositMoney = depositMoney.add(entity.getExpenditureMoney() == null ? new BigDecimal(0) : entity.getExpenditureMoney());
             }
-            if (revenueMoney.compareTo(depositMoney) == -1) {
+            revenueMoney = revenueMoney.subtract(depositMoney);
+            if (revenueMoney.compareTo(expenditureDto.getExpenditureMoney()) == -1) {
                 result.put("code", 7001);
                 result.put("msg", "剩余金额不足");
                 return result;
@@ -104,6 +105,7 @@ public class ExpenditureController {
             DepositLogEntity depositLogEntity = new DepositLogEntity();
             depositLogEntity.setExpenditureId(expenditureDto.getExpenditureId());
             depositLogEntity.setRevenueId(depositId);
+            depositLogEntity.setAuditUser(userId);
             depositLogBiz.save(depositLogEntity);
         }
         //添加申请工作流
