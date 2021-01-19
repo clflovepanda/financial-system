@@ -64,7 +64,7 @@ public class QRCodeUtil {
 
                     for(int j = 0;j<1;j++){
                         String filename =tname+"_"+j+"."+format;
-                        String content ="http://www.medcircle.cn/medapp/reginfo?uid=#259046#&regid=#418#&regcode=#259046#&name=#张晓磊#&org=#北京协和医院#";
+                        String content ="";
                         //String content ="http://www.medcircle.cn/web/user?medcircle_cid=2";
 //				String content = "content for therad "+tname+"_"+j;
                         try {

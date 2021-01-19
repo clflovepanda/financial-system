@@ -285,7 +285,7 @@ public class ProjectController {
         }
         projectFinancialStatisticsDto.setExpenditureRatio(ratio.doubleValue());
         //结算收入
-        BigDecimal settlementIncome = settlementBiz.getreByProjectId(projectId);
+        BigDecimal settlementIncome = settlementBiz.getreByProjectId(projectId) == null ? BigDecimal.ZERO : settlementBiz.getreByProjectId(projectId);
         projectFinancialStatisticsDto.setSettlement(settlementIncome);
         //应收收入
         projectFinancialStatisticsDto.setReceivable(settlementIncome.subtract(realExpenditure));
