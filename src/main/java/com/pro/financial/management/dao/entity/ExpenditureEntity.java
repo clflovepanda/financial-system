@@ -93,4 +93,9 @@ public class ExpenditureEntity {
     private String provinceName;
     @TableField(exist = false)
     private String cityName;
+
+    @TableField(exist = false)
+    private String projectName;
+    @TableField(exist = false)
+    private String projectNo;
 }

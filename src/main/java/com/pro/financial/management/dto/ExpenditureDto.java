@@ -80,6 +80,8 @@ public class ExpenditureDto {
 
     private String cityName;
     private String provinceName;
+    private String projectName;
+    private String projectNo;
 
     private List<ExpenditureAuditLogDto> expenditureAuditLogs;
 }

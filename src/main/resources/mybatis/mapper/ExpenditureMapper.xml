@@ -130,7 +130,7 @@
   </select>
 
   <select id="searchList" resultType="com.pro.financial.management.dao.entity.ExpenditureEntity">
-    select *, pr.name provinceName from expenditure e
+    select *, pr.name provinceName, p.name projectName, p.code projectNo from expenditure e
     left join `user` u on e.create_user = u.user_id
     left join expenditure_method using (expenditure_method_id)
     left join expenditure_purpose using (expenditure_purpose_id)
