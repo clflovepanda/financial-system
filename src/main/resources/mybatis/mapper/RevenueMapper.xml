@@ -71,8 +71,8 @@
     <if test="projectName != null and projectName != ''">
       and p.name like "%${projectName}%"
     </if>
-    <if test="projectNo != null and projectName != ''">
-      and p.code like "%${projectName}%"
+    <if test="projectNo != null and projectNo != ''">
+      and p.code like "%${projectNo}%"
     </if>
     <if test="startDt != null  and endDt != null">
       AND re.ctime > #{startDt}
