@@ -123,7 +123,7 @@ public class ExpenditureController {
         JSONObject result = new JSONObject();
 
         ExpenditureDto expenditureDto = JSONObject.parseObject(jsonInfo.toJSONString(), ExpenditureDto.class);
-        if (expenditureDto.getExpenditureId() == null || expenditureDto.getExpenditureId() < 0) {
+        if (expenditureDto.getExpenditureId() == null || expenditureDto.getExpenditureId() < 0 || expenditureDto.getExpenditureMoney() == null) {
             result.put("code", 1001);
             result.put("msg", "传入参数有误");
             return result;
@@ -134,6 +134,7 @@ public class ExpenditureController {
             result.put("msg", "退押金请在押金管理中删除");
             return result;
         }
+        expenditureDto.setMoneyCapital(SimpleMoneyFormat.getInstance().format(expenditureDto.getExpenditureMoney()));
         int count = expenditureBiz.updateExpenditure(expenditureDto);
         result.put("code", 0);
         result.put("msg", HttpStatus.OK.getReasonPhrase());
