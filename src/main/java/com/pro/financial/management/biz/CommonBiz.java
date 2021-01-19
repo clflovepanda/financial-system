@@ -34,7 +34,8 @@ public class CommonBiz {
             conf.setConnectionTimeout(5000);
             conf.setMaxErrorRetry(3);
             OSSClient client = new OSSClient(OSS_ENDPOINT, OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET, conf);
-            client.putObject(OSS_BUKET, filePath, new ByteArrayInputStream(os.toByteArray()), objectMetadata);
+            client.putObject(OSS_BUKET, "qrcode/" + filePath, new ByteArrayInputStream(os.toByteArray()), objectMetadata);
+
             return OSS_URL + filePath;
         } catch (IOException e) {
             e.printStackTrace();
