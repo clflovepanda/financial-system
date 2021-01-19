@@ -206,7 +206,9 @@ public class ExpenditureController {
         }
         ExpenditureStatisticsEntity expenditureStatisticsEntity = expenditureBiz.getStatistics(projectId, companyId, numbering, expenditureMethodId, expenditureTypeId,
                 beneficiaryUnit, createUser, state, expenditureAuditLog, expenditurePurposeId, startDate, endDate, keyWord, projectName, projectNo);
-
+        if (expenditureStatisticsEntity == null) {
+            expenditureStatisticsEntity = new ExpenditureStatisticsEntity();
+        }
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", expenditureDtos);

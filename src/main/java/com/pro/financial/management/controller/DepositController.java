@@ -7,14 +7,11 @@ import com.pro.financial.management.biz.DepositLogBiz;
 import com.pro.financial.management.biz.ExpenditureAuditLogBiz;
 import com.pro.financial.management.biz.ExpenditureBiz;
 import com.pro.financial.management.biz.RevenueBiz;
-import com.pro.financial.management.dao.DepositLogDao;
 import com.pro.financial.management.dao.entity.DepositLogEntity;
 import com.pro.financial.management.dao.entity.DepositStatisticEntity;
-import com.pro.financial.management.dao.entity.ExpenditureAuditLogEntity;
 import com.pro.financial.management.dao.entity.ExpenditureEntity;
 import com.pro.financial.management.dto.ExpenditureAuditLogDto;
 import com.pro.financial.management.dto.RevenueDto;
-import com.pro.financial.user.biz.UserBiz;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -86,6 +83,9 @@ public class DepositController {
         }
         DepositStatisticEntity depositStatisticEntity = revenueBiz.getDepositStatistic(projectId, revenueNo, null, receivementTypeId,
                 companyId, remitter, createUser, startDate, endDate, projectName, projectNo, revenueTypeId);
+        if (depositStatisticEntity == null) {
+            depositStatisticEntity = new DepositStatisticEntity();
+        }
         resutlMap.put("statistic", depositStatisticEntity);
         result.put("code", 0);
         result.put("msg", "");
