@@ -114,7 +114,7 @@ public interface RoleDao {
             " role_id IN ( SELECT role_id FROM user_role_relation WHERE user_id = #{userId} ))")
     List<DataSourceEntity> getDatasourceByUserIds(@Param("userId") Integer userId);
 
-    @Select("SELECT distinct intro FROM permission WHERE permission_id IN (SELECT permission_id FROM role_permission_relation WHERE role_id IN (SELECT DISTINCT role_id FROM user_role_relation where user_id =#{userId})) ")
+    @Select("SELECT distinct intro FROM permission WHERE permission_id IN (SELECT permission_id FROM role_permission_relation WHERE role_id IN (SELECT DISTINCT role_id FROM user_role_relation where user_id =#{userId}) and state = 1)")
     Set<String> getMenu(@Param("userId") Integer userId);
 
     @Insert({

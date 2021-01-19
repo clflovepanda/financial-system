@@ -295,7 +295,7 @@ public class ExpenditureController {
                 result.put("msg", "无法删除已提交记录");
                 return result;
             }
-            if (lastLog.getId() - expenditureAuditLogDto.getId() == 0 && expenditureAuditLogDto.getCreateUser() - userId == 0) {
+            if (lastLog.getId() - expenditureAuditLogDto.getId() == 0) {
                 expenditureAuditLogBiz.remove(expenditureAuditLogDto);
                 ExpenditureAuditLogDto nextLog = sortList.get(1);
                 ExpenditureDto expenditureDto = new ExpenditureDto();

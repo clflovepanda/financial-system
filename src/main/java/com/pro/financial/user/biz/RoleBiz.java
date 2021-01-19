@@ -7,20 +7,20 @@ import com.pro.financial.user.converter.RoleEntity2Dto;
 import com.pro.financial.user.dao.DataSourceDao;
 import com.pro.financial.user.dao.PermissionDao;
 import com.pro.financial.user.dao.RoleDao;
-import com.pro.financial.user.dao.entity.DataSourceEntity;
 import com.pro.financial.user.dao.entity.PermissionEntity;
 import com.pro.financial.user.dao.entity.RoleEntity;
 import com.pro.financial.user.dto.DataSourceDto;
-import com.pro.financial.user.dto.PermissionDto;
 import com.pro.financial.user.dto.RoleDto;
-import com.pro.financial.user.dto.UserDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
