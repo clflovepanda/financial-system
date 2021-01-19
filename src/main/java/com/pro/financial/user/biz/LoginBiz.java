@@ -43,6 +43,11 @@ public class LoginBiz {
      */
     public JSONObject login(String userName, String password, Integer validateCode, String code, HttpServletRequest request, HttpServletResponse response) {
         JSONObject result = new JSONObject();
+        if (StringUtils.isEmpty(userName)) {
+            result.put("code", 1002);
+            result.put("msg", "未输入用户名");
+            return result;
+        }
         if (validateCode == null || validateCode < 1 || StringUtils.isEmpty(code)) {
             result.put("code", 1002);
             result.put("msg", "验证码错误");

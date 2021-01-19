@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/project")
@@ -453,16 +454,17 @@ public class ProjectController {
         //数量
         int count = projectBiz.getCount(projectIds, projectNo, projectName, managerName, salesName,
                 userNames, settlementState, state, saleCommisState, startDate, endDate, auditingState);
+        List<Integer> projectIds2 = projectEntities.stream().map(project -> project.getProjectId()).collect(Collectors.toList());
         // 项目人员表
-        List<ProjectUserEntity> projectUserEntities = projectUserBiz.getProjectUserList(projectIds);
+        List<ProjectUserEntity> projectUserEntities = projectUserBiz.getProjectUserList(projectIds2);
         // 项目收入表
-        List<RevenueEntity> revenueEntities = revenueBiz.getRevenueList(projectIds);
+        List<RevenueEntity> revenueEntities = revenueBiz.getRevenueList(projectIds2);
         // 项目支出表
-        List<ExpenditureEntity> expenditureEntities = expenditureBiz.getExpenditureList(projectIds);
+        List<ExpenditureEntity> expenditureEntities = expenditureBiz.getExpenditureList(projectIds2);
         //结算单
-        List<SettlementEntity> settlementEntities = settlementBiz.getListByProjectIds(projectIds);
+        List<SettlementEntity> settlementEntities = settlementBiz.getListByProjectIds(projectIds2);
         // 认款记录表
-        List<SubscriptionLogEntity> subscriptionLogEntities = subscriptionLogBiz.getListByProjectIds(projectIds);
+        List<SubscriptionLogEntity> subscriptionLogEntities = subscriptionLogBiz.getListByProjectIds(projectIds2);
         List<ProjectDto> projectDtos = ConvertUtil.convert(ProjectEntity2Dto.instance, projectEntities);
         if (!CollectionUtils.isEmpty(projectDtos)) {
             for (ProjectDto projectDto : projectDtos) {
@@ -582,6 +584,10 @@ public class ProjectController {
         projectDto.setUpdateUser(userId);
         projectDto.setUtime(new Date());
         projectDto.setFullname(projectDto.getName());
+        if (projectDto.getAuditingState() != null && projectDto.getAuditingState() == 2) {
+            projectDto.setState(1);
+            projectDto.setAuditingState(0);
+        }
         projectBiz.updateById(ProjectDto2Entity.instance.convert(projectDto));
         int projectId = projectDto.getProjectId();
         // 处理项目关联类目表
