@@ -37,6 +37,7 @@ public class InvoiceController {
         JSONObject result = new JSONObject();
         String keyWord = request.getParameter("keyWord");
         String username = request.getParameter("username");
+        Integer projectId = Integer.parseInt(request.getParameter("projectId") == null ? "0" : request.getParameter("projectId"));
         //项目时间
         String startDt = request.getParameter("startDt");
         String endDt = request.getParameter("endDt");
@@ -45,7 +46,7 @@ public class InvoiceController {
         offset = limit*(offset - 1);
         Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
         Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
-        List<InvoiceDto> invoiceDtos = invoiceBiz.getList(keyWord, username, startDate, endDate, limit, offset);
+        List<InvoiceDto> invoiceDtos = invoiceBiz.getList(projectId, keyWord, username, startDate, endDate, limit, offset);
         int count = invoiceBiz.getCount(keyWord, username, startDate, endDate);
         result.put("code", 0);
         result.put("msg", "");

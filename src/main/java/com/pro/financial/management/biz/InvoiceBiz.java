@@ -28,8 +28,8 @@ public class InvoiceBiz extends ServiceImpl<InvoiceDao, InvoiceEntity> {
     @Autowired
     private InvoiceDao invoiceDao;
 
-    public List<InvoiceDto> getList(String keyWord, String username, Date startDate, Date endDate, Integer limit, Integer offset) {
-        List<InvoiceEntity> invoiceEntities = invoiceDao.getList(keyWord, username, startDate, endDate, limit, offset);
+    public List<InvoiceDto> getList(Integer projectId, String keyWord, String username, Date startDate, Date endDate, Integer limit, Integer offset) {
+        List<InvoiceEntity> invoiceEntities = invoiceDao.getList(projectId, keyWord, username, startDate, endDate, limit, offset);
         return ConvertUtil.convert(InvoiceEntity2Dto.instance, invoiceEntities);
     }
 

@@ -21,7 +21,7 @@ import java.util.List;
 @Repository
 public interface InvoiceDao extends BaseMapper<InvoiceEntity> {
 
-    List<InvoiceEntity> getList(@Param("keyWord") String keyWord,@Param("username")  String username,@Param("startDate")  Date startDate,@Param("endDate")  Date endDate,
+    List<InvoiceEntity> getList(@Param("projectId") Integer projectId, @Param("keyWord") String keyWord,@Param("username")  String username,@Param("startDate")  Date startDate,@Param("endDate")  Date endDate,
                                 @Param("limit") Integer limit, @Param("offset") Integer offset);
 
     @Select("SELECT invoice_no FROM invoice ORDER BY invoice_id DESC LIMIT 0,1")
