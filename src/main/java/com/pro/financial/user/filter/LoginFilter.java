@@ -1,16 +1,13 @@
 package com.pro.financial.user.filter;
 
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.pro.financial.consts.CommonConst;
 import com.pro.financial.user.converter.UserEntity2Dto;
 import com.pro.financial.user.dao.PermissionDao;
 import com.pro.financial.user.dao.UserDao;
-import com.pro.financial.user.dto.DataSourceDto;
 import com.pro.financial.user.dto.PermissionDto;
 import com.pro.financial.user.dto.UserDto;
-import lombok.Getter;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
