@@ -53,5 +53,7 @@ public class RevenueDto {
     private BigDecimal returning;
     //已退回
     private BigDecimal returned;
+    //押金转收入
+    private BigDecimal toRevenue;
     private String revenueTypeName;
 }

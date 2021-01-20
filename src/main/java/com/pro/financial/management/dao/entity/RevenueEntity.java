@@ -74,6 +74,9 @@ public class RevenueEntity {
     //已退回
     @TableField(exist = false)
     private BigDecimal returned;
+    //押金转收入
+    @TableField(exist = false)
+    private BigDecimal toRevenue;
 
     @TableField(exist = false)
     private String revenueTypeName;

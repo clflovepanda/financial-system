@@ -76,10 +76,17 @@ public class DepositController {
         BigDecimal toBeReturned = BigDecimal.ZERO;
         BigDecimal returned = BigDecimal.ZERO;
         BigDecimal returning = BigDecimal.ZERO;
+        BigDecimal toRevenue = BigDecimal.ZERO;
         for (RevenueDto revenueDto : revenueDtos) {
-            toBeReturned = toBeReturned.add(revenueDto.getToBeReturned() == null ? new BigDecimal(0) : revenueDto.getToBeReturned());
-            returned = returned.add(revenueDto.getReturned() == null ? new BigDecimal(0) : revenueDto.getReturned());
-            returning = returning.add(revenueDto.getReturning() == null ? new BigDecimal(0) : revenueDto.getReturning());
+//            toBeReturned = toBeReturned.add(revenueDto.getToBeReturned() == null ? new BigDecimal(0) : revenueDto.getToBeReturned());
+//            returned = returned.add(revenueDto.getReturned() == null ? new BigDecimal(0) : revenueDto.getReturned());
+//            returning = returning.add(revenueDto.getReturning() == null ? new BigDecimal(0) : revenueDto.getReturning());
+            if ((revenueDto.getReturning()== null || revenueDto.getReturning().compareTo(BigDecimal.ZERO) == 0) && revenueDto.getReturned().compareTo(BigDecimal.ZERO) != 0) {
+//                revenueDto.setToRevenue(revenueDto.getToBeReturned().subtract(revenueDto.getReturned()));
+                //已经退回待退回变成押金转收入
+                revenueDto.setToRevenue(revenueDto.getToBeReturned());
+                revenueDto.setToBeReturned(BigDecimal.ZERO);
+            }
         }
         DepositStatisticEntity depositStatisticEntity = revenueBiz.getDepositStatistic(projectId, revenueNo, null, receivementTypeId,
                 companyId, remitter, createUser, startDate, endDate, projectName, projectNo, revenueTypeId);
