@@ -591,7 +591,12 @@ public class ProjectController {
         projectDto.setUpdateUser(userId);
         projectDto.setUtime(new Date());
         projectDto.setFullname(projectDto.getName());
-        if (projectDto.getAuditingState() != null && projectDto.getAuditingState() == 2) {
+        //查询项目原始状态
+        ProjectEntity projectEntity = projectBiz.getById(projectDto.getProjectId());
+        //判断失效了进行修改
+        if (projectEntity.getAuditingState() != null && projectEntity.getAuditingState() == 2) {
+//            projectAuditLogBiz.
+            projectAuditLogBiz.removeLog(projectDto.getProjectId());
             projectDto.setState(1);
             projectDto.setAuditingState(0);
         }

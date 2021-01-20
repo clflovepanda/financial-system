@@ -18,4 +18,8 @@ public class ProjectAuditLogBiz {
     public ProjectAuditLogDto getProjectAuditByProjectId(Integer projectId) {
         return projectAuditLogDao.getProjectAuditByProjectId(projectId);
     }
+
+    public int removeLog(Integer projectId) {
+        return projectAuditLogDao.removeLog(projectId);
+    }
 }

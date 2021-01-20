@@ -5,6 +5,7 @@ import com.pro.financial.management.dto.ProjectAuditLogDto;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -21,4 +22,7 @@ public interface ProjectAuditLogDao {
             "where project_id = #{projectId} " +
             "and project_audit_log.state = 1 order by ctime desc limit 0 , 1")
     ProjectAuditLogDto getProjectAuditByProjectId(@Param("projectId") Integer projectId);
+
+    @Update("update project_audit_log set state = 0 where project_id = #{projectId}")
+    int removeLog(@Param("projectId") Integer projectId);
 }
