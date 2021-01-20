@@ -69,7 +69,7 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
             "using(project_id) " +
             "left join data_source " +
             "using(data_source_id) " +
-            "where name like #{keyWords} and project.auditing_state = 1" )
+            "where name like #{keyWords} and project.auditing_state = 1 and project.state <> 6" )
     List<ProjectEntity> getProjectByKeywords(@Param("keyWords") String keyWords);
 
     @Select("SELECT code FROM project ORDER BY project_id DESC LIMIT 0,1")
