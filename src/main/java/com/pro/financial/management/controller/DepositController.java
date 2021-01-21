@@ -81,7 +81,7 @@ public class DepositController {
 //            toBeReturned = toBeReturned.add(revenueDto.getToBeReturned() == null ? new BigDecimal(0) : revenueDto.getToBeReturned());
 //            returned = returned.add(revenueDto.getReturned() == null ? new BigDecimal(0) : revenueDto.getReturned());
 //            returning = returning.add(revenueDto.getReturning() == null ? new BigDecimal(0) : revenueDto.getReturning());
-            if ((revenueDto.getReturning()== null || revenueDto.getReturning().compareTo(BigDecimal.ZERO) == 0) && revenueDto.getReturned().compareTo(BigDecimal.ZERO) != 0) {
+            if ((revenueDto.getReturning()== null || revenueDto.getReturning().compareTo(BigDecimal.ZERO) == 0) && (revenueDto.getReturned() == null || revenueDto.getReturned().compareTo(BigDecimal.ZERO) != 0)) {
 //                revenueDto.setToRevenue(revenueDto.getToBeReturned().subtract(revenueDto.getReturned()));
                 //已经退回待退回变成押金转收入
                 revenueDto.setToRevenue(revenueDto.getToBeReturned());
