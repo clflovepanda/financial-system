@@ -250,14 +250,16 @@ public class ProjectController {
         int createUser = projectEntity.getCreateUser();
         projectEntity.setCreateUserName(userDao.getUserById(createUser).getUsername());
         // 项目工时表 TODO
-        //财务统计 TODO
+        //财务统计
         ProjectFinancialStatisticsDto projectFinancialStatisticsDto = new ProjectFinancialStatisticsDto();
         projectFinancialStatisticsDto.setEstincome(projectEntity.getEstincome());
         projectFinancialStatisticsDto.setBudget(projectEntity.getBudget());
-        //实际收入 (无押金和预收押金)
-        BigDecimal realRevenue = revenueBiz.getreByProjectId(projectId, "") == null ? new BigDecimal(0) : revenueBiz.getreByProjectId(projectId, "");
-        projectFinancialStatisticsDto.setActualIncome(realRevenue);
-        //实际支出(已经提交, 已经支付, 平借款)
+        //实际收入 (无押金和预收押金, 押金转收入)
+        BigDecimal actualIncome = revenueBiz.getreByProjectId(projectId, "") == null ? new BigDecimal(0) : revenueBiz.getreByProjectId(projectId, "");
+        projectFinancialStatisticsDto.setActualIncome(actualIncome);
+        //大收
+        BigDecimal relRevenue = revenueBiz.getRealRevenue(projectId);
+        //实际支出(已经提交, 已经支付, 平借款) 大支
         BigDecimal realExpenditure = expenditureBiz.getexByProjectId(projectId) == null ? new BigDecimal(0) : expenditureBiz.getexByProjectId(projectId);
         projectFinancialStatisticsDto.setActualExpenditure(realExpenditure);
         //预收押金
@@ -266,25 +268,22 @@ public class ProjectController {
         //押金转收入
         BigDecimal deposit2Re = revenueBiz.getreByProjectId(projectId, "S") == null ? new BigDecimal(0) : revenueBiz.getreByProjectId(projectId, "S");
         projectFinancialStatisticsDto.setDepositIncome(deposit2Re);
-        //项目利润
-        BigDecimal profit = BigDecimal.ZERO;
-        //实际收入（收回押金+预收押金+认款 ）
-        BigDecimal revenue = profit.add(deposit).add(realRevenue);
-        profit = revenue.subtract(realExpenditure);
+        //毛利润
+        BigDecimal profit = relRevenue.subtract(realExpenditure);
         projectFinancialStatisticsDto.setProfit(profit);
+        Double rate = new Double(0);
         //毛利率
-        BigDecimal rate = BigDecimal.ZERO;
-        if (!(revenue.compareTo(new BigDecimal(0)) == 0)) {
-            rate = profit.divide(revenue, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
+        if (relRevenue.compareTo(BigDecimal.ZERO) != 0) {
+            rate = profit.divide(relRevenue, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).doubleValue();
         }
         projectFinancialStatisticsDto.setRate(rate.doubleValue());
 
-        //支出比 = 实际支出 （提交的+ 已支付+平借款的）/  实际收入（收回押金+预收押金+认款 ）
-        BigDecimal ratio = BigDecimal.ZERO;
-        if (!(revenue.compareTo(new BigDecimal(0)) == 0)) {
-            ratio = realExpenditure.divide(revenue, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
+        //支出比 = （大支/大收）* 100%
+        double expenditureRatio = new Double(0);
+        if (relRevenue.compareTo(BigDecimal.ZERO) != 0) {
+            expenditureRatio = realExpenditure.divide(relRevenue, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).doubleValue();
         }
-        projectFinancialStatisticsDto.setExpenditureRatio(ratio.doubleValue());
+        projectFinancialStatisticsDto.setExpenditureRatio(expenditureRatio);
         //结算收入
         BigDecimal settlementIncome = settlementBiz.getreByProjectId(projectId) == null ? BigDecimal.ZERO : settlementBiz.getreByProjectId(projectId);
         projectFinancialStatisticsDto.setSettlement(settlementIncome);
@@ -299,8 +298,8 @@ public class ProjectController {
         projectFinancialStatisticsDto.setRelProfit(relProfit);
         //纯利率
         BigDecimal relRate = BigDecimal.ZERO;
-        if (!(revenue.compareTo(new BigDecimal(0)) == 0)) {
-            relRate = relProfit.divide(revenue, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
+        if (relRevenue.compareTo(BigDecimal.ZERO) != 0) {
+            relRate = relProfit.divide(relRevenue, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
         }
         projectFinancialStatisticsDto.setRelRate(relRate.doubleValue());
 
@@ -473,30 +472,13 @@ public class ProjectController {
             for (ProjectDto projectDto : projectDtos) {
                 //设置总支出和收入
                 Integer projectId = projectDto.getProjectId();
-                BigDecimal paymentIncome = BigDecimal.ZERO;
-                BigDecimal paymentExpenses = BigDecimal.ZERO;
                 BigDecimal settlementIncome = BigDecimal.ZERO;
-                BigDecimal settlementExpenses = BigDecimal.ZERO;
-                for (RevenueEntity revenueEntity : revenueEntities) {
-                    if (revenueEntity.getProjectId() - projectId == 0) {
-                        paymentIncome = paymentIncome.add(revenueEntity.getCnyMoney() == null ? new BigDecimal(0) : revenueEntity.getCnyMoney());
-                    }
-                }
-                for (ExpenditureEntity expenditureEntity : expenditureEntities) {
-                    if (expenditureEntity.getProjectId() - projectId == 0) {
-                        paymentExpenses = paymentExpenses.add(expenditureEntity.getExpenditureMoney() == null ? new BigDecimal(0) : expenditureEntity.getExpenditureMoney());
-                    }
-                }
                 for (SettlementEntity settlementEntity : settlementEntities) {
                     if (settlementEntity.getProjectId() - projectId == 0) {
                         settlementIncome = settlementIncome.add(settlementEntity.getSettlementIncome() == null ? new BigDecimal(0) : settlementEntity.getSettlementIncome());
-                        settlementExpenses = settlementExpenses.add(settlementEntity.getSettlementExpenses() == null ? new BigDecimal(0) : settlementEntity.getSettlementExpenses());
                     }
                 }
-                projectDto.setPaymentIncome(paymentIncome);
-                projectDto.setPaymentExpenses(paymentExpenses);
                 projectDto.setSettlementIncome(settlementIncome);
-                projectDto.setSettlementExpenses(settlementExpenses);
 
 //                //实际收入
 //                BigDecimal realRevenue = revenueBiz.getreByProjectId(projectId, "");
