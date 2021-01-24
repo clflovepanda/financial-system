@@ -462,16 +462,12 @@ public class ProjectController {
             result.put("count", 0);
             return result;
         }
-        // 项目人员表
-        List<ProjectUserEntity> projectUserEntities = projectUserBiz.getProjectUserList(projectIds2);
         // 项目收入表
         List<RevenueEntity> revenueEntities = revenueBiz.getRevenueList(projectIds2);
         // 项目支出表
         List<ExpenditureEntity> expenditureEntities = expenditureBiz.getExpenditureList(projectIds2);
         //结算单
         List<SettlementEntity> settlementEntities = settlementBiz.getListByProjectIds(projectIds2);
-        // 认款记录表
-        List<SubscriptionLogEntity> subscriptionLogEntities = subscriptionLogBiz.getListByProjectIds(projectIds2);
         List<ProjectDto> projectDtos = ConvertUtil.convert(ProjectEntity2Dto.instance, projectEntities);
         if (!CollectionUtils.isEmpty(projectDtos)) {
             for (ProjectDto projectDto : projectDtos) {
@@ -508,21 +504,25 @@ public class ProjectController {
 //                BigDecimal deposit = revenueBiz.getreByProjectId(projectId, "Y");
 //                //押金转收入
 //                BigDecimal deposit2Re = revenueBiz.getreByProjectId(projectId, "S");
-//                //实际支出
-//                BigDecimal realExpenditure = expenditureBiz.getexByProjectId(projectId);
+                //大收
+                BigDecimal realRevenue = revenueBiz.getRealRevenue(projectId);
+                projectDto.setRelRevenue(realRevenue);
+                //大支
+                BigDecimal realExpenditure = expenditureBiz.getexByProjectId(projectId);
+                projectDto.setRelExpenditure(realExpenditure);
                 //利润率
-                paymentIncome = paymentIncome == null ? new BigDecimal(0) : paymentIncome;
-                paymentExpenses = paymentExpenses == null ? new BigDecimal(0) : paymentExpenses;
-                projectDto.setPaymentProfit(paymentIncome.subtract(paymentExpenses).doubleValue());
+//                paymentIncome = paymentIncome == null ? new BigDecimal(0) : paymentIncome;
+//                paymentExpenses = paymentExpenses == null ? new BigDecimal(0) : paymentExpenses;
+//                projectDto.setPaymentProfit(paymentIncome.subtract(paymentExpenses).doubleValue());
+                //项目毛利润
+                BigDecimal profit = realRevenue.subtract(realExpenditure);
+                projectDto.setProjectProfit(profit);
                 //毛利率
-
-
-                BigDecimal rate = BigDecimal.ZERO;
-                if (!(paymentIncome.compareTo(new BigDecimal(0)) == 0)) {
-                    rate = paymentIncome.subtract(paymentExpenses);
-                    rate = rate.divide(paymentIncome, 2, BigDecimal.ROUND_HALF_UP);
-                }
-                projectDto.setProjectRate(rate.doubleValue());
+               if (realRevenue.compareTo(BigDecimal.ZERO) == 0) {
+                   projectDto.setProjectRate(new Double(0));
+               } else {
+                   projectDto.setProjectRate(profit.divide(realRevenue, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).doubleValue());
+               }
             }
         }
 

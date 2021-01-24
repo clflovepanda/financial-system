@@ -107,7 +107,8 @@ public class ExpenditureBiz {
     }
 
     public BigDecimal getexByProjectId(Integer projectId) {
-        return expenditureDao.getexByProjectId(projectId);
+        BigDecimal realExpenditure = expenditureDao.getexByProjectId(projectId);
+        return realExpenditure == null ? BigDecimal.ZERO : realExpenditure;
     }
 
     public ExpenditureEntity getById(Integer expenditureId) {

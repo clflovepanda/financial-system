@@ -129,4 +129,14 @@ public class RevenueBiz {
         queryWrapper.eq("subscription_log_id", id).eq("`delete`", 1);
         return revenueDao.selectList(queryWrapper);
     }
+
+    /**
+     * 查询大收
+     * @param projectId
+     * @return
+     */
+    public BigDecimal getRealRevenue(Integer projectId) {
+        BigDecimal realRevenue = revenueDao.getRealRevenue(projectId);
+        return realRevenue == null ? BigDecimal.ZERO : realRevenue;
+    }
 }

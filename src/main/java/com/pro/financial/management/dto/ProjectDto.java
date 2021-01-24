@@ -70,14 +70,10 @@ public class ProjectDto {
     private BigDecimal paymentExpenses;
     //收付款利润
     private Double paymentProfit;
+    //项目毛利润
+    private BigDecimal projectProfit;
     //项目毛利率
     private Double projectRate;
-
-    //收入
-    private RevenueDto revenue;
-
-    //支出
-    private ExpenditureDto expenditure;
 
     private String dataSourceName;
     private String dataSourceId;
@@ -87,8 +83,10 @@ public class ProjectDto {
     private Integer salesId;
     private List<Integer> userIds;
 
-    //实际收入
+    //大收
     private BigDecimal relRevenue;
+    //大支
+    private BigDecimal relExpenditure;
     private BigDecimal receivable;
 
 
