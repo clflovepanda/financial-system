@@ -139,4 +139,8 @@ public class RevenueBiz {
         BigDecimal realRevenue = revenueDao.getRealRevenue(projectId);
         return realRevenue == null ? BigDecimal.ZERO : realRevenue;
     }
+
+    public BigDecimal getdepositByProjectId(Integer projectId) {
+        return revenueDao.getdepositByProjectId(projectId);
+    }
 }

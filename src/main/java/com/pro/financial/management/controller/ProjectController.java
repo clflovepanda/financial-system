@@ -262,8 +262,8 @@ public class ProjectController {
         //实际支出(已经提交, 已经支付, 平借款) 大支
         BigDecimal realExpenditure = expenditureBiz.getexByProjectId(projectId) == null ? new BigDecimal(0) : expenditureBiz.getexByProjectId(projectId);
         projectFinancialStatisticsDto.setActualExpenditure(realExpenditure);
-        //预收押金
-        BigDecimal deposit = revenueBiz.getreByProjectId(projectId, "Y") == null ? new BigDecimal(0) : revenueBiz.getreByProjectId(projectId, "Y");
+        //预收押金  支出类型为7
+        BigDecimal deposit = revenueBiz.getdepositByProjectId(projectId);
         projectFinancialStatisticsDto.setDeposit(deposit);
         //押金转收入
         BigDecimal deposit2Re = revenueBiz.getreByProjectId(projectId, "S") == null ? new BigDecimal(0) : revenueBiz.getreByProjectId(projectId, "S");
