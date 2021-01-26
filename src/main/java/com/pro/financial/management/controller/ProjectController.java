@@ -461,10 +461,6 @@ public class ProjectController {
             result.put("count", 0);
             return result;
         }
-        // 项目收入表
-        List<RevenueEntity> revenueEntities = revenueBiz.getRevenueList(projectIds2);
-        // 项目支出表
-        List<ExpenditureEntity> expenditureEntities = expenditureBiz.getExpenditureList(projectIds2);
         //结算单
         List<SettlementEntity> settlementEntities = settlementBiz.getListByProjectIds(projectIds2);
         List<ProjectDto> projectDtos = ConvertUtil.convert(ProjectEntity2Dto.instance, projectEntities);
@@ -480,12 +476,6 @@ public class ProjectController {
                 }
                 projectDto.setSettlementIncome(settlementIncome);
 
-//                //实际收入
-//                BigDecimal realRevenue = revenueBiz.getreByProjectId(projectId, "");
-//                //预收押金
-//                BigDecimal deposit = revenueBiz.getreByProjectId(projectId, "Y");
-//                //押金转收入
-//                BigDecimal deposit2Re = revenueBiz.getreByProjectId(projectId, "S");
                 //大收
                 BigDecimal realRevenue = revenueBiz.getRealRevenue(projectId);
                 projectDto.setRelRevenue(realRevenue);

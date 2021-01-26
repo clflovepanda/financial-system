@@ -79,6 +79,6 @@ public interface RevenueDao extends BaseMapper<RevenueEntity> {
     @Update("update revenue set `delete` = 0 where subscription_log_id = #{id}")
     int deleteBySubLogId(@Param("id") Integer id);
 
-    @Select("SELECT (IFNULL((SELECT SUM(cny_money) FROM revenue WHERE project_id = #{projectId} AND `delete` = 1 and revenue_type_id <> 13), 0)) - (IFNULL((SELECT SUM(cny_money) FROM revenue WHERE project_id = #{projectId} AND `delete` = 1 and revenue_type_id = 13), 0))")
+    @Select("SELECT SUM(cny_money) FROM revenue WHERE project_id = #{projectId} AND `delete` = 1 and revenue_type_id <> 13")
     BigDecimal getRealRevenue(@Param("projectId") Integer projectId);
 }
