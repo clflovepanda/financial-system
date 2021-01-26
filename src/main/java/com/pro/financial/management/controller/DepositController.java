@@ -133,9 +133,11 @@ public class DepositController {
             return result;
         }
         ExpenditureEntity expenditureEntity = expenditureBiz.selectById(expenditureId);
-        if (expenditureEntity.getState() - CommonConst.expenditure_audit_type_paid == 0) {
+        if (expenditureEntity.getState() - CommonConst.expenditure_audit_type_paid == 0
+                || expenditureEntity.getState() - CommonConst.expenditure_audit_type_flat == 0
+                || expenditureEntity.getState() - CommonConst.expenditure_audit_type_cancel == 0) {
             result.put("code", 1001);
-            result.put("msg", "已经支付无法删除");
+            result.put("msg", "已经支付或平借款无法删除");
             return result;
         }
         List<ExpenditureAuditLogDto> expenditureAuditLogDtos = expenditureAuditLogBiz.getLogByEId(expenditureId);

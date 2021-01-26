@@ -139,9 +139,9 @@
     </select>
     <select id="getStatistic" resultType="com.pro.financial.management.dao.entity.RevenueStatisticEntity">
         select
-        sum(CASE WHEN re.revenue_type_id > 0 THEN cny_money END) AS allRevenue ,
-        sum(CASE WHEN re.revenue_type_id='7' THEN cny_money END) AS depositToRevenue ,
-        sum(CASE WHEN re.revenue_type_id not in ('5','7') THEN cny_money END) AS revenue ,
+        sum(CASE WHEN re.revenue_type_id not in ('5','7') THEN cny_money END) AS allRevenue ,
+        sum(CASE WHEN re.revenue_type_id='13' THEN cny_money END) AS depositToRevenue ,
+        sum(CASE WHEN re.revenue_type_id not in ('5','7','13') THEN cny_money END) AS revenue ,
         sum(CASE WHEN re.revenue_type_id='5' THEN cny_money END) AS deposit
         from revenue re
         left join receivement r on re.receivement_id = r.id

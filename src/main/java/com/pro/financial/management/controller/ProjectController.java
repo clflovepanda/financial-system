@@ -344,6 +344,12 @@ public class ProjectController {
         Integer id = Integer.valueOf(request.getParameter("id"));
         Integer state = Integer.valueOf(request.getParameter("project_state"));
         int updateResult = projectBiz.updateState(id, state);
+        if (state == 6) {
+            ProjectEntity projectEntity = new ProjectEntity();
+            projectEntity.setProjectId(id);
+            projectEntity.setSettlementState(1);
+            projectBiz.updateById(projectEntity);
+        }
         if (updateResult == 1) {
             result.put("code", 0);
             result.put("msg", HttpStatus.OK.getReasonPhrase());

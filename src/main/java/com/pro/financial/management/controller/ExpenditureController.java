@@ -264,7 +264,7 @@ public class ExpenditureController {
                 expenditureDto.setState(expenditureAuditLogDto.getAuditType());
                 expenditureBiz.updateExpenditure(expenditureDto);
                 //已经支付 如果更改押金表记录
-                if (expenditureAuditLogDto.getAuditType() - CommonConst.expenditure_audit_type_paid == 0) {
+                if (expenditureAuditLogDto.getAuditType() - CommonConst.expenditure_audit_type_paid == 0 || expenditureAuditLogDto.getAuditType() - CommonConst.expenditure_audit_type_flat == 0) {
                     QueryWrapper<DepositLogEntity> queryWrapper = new QueryWrapper<>();
                     queryWrapper.eq("expenditure_id", expenditureAuditLogDto.getExpenditureId());
                     DepositLogEntity depositLogEntity = new DepositLogEntity();
