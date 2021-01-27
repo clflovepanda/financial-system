@@ -34,7 +34,7 @@ public interface SettlementDao {
 
     @Select("<script>" +
             "select * from settlement " +
-            "where project_id in " +
+            "where state = 1 and project_id in " +
             "<foreach collection='projectIds' item='projectId' index='index' separator=',' open='(' close=')'>" +
             "#{projectId}" +
             "</foreach>" +
