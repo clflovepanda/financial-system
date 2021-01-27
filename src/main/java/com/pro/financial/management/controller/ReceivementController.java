@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -329,9 +330,18 @@ public class ReceivementController {
     }
 
     @RequestMapping("/addsublog")
+    @Transactional
     public JSONObject addSubscriptionLog(@RequestBody JSONObject jsonInfo, @CookieValue("user_id") Integer userId) {
         JSONObject result = new JSONObject();
-        SubscriptionLogDto subscriptionLogDto = JSONObject.parseObject(jsonInfo.toJSONString(), SubscriptionLogDto.class);
+        SubscriptionLogDto subscriptionLogDto;
+        try {
+            subscriptionLogDto = JSONObject.parseObject(jsonInfo.toJSONString(), SubscriptionLogDto.class);
+        } catch (Exception e) {
+            result.put("code", 1001);
+            result.put("msg", "传入参数有误");
+            return result;
+        }
+
         if (subscriptionLogDto == null || subscriptionLogDto.getReceivementId() == null) {
             result.put("code", 1001);
             result.put("msg", "未传入认款类型");

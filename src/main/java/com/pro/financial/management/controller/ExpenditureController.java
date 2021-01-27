@@ -50,6 +50,7 @@ public class ExpenditureController {
     private BeneficiaryUnitBiz beneficiaryUnitBiz;
 
     @RequestMapping("/add")
+    @Transactional
     public JSONObject addExpenditure(@RequestBody JSONObject jsonInfo, HttpServletRequest request, @CookieValue("user_id") Integer userId) {
         JSONObject result = new JSONObject();
         ExpenditureDto expenditureDto = JSONObject.parseObject(jsonInfo.toJSONString(), ExpenditureDto.class);
