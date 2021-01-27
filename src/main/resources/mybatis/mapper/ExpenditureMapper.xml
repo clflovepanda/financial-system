@@ -55,6 +55,7 @@
     left join company c on e.company_id = c.company_id
     left join `user` u on e.create_user = u.user_id
     where 1=1
+    and e.is_effective = 1
     <if test="applyUser != null and applyUser != ''">
         AND e.create_user LIKE "%${applyUser}%"
     </if>
@@ -102,6 +103,7 @@
     left join company c on e.company_id = c.company_id
     left join `user` u on e.create_user = u.user_id
     where 1=1
+    and e.is_effective = 1
     <if test="applyUser != null and applyUser != ''">
       AND e.create_user LIKE "%${applyUser}%"
     </if>
@@ -249,7 +251,7 @@
   <select id="getStatistics" resultType="com.pro.financial.management.dao.entity.ExpenditureStatisticsEntity">
     SELECT
     sum(CASE WHEN e.state='1' THEN expenditure_money END) AS submitted ,
-    sum(CASE WHEN e.state='2' THEN expenditure_money END) AS notApproved ,
+    sum(CASE WHEN e.state='1' THEN expenditure_money END) AS notApproved ,
     sum(CASE WHEN e.state='4' THEN expenditure_money END) AS paid ,
     sum(CASE WHEN e.state='5' THEN expenditure_money END) AS cancel ,
     sum(CASE WHEN e.state='6' THEN expenditure_money END) AS flatLoan

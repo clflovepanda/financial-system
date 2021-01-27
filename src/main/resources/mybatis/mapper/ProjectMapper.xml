@@ -171,8 +171,8 @@
     <select id="statistics" resultType="com.pro.financial.management.dao.entity.ProjectEntity">
         SELECT p.project_id, p.name,p.code , p.fullname, u.username managerName, p.estincome,
         (SELECT SUM(settlement_income) FROM settlement WHERE project_id = p.project_id and state = 1 ) settlementIncome,
-        (SELECT SUM(re.cny_money) FROM revenue re LEFT JOIN receivement r on re.receivement_id = r.id WHERE r.receivement_type_id in (1,2,3) and re.project_id = p.project_id) relRevenue,
-        (SELECT SUM(cny_money) FROM invoice WHERE project_id = p.project_id) receivable
+        (SELECT SUM(cny_money) FROM revenue re LEFT JOIN revenue_type rt USING (revenue_type_id) WHERE re.project_id = p.project_id and re.`delete` = 1 AND rt.remark <![CDATA[ <> ]]> 'Y' AND rt.remark <![CDATA[ <> ]]> 'S') relRevenue,
+        ((SELECT SUM(settlement_income) FROM settlement WHERE project_id = p.project_id and state = 1 ) - (SELECT SUM(cny_money) FROM revenue re LEFT JOIN revenue_type rt USING (revenue_type_id) WHERE re.project_id = p.project_id and re.`delete` = 1 AND rt.remark <![CDATA[ <> ]]> 'Y')) receivable
         from project p
         LEFT JOIN project_data_source pds USING(project_id)
         LEFT JOIN data_source ds USING(data_source_id)
