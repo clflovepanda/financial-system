@@ -6,6 +6,7 @@
     <select id="getQuotation" resultType="com.pro.financial.management.dao.entity.QuotationEntity">
         select * from quotation
         where 1=1
+        and state = 1
         <if test="projectId != null">
             and project_id = #{projectId}
         </if>
@@ -36,6 +37,9 @@
 
             <if test="quotation.resourceName != null">
                 resource_name = #{quotation.resourceName},
+            </if>
+            <if test="quotation.resourceUrl != null">
+                resource_url = #{quotation.resourceUrl},
             </if>
             <if test="quotation.state != null">
                 state = #{quotation.state},
