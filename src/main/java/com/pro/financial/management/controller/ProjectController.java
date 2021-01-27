@@ -288,7 +288,7 @@ public class ProjectController {
         BigDecimal settlementIncome = settlementBiz.getreByProjectId(projectId) == null ? BigDecimal.ZERO : settlementBiz.getreByProjectId(projectId);
         projectFinancialStatisticsDto.setSettlement(settlementIncome);
         //应收收入
-        projectFinancialStatisticsDto.setReceivable(settlementIncome.subtract(realExpenditure));
+        projectFinancialStatisticsDto.setReceivable(settlementIncome.subtract(actualIncome).subtract(deposit2Re));
 
         //人工成本
         BigDecimal timeMoney = BigDecimal.ZERO;
