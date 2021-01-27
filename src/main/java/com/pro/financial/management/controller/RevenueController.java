@@ -77,6 +77,9 @@ public class RevenueController {
                 remitter, createUser, startDate, endDate, null, null, revenueTypeId, limit, offset);
         RevenueStatisticEntity revenueStatisticEntity = revenueBiz.getStatistic(projectId, revenueNo, remitterMethodId, receivementTypeId, companyId,
                 remitter, createUser, startDate, endDate, null, null, revenueTypeId);
+        if (revenueStatisticEntity == null) {
+            revenueStatisticEntity = new RevenueStatisticEntity();
+        }
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", revenueDtos);
