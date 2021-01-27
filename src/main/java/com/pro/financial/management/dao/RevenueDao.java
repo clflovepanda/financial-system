@@ -84,4 +84,7 @@ public interface RevenueDao extends BaseMapper<RevenueEntity> {
 
     @Select("SELECT SUM(cny_money) FROM revenue WHERE project_id = #{projectId} AND `delete` = 1 and revenue_type_id = 7")
     BigDecimal getdepositByProjectId(Integer projectId);
+
+    @Update("update revenue set `delete` = 0 where subscription_log_id = #{id} and revenue_type_id = 13")
+    int deleteByRevenueId(@Param("id") int revenueId);
 }

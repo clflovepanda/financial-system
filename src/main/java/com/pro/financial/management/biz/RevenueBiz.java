@@ -15,6 +15,7 @@ import com.pro.financial.utils.ConvertUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -142,5 +143,16 @@ public class RevenueBiz {
 
     public BigDecimal getdepositByProjectId(Integer projectId) {
         return revenueDao.getdepositByProjectId(projectId);
+    }
+
+    public int deleteByIds(List<Integer> revenueIds) {
+        int count = 0;
+        if (!CollectionUtils.isEmpty(revenueIds)) {
+            for (int revenueId : revenueIds) {
+                revenueDao.deleteByRevenueId(revenueId);
+                count ++;
+            }
+        }
+        return  count;
     }
 }

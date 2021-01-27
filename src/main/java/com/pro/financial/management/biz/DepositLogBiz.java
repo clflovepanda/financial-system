@@ -118,7 +118,7 @@ public class DepositLogBiz extends ServiceImpl<DepositLogDao, DepositLogEntity> 
                     depositRevenue.setRevenueTypeId(13);
                     //无到款记录认款记录 设为0
                     depositRevenue.setReceivementId(deposit.getReceivementId());
-                    depositRevenue.setSubscriptionLogId(0);
+                    depositRevenue.setSubscriptionLogId(deposit.getId());
                     revenueDao.insert(depositRevenue);
                 }
             }

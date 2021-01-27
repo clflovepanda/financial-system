@@ -282,6 +282,7 @@ public class ExpenditureController {
         return result;
     }
     @RequestMapping("/approval/del")
+    @Transactional
     public JSONObject approvalDel(HttpServletRequest request, @RequestBody ExpenditureAuditLogDto expenditureAuditLogDto, @CookieValue("user_id") Integer userId) {
         JSONObject result = new JSONObject();
         ExpenditureAuditLogDto lastLog = new ExpenditureAuditLogDto();
@@ -308,12 +309,22 @@ public class ExpenditureController {
                 expenditureDto.setState(nextLog.getAuditType());
                 expenditureBiz.updateExpenditure(expenditureDto);
                 //已经支付 如果更改押金表记录
-                if (expenditureAuditLogDto.getAuditType() - CommonConst.expenditure_audit_type_paid == 0) {
+                if (expenditureAuditLogDto.getAuditType() - CommonConst.expenditure_audit_type_paid == 0 ||
+                        expenditureAuditLogDto.getAuditType() - CommonConst.expenditure_audit_type_flat == 0) {
                     QueryWrapper<DepositLogEntity> queryWrapper = new QueryWrapper<>();
                     queryWrapper.eq("expenditure_id", expenditureAuditLogDto.getExpenditureId());
+                    List<DepositLogEntity> deposits = depositLogBiz.getByExpenditureId(expenditureAuditLogDto.getExpenditureId());
                     DepositLogEntity depositLogEntity = new DepositLogEntity();
                     depositLogEntity.setState(0);
                     depositLogBiz.update(depositLogEntity, queryWrapper);
+
+                    //删除押金转收入
+                    if (!CollectionUtils.isEmpty(deposits)) {
+                        List<Integer> revenueIds = deposits.stream().map(deposit -> deposit.getRevenueId()).collect(Collectors.toList());
+                        revenueBiz.deleteByIds(revenueIds);
+                    }
+                    //更改押金状态
+
                 }
 
             } else {
