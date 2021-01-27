@@ -22,7 +22,7 @@ public class QuotationController {
     @RequestMapping("/list")
     public JSONObject list(HttpServletRequest request) {
         JSONObject result = new JSONObject();
-        String quotationName = request.getParameter("quotationName");
+        String quotationName = request.getParameter("name");
         String quotationNo = request.getParameter("quotationNo");
         String projectId = request.getParameter("projectId");
         Integer limit = StringUtils.isEmpty(request.getParameter("limit")) ? null : Integer.parseInt(request.getParameter("limit"));
