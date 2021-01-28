@@ -11,6 +11,8 @@
         select * from deposit_log
         left join expenditure using (expenditure_id)
         where revenue_id = #{depositId}
+        and expenditure.state <![CDATA[ <> ]]> 5
+        and expenditure.is_effective = 1
     </select>
 
 </mapper>

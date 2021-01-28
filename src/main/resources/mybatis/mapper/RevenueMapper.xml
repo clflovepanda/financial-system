@@ -24,9 +24,9 @@
     select re.id, re.revenue_no, co_name, remitter_method_name, r.remitter, revenue_type_name, receivement_type_name, data_source_name,
      re.cny_money, u.username, re.ctime, p.name projectName, p.code  projectNo, p.project_id
       <if test="revenueTypeId == null or revenueTypeId == ''">
-          ,re.cny_money - (SELECT SUM(expenditure_money) FROM deposit_log LEFT JOIN expenditure USING(expenditure_id) WHERE revenue_id = re.id) toBeReturned
-          ,(SELECT SUM(expenditure_money) FROM deposit_log LEFT JOIN expenditure USING(expenditure_id) WHERE revenue_id = re.id and deposit_log.state=1) returned
-          ,(SELECT SUM(expenditure_money) FROM deposit_log LEFT JOIN expenditure USING(expenditure_id) WHERE revenue_id = re.id and deposit_log.state=0) returning
+          ,re.cny_money - (SELECT SUM(expenditure_money) FROM deposit_log LEFT JOIN expenditure USING(expenditure_id) WHERE revenue_id = re.id and expenditure.state <![CDATA[ <> ]]> 5 and expenditure.is_effective = 1) toBeReturned
+          ,(SELECT SUM(expenditure_money) FROM deposit_log LEFT JOIN expenditure USING(expenditure_id) WHERE revenue_id = re.id and deposit_log.state=1 and expenditure.state <![CDATA[ <> ]]> 5 and expenditure.is_effective = 1) returned
+          ,(SELECT SUM(expenditure_money) FROM deposit_log LEFT JOIN expenditure USING(expenditure_id) WHERE revenue_id = re.id and deposit_log.state=0 and expenditure.state <![CDATA[ <> ]]> 5 and expenditure.is_effective = 1) returning
       </if>
     from revenue re
     left join receivement r on re.receivement_id = r.id
@@ -197,9 +197,10 @@
     <select id="getDepositStatistic" resultType="com.pro.financial.management.dao.entity.DepositStatisticEntity">
         select
         sum(re.cny_money) allDeposit,
-        sum(re.cny_money - (SELECT SUM(expenditure_money) FROM deposit_log LEFT JOIN expenditure USING(expenditure_id) WHERE revenue_id = re.id)) toBeReturned,
-        sum((SELECT SUM(expenditure_money) FROM deposit_log LEFT JOIN expenditure USING(expenditure_id) WHERE revenue_id = re.id and deposit_log.state=1)) approval,
-        sum((SELECT SUM(expenditure_money) FROM deposit_log LEFT JOIN expenditure USING(expenditure_id) WHERE revenue_id = re.id and deposit_log.state=0)) returned
+        sum(if((SELECT SUM(expenditure_money) FROM deposit_log LEFT JOIN expenditure USING(expenditure_id) WHERE revenue_id = re.id and deposit_log.state=0 and expenditure.state <![CDATA[ <> ]]> 5 and expenditure.is_effective = 1) is null , 0, re.cny_money - (SELECT SUM(expenditure_money) FROM deposit_log LEFT JOIN expenditure USING(expenditure_id) WHERE revenue_id = re.id and expenditure.state <![CDATA[ <> ]]> 5 and expenditure.is_effective = 1 ))) toBeReturned,
+        sum((SELECT SUM(expenditure_money) FROM deposit_log LEFT JOIN expenditure USING(expenditure_id) WHERE revenue_id = re.id and deposit_log.state=1 and expenditure.state <![CDATA[ <> ]]> 5 and expenditure.is_effective = 1)) approval,
+        sum((SELECT SUM(expenditure_money) FROM deposit_log LEFT JOIN expenditure USING(expenditure_id) WHERE revenue_id = re.id and deposit_log.state=0 and expenditure.state <![CDATA[ <> ]]> 5 and expenditure.is_effective = 1)) returned,
+        sum(if((SELECT SUM(expenditure_money) FROM deposit_log LEFT JOIN expenditure USING(expenditure_id) WHERE revenue_id = re.id and deposit_log.state=0 and expenditure.state <![CDATA[ <> ]]> 5 and expenditure.is_effective = 1) > 0 , 0, re.cny_money - (SELECT SUM(expenditure_money) FROM deposit_log LEFT JOIN expenditure USING(expenditure_id) WHERE revenue_id = re.id and expenditure.state <![CDATA[ <> ]]> 5 and expenditure.is_effective = 1 ) - )) toRevenue
         from revenue re
         left join receivement r on re.receivement_id = r.id
         left join `user` u on re.create_user = u.user_id

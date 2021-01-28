@@ -240,7 +240,7 @@ public class ExpenditureController {
         JSONObject result = new JSONObject();
         if (expenditureAuditLogDto.getExpenditureId() == null || expenditureAuditLogDto.getExpenditureId() < 1 || expenditureAuditLogDto.getAuditType() == null) {
             result.put("code", 1001);
-            result.put("msg", "传入参数有误");
+            result.put("msg", "请选择审批结果");
             return result;
         }
         ExpenditureAuditLogDto lastLog = new ExpenditureAuditLogDto();
@@ -278,6 +278,17 @@ public class ExpenditureController {
                     //判断是否是押金  押金转收入
                     depositLogBiz.toRevenue(expenditureAuditLogDto.getExpenditureId());
                 }
+                //作废逻辑
+                if (expenditureAuditLogDto.getAuditType() - CommonConst.expenditure_audit_type_cancel == 0) {
+                    QueryWrapper<DepositLogEntity> queryWrapper = new QueryWrapper<>();
+                    queryWrapper.eq("expenditure_id", expenditureAuditLogDto.getExpenditureId());
+                    DepositLogEntity depositLogEntity = new DepositLogEntity();
+                    //作废
+                    depositLogEntity.setState(2);
+                    depositLogEntity.setAuditUser(userId);
+                    depositLogBiz.update(depositLogEntity, queryWrapper);
+
+                }
             }
         }
         result.put("code", 0);
@@ -305,6 +316,15 @@ public class ExpenditureController {
                 return result;
             }
             if (lastLog.getId() - expenditureAuditLogDto.getId() == 0) {
+                //票据作废 状态 如果是押金的话需要判断是否还可以退押金
+                if (expenditureAuditLogDto.getAuditType() - CommonConst.expenditure_audit_type_cancel == 0) {
+                   List<DepositLogEntity> deps = depositLogBiz.getAllByExpenditureId(expenditureAuditLogDto.getExpenditureId());
+                   if (!CollectionUtils.isEmpty(deps)) {
+                       result.put("code", 4001);
+                       result.put("msg", "押金作废数据,无法删除");
+                       return result;
+                   }
+                }
                 expenditureAuditLogBiz.remove(expenditureAuditLogDto);
                 ExpenditureAuditLogDto nextLog = sortList.get(1);
                 ExpenditureDto expenditureDto = new ExpenditureDto();
@@ -329,6 +349,7 @@ public class ExpenditureController {
                     //更改押金状态
 
                 }
+
 
             } else {
                 result.put("code", 4001);

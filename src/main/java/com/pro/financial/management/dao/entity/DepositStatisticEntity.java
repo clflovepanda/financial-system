@@ -18,4 +18,6 @@ public class DepositStatisticEntity {
     private BigDecimal approval = BigDecimal.ZERO;
     // 已退回押金总金额
     private BigDecimal returned = BigDecimal.ZERO;
+    //押金转收入
+    private BigDecimal toRevenue = BigDecimal.ZERO;
 }

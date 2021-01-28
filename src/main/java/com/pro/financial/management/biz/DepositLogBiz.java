@@ -133,7 +133,7 @@ public class DepositLogBiz extends ServiceImpl<DepositLogDao, DepositLogEntity> 
         QueryWrapper<DepositLogEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("expenditure_id", id);
         DepositLogEntity depositLogEntity = new DepositLogEntity();
-        depositLogEntity.setState(0);
+        depositLogEntity.setState(-1);
         return depositLogDao.update(depositLogEntity, queryWrapper);
     }
 
@@ -143,4 +143,9 @@ public class DepositLogBiz extends ServiceImpl<DepositLogDao, DepositLogEntity> 
         return depositLogDao.selectList(wrapper);
     }
 
+    public List<DepositLogEntity> getAllByExpenditureId(Integer expenditureId) {
+        QueryWrapper<DepositLogEntity>  wrapper = new QueryWrapper();
+        wrapper.eq("expenditure_id", expenditureId);
+        return depositLogDao.selectList(wrapper);
+    }
 }

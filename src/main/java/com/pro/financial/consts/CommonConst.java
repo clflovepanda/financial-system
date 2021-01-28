@@ -49,7 +49,7 @@ public class CommonConst {
     //工时-模板
     public static final String project_task_status_template = "-1";
 
-    //支出审批状态
+    //支出审批状态 状态(0:未提交 1:已提交 2:审核中 3:被驳回 4:已支付 5:作废 6:平借款)
     public static final Integer expenditure_audit_type_not_submit = 0;
     public static final Integer expenditure_audit_type_submit = 1;
     public static final Integer expenditure_audit_type_reviewed = 2;
