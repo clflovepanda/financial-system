@@ -258,6 +258,9 @@ public class ExpenditureController {
                 //添加审批记录
                 expenditureAuditLogDto.setCreateUser(userId);
                 expenditureAuditLogDto.setCtime(new Date());
+                if (expenditureAuditLogDto.getAuditType() - CommonConst.expenditure_audit_type_paid == 0 || expenditureAuditLogDto.getAuditType() - CommonConst.expenditure_audit_type_flat == 0) {
+                    expenditureAuditLogDto.setState(1);
+                }
                 expenditureAuditLogBiz.addExpenditureAuditLog(expenditureAuditLogDto);
                 //修改支出表状态
                 ExpenditureDto expenditureDto = new ExpenditureDto();
