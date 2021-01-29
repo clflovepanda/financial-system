@@ -76,15 +76,6 @@ public class ExpenditureController {
         expenditureDto.setCtime(new Date());
         expenditureDto.setUpdateUser(userId);
         expenditureDto.setUtime(new Date());
-        int count = expenditureBiz.addExpenditure(expenditureDto);
-        //添加银行信息
-        try {
-            BeneficiaryUnitEntity beneficiaryUnitEntity = JSONObject.parseObject(JSONObject.toJSONString(expenditureDto), BeneficiaryUnitEntity.class);
-            beneficiaryUnitBiz.save(beneficiaryUnitEntity);
-        } catch (Exception e) {
-
-        }
-        //退押金操作
         if (StringUtils.equals("deposit", request.getParameter("flag"))) {
             //depositId 为收入表revenueId
             Integer depositId = jsonInfo.getInteger("revenueId");
@@ -109,6 +100,16 @@ public class ExpenditureController {
             depositLogEntity.setAuditUser(userId);
             depositLogBiz.save(depositLogEntity);
         }
+        int count = expenditureBiz.addExpenditure(expenditureDto);
+        //添加银行信息
+        try {
+            BeneficiaryUnitEntity beneficiaryUnitEntity = JSONObject.parseObject(JSONObject.toJSONString(expenditureDto), BeneficiaryUnitEntity.class);
+            beneficiaryUnitBiz.save(beneficiaryUnitEntity);
+        } catch (Exception e) {
+
+        }
+        //退押金操作
+
         //添加申请工作流
         ExpenditureAuditLogDto expenditureAuditLogDto = new ExpenditureAuditLogDto();
         expenditureAuditLogDto.setExpenditureId(expenditureDto.getExpenditureId());
