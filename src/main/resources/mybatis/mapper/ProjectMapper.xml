@@ -82,7 +82,7 @@
         <if test="managerName !=  null and managerName != ''">
             and a.managerName LIKE "%${managerName}%"
         </if>
-        <if test="salesName !=  null and managerName != ''">
+        <if test="salesName !=  null and salesName != ''">
             and a.salesName LIKE "%${salesName}%"
         </if>
         <if test="userNames !=  null and userNames != ''">
@@ -155,7 +155,7 @@
         <if test="managerName !=  null and managerName != ''">
             and a.managerName LIKE "%${managerName}%"
         </if>
-        <if test="salesName !=  null and managerName != ''">
+        <if test="salesName !=  null and salesName != ''">
             and a.salesName LIKE "%${salesName}%"
         </if>
         <if test="userNames !=  null and userNames != ''">

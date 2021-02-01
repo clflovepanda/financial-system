@@ -41,7 +41,12 @@
     and re.delete = 1
 --     非押金类型
     <if test="revenueTypeId != null and revenueTypeId != ''">
-      and rt.remark != "Y"
+        <if test="revenueTypeId == '1'.toString()">
+            and rt.remark != "Y"
+        </if>
+        <if test="revenueTypeId != '1'.toString()">
+            and rt.revenue_type_id = #{revenueTypeId}
+        </if>
     </if>
 --     押金类型
     <if test="revenueTypeId == null or revenueTypeId == ''">

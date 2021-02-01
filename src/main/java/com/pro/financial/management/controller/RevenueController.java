@@ -64,7 +64,8 @@ public class RevenueController {
         //认款人
         String createUser = request.getParameter("createUser");
 
-        String revenueTypeId = "1";
+        //认款类型
+        String revenueTypeId = StringUtils.isEmpty(request.getParameter("revenueTypeId")) ? "1" : request.getParameter("revenueTypeId");
 
         String startDt = request.getParameter("startDt");
         String endDt = request.getParameter("endDt");
