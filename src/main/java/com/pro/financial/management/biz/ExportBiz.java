@@ -79,14 +79,58 @@ public class ExportBiz {
 
         try ( CSVPrinter printer = ExportUtil.getCsvPrinter(fileName, CommonConst.export_expenditure)){
             int i = 1;
+            //状态(0:未提交 1:已提交 2:审核中 3:被驳回 4:已支付 5:作废 6:平借款)
             for (ExpenditureDto expenditureDto : expenditureDtos) {
+                String stateStr = "";
+                switch (expenditureDto.getState()) {
+                    case 0:
+                        stateStr = "已提交";
+                    case 1:
+                        stateStr = "已提交";
+                    case 2:
+                        stateStr = "已提交";
+                    case 3:
+                        stateStr = "已提交";
+                        break;
+                    case 4:
+                        stateStr = "已支付";
+                        break;
+                    case 5:
+                        stateStr = "已驳回";
+                        break;
+                    case 6:
+                        stateStr = "平借款";
+                        break;
+                }
+                String auditTypeStr = "";
+                switch (expenditureDto.getState()) {
+                    case 0:
+                        auditTypeStr = "财务审批";
+                    case 1:
+                        auditTypeStr = "财务审批";
+                    case 2:
+                        auditTypeStr = "财务审批";
+                    case 3:
+                        auditTypeStr = "财务审批";
+                        break;
+                    case 4:
+                        auditTypeStr = "已支付";
+                        break;
+                    case 5:
+                        auditTypeStr = "已驳回";
+                        break;
+                    case 6:
+                        auditTypeStr = "平借款";
+                        break;
+                }
                 String[] line = new String[]{i+"", expenditureDto.getNumbering(), expenditureDto.getCoName(), expenditureDto.getExpenditureMethodName(),
                         expenditureDto.getExpenditureTypeName(), expenditureDto.getExpenditurePurposeName(), expenditureDto.getBeneficiaryUnit(), expenditureDto.getExpenditureMoney()+"",
-                        expenditureDto.getUsername(), expenditureDto.getCtime()+"", expenditureDto.getState()+"", expenditureDto.getUtime()+"", expenditureDto.getAuditType()};
+                        expenditureDto.getUsername(), expenditureDto.getCtime()+"",
+                        stateStr,
+                        expenditureDto.getUtime()+"", expenditureDto.getAuditType()};
                 printer.printRecord(line);
                 i++ ;
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             result.put("code", 8001);

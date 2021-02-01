@@ -22,12 +22,14 @@ import java.util.List;
 public interface InvoiceDao extends BaseMapper<InvoiceEntity> {
 
     List<InvoiceEntity> getList(@Param("projectId") Integer projectId, @Param("keyWord") String keyWord,@Param("username")  String username,@Param("startDate")  Date startDate,@Param("endDate")  Date endDate,
-                                @Param("limit") Integer limit, @Param("offset") Integer offset);
+                                @Param("limit") Integer limit, @Param("offset") Integer offset,
+                                @Param("projectName") String projectName, @Param("projectNo") String projectNo, @Param("coName") String coName, @Param("revenueTypeName") String revenueTypeName);
 
     @Select("SELECT invoice_no FROM invoice ORDER BY invoice_id DESC LIMIT 0,1")
     String selectLastNo();
 
-    int getCount(String keyWord, String username, Date startDate, Date endDate);
+    int getCount(@Param("projectId") Integer projectId, @Param("keyWord") String keyWord,@Param("username")  String username,@Param("startDate")  Date startDate,@Param("endDate")  Date endDate,
+                 @Param("projectName") String projectName, @Param("projectNo") String projectNo, @Param("coName") String coName, @Param("revenueTypeName") String revenueTypeName);
 
     @Select("SELECT sum(cny_money) FROM invoice WHERE project_id = #{projectId}")
     BigDecimal getreByProjectId(@Param("projectId") Integer projectId);

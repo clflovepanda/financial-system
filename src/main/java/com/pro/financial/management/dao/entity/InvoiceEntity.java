@@ -138,5 +138,7 @@ public class InvoiceEntity implements Serializable {
     private String revenueTypeName;
     @TableField(exist = false)
     private String projectName;
+    @TableField(exist = false)
+    private String projectNo;
 
 }

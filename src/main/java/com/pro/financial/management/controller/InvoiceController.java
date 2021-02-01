@@ -36,7 +36,16 @@ public class InvoiceController {
     public JSONObject getInvoice(HttpServletRequest request) {
         JSONObject result = new JSONObject();
         String keyWord = request.getParameter("keyWord");
+        //经办人
         String username = request.getParameter("username");
+        //项目名称
+        String projectName = request.getParameter("projectName");
+        //项目编号
+        String projectNo = request.getParameter("projectNo");
+        //公司
+        String coName = request.getParameter("coName");
+        //应税劳务名称
+        String revenueTypeName = request.getParameter("revenueTypeName");
         Integer projectId = Integer.parseInt(request.getParameter("projectId") == null ? "0" : request.getParameter("projectId"));
         //项目时间
         String startDt = request.getParameter("startDt");
@@ -46,8 +55,8 @@ public class InvoiceController {
         offset = limit*(offset - 1);
         Date startDate = StringUtils.isEmpty(startDt) ? null : new Date(Long.parseLong(startDt));
         Date endDate = StringUtils.isEmpty(endDt) ? null : new Date(Long.parseLong(endDt));
-        List<InvoiceDto> invoiceDtos = invoiceBiz.getList(projectId, keyWord, username, startDate, endDate, limit, offset);
-        int count = invoiceBiz.getCount(keyWord, username, startDate, endDate);
+        List<InvoiceDto> invoiceDtos = invoiceBiz.getList(projectId, keyWord, username, startDate, endDate, limit, offset, projectName, projectNo, coName, revenueTypeName);
+        int count = invoiceBiz.getCount(projectId, keyWord, username, startDate, endDate, projectName, projectNo, coName, revenueTypeName);
         result.put("code", 0);
         result.put("msg", "");
         result.put("data", invoiceDtos);

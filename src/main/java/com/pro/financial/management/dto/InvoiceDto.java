@@ -116,4 +116,5 @@ public class InvoiceDto {
 
     private String revenueTypeName;
     private String projectName;
+    private String projectNo;
 }

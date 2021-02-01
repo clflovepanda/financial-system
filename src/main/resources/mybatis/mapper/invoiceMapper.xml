@@ -3,7 +3,7 @@
 <mapper namespace="com.pro.financial.management.dao.InvoiceDao">
 
     <select id="getList" resultType="com.pro.financial.management.dao.entity.InvoiceEntity">
-        select i.*,p.name projectName, c.co_name companyName, rt.revenue_type_name, u.username,p.name projectName
+        select i.*,p.name projectName,p.code projectNo, c.co_name companyName, rt.revenue_type_name, u.username,p.name projectName
          from invoice i
         left join `user` u on u.user_id = i.operator
         left join project p using (project_id)
@@ -17,7 +17,19 @@
             and u.username like "%${username}%"
         </if>
         <if test="keyWord != null and keyWord != ''">
-            and (i.invoice_no like "%${keyWord}%" or i.unitname like "%${keyWord}%")
+            and i.invoice_no like "%${keyWord}%"
+        </if>
+        <if test="projectName != null and projectName != ''">
+            and p.name like "%${projectName}%"
+        </if>
+        <if test="projectNo != null and projectNo != ''">
+            and p.code like "%${projectNo}%"
+        </if>
+        <if test="coName != null and coName != ''">
+            and i.unitname like "%${coName}%"
+        </if>
+        <if test="revenueTypeName != null and revenueTypeName != ''">
+            and rt.revenue_type_name like "%${revenueTypeName}%"
         </if>
         <if test="startDate != null  and endDate != null">
             AND i.create_datetime > #{startDate}
@@ -37,11 +49,26 @@
         left join company c using (company_id)
         left join revenue_type rt using (revenue_type_id)
         where 1=1
+        <if test="projectId != null and projectId != ''">
+            and p.project_id = #{projectId}
+        </if>
         <if test="username != null and username != ''">
             and u.username like "%${username}%"
         </if>
         <if test="keyWord != null and keyWord != ''">
-            and (i.invoice_no like "%${keyWord}%" or i.unitname like "%${keyWord}%")
+            and i.invoice_no like "%${keyWord}%"
+        </if>
+        <if test="projectName != null and projectName != ''">
+            and p.name like "%${projectName}%"
+        </if>
+        <if test="projectNo != null and projectNo != ''">
+            and p.code like "%${projectNo}%"
+        </if>
+        <if test="coName != null and coName != ''">
+            and i.unitname like "%${coName}%"
+        </if>
+        <if test="revenueTypeName != null and revenueTypeName != ''">
+            and rt.revenue_type_name like "%${revenueTypeName}%"
         </if>
         <if test="startDate != null  and endDate != null">
             AND i.create_datetime > #{startDate}

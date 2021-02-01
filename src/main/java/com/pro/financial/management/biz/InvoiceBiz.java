@@ -28,8 +28,10 @@ public class InvoiceBiz extends ServiceImpl<InvoiceDao, InvoiceEntity> {
     @Autowired
     private InvoiceDao invoiceDao;
 
-    public List<InvoiceDto> getList(Integer projectId, String keyWord, String username, Date startDate, Date endDate, Integer limit, Integer offset) {
-        List<InvoiceEntity> invoiceEntities = invoiceDao.getList(projectId, keyWord, username, startDate, endDate, limit, offset);
+    public List<InvoiceDto> getList(Integer projectId, String keyWord, String username, Date startDate, Date endDate, Integer limit, Integer offset,
+                                    String projectName, String projectNo, String coName, String revenueTypeName) {
+        List<InvoiceEntity> invoiceEntities = invoiceDao.getList(projectId, keyWord, username, startDate, endDate, limit, offset,
+                projectName, projectNo, coName, revenueTypeName);
         return ConvertUtil.convert(InvoiceEntity2Dto.instance, invoiceEntities);
     }
 
@@ -45,8 +47,10 @@ public class InvoiceBiz extends ServiceImpl<InvoiceDao, InvoiceEntity> {
         return invoiceDao.selectLastNo();
     }
 
-    public int getCount(String keyWord, String username, Date startDate, Date endDate) {
-        return invoiceDao.getCount(keyWord, username, startDate, endDate);
+    public int getCount(Integer projectId, String keyWord, String username, Date startDate, Date endDate,
+                        String projectName, String projectNo, String coName, String revenueTypeName) {
+        return invoiceDao.getCount(projectId, keyWord, username, startDate, endDate,
+                projectName, projectNo, coName, revenueTypeName);
     }
 
     public BigDecimal getreByProjectId(Integer projectId) {

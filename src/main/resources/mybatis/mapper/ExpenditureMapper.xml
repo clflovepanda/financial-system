@@ -48,10 +48,12 @@
     using (expenditure_type_id)
     left join project p
     on p.project_id = e.project_id
-    left join project_data_source pds
-    on p.project_id = pds.project_id
-    left join data_source dt
-    using (data_source_id)
+    <if test="attribute != null and attribute != ''">
+      left join project_data_source pds
+      on p.project_id = pds.project_id
+      left join data_source dt
+      using (data_source_id)
+    </if>
     left join company c on e.company_id = c.company_id
     left join `user` u on e.create_user = u.user_id
     where 1=1
@@ -96,10 +98,6 @@
     using (expenditure_type_id)
     left join project p
     on p.project_id = e.project_id
-    left join project_data_source pds
-    on p.project_id = pds.project_id
-    left join data_source dt
-    using (data_source_id)
     left join company c on e.company_id = c.company_id
     left join `user` u on e.create_user = u.user_id
     where 1=1
