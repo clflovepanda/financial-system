@@ -56,11 +56,12 @@ public class ExpenditureController {
         ExpenditureDto expenditureDto = JSONObject.parseObject(jsonInfo.toJSONString(), ExpenditureDto.class);
 //        Integer revenueId = jsonInfo.getInteger("revenueId");
 //        RevenueDto revenueDto =  revenueBiz.getByRevenueId(revenueId);
-        if (expenditureDto.getExpenditureId() == null) {
+        if (expenditureDto.getExpenditureMethodId() == null) {
             result.put("code", 1001);
             result.put("msg", "传入参数有误!");
             return result;
         }
+        int count = 0;
         //生成编号
         String numbering;
         //获取最后一条数据的编号
@@ -94,13 +95,16 @@ public class ExpenditureController {
                 result.put("msg", "剩余金额不足");
                 return result;
             }
+            count = expenditureBiz.addExpenditure(expenditureDto);
             DepositLogEntity depositLogEntity = new DepositLogEntity();
             depositLogEntity.setExpenditureId(expenditureDto.getExpenditureId());
             depositLogEntity.setRevenueId(depositId);
             depositLogEntity.setAuditUser(userId);
             depositLogBiz.save(depositLogEntity);
+        } else {
+            count = expenditureBiz.addExpenditure(expenditureDto);
         }
-        int count = expenditureBiz.addExpenditure(expenditureDto);
+
         //添加银行信息
         try {
             BeneficiaryUnitEntity beneficiaryUnitEntity = JSONObject.parseObject(JSONObject.toJSONString(expenditureDto), BeneficiaryUnitEntity.class);
@@ -108,8 +112,6 @@ public class ExpenditureController {
         } catch (Exception e) {
 
         }
-        //退押金操作
-
         //添加申请工作流
         ExpenditureAuditLogDto expenditureAuditLogDto = new ExpenditureAuditLogDto();
         expenditureAuditLogDto.setExpenditureId(expenditureDto.getExpenditureId());
