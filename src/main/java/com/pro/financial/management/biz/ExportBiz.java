@@ -123,11 +123,11 @@ public class ExportBiz {
                         auditTypeStr = "平借款";
                         break;
                 }
-                String[] line = new String[]{i+"", expenditureDto.getNumbering(), expenditureDto.getCoName(), expenditureDto.getExpenditureMethodName(),
+                String[] line = new String[]{i+"", expenditureDto.getNumbering(), expenditureDto.getProjectNo(), expenditureDto.getProjectName() , expenditureDto.getCoName(), expenditureDto.getExpenditureMethodName(),
                         expenditureDto.getExpenditureTypeName(), expenditureDto.getExpenditurePurposeName(), expenditureDto.getBeneficiaryUnit(), expenditureDto.getExpenditureMoney()+"",
                         expenditureDto.getUsername(), expenditureDto.getCtime()+"",
                         stateStr,
-                        expenditureDto.getUtime()+"", expenditureDto.getAuditType()};
+                        expenditureDto.getUtime()+"", auditTypeStr};
                 printer.printRecord(line);
                 i++ ;
             }

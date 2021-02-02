@@ -61,7 +61,7 @@ public class CommonConst {
     //押金导出表头
     public static final String[] export_deposit = new String[]{"序号","押金编号","到款账户","到款种类","汇款方","认款类型","认款金额/元","认款人","认款时间","待退回金额/元","退回中押金/元","已退回押金/元"};
     //支出导出表头
-    public static final String[] export_expenditure = new String[]{"序号","支出编号","公司", "支付方式", "支出类型", "用途", "收款人单位", "金额/元", "申请人", "创建时间", "最新状态", "最新状态时间", "工作流"};
+    public static final String[] export_expenditure = new String[]{"序号","支出编号","项目编号","项目名称","公司", "支付方式", "支出类型", "用途", "收款人单位", "金额/元", "申请人", "创建时间", "最新状态", "最新状态时间", "工作流"};
     //支出统计表头
     public static final String[] export_statistics_expenditure = new String[]{"序号","公司", "编号", "部门/项目", "收款人单位", "方式", "用途", "金额", "申请人", "状态"};
     public static final String[] export_statistics_project = new String[]{"序号", "编号", "名称", "负责人", "报价(未完成)", "结算收入(已完成)", "实际收入", "应收收入"};
