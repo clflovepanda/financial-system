@@ -56,7 +56,7 @@ public class ExpenditureController {
         ExpenditureDto expenditureDto = JSONObject.parseObject(jsonInfo.toJSONString(), ExpenditureDto.class);
 //        Integer revenueId = jsonInfo.getInteger("revenueId");
 //        RevenueDto revenueDto =  revenueBiz.getByRevenueId(revenueId);
-        if (expenditureDto.getExpenditureMethodId() == null) {
+        if (expenditureDto.getExpenditureId() == null) {
             result.put("code", 1001);
             result.put("msg", "传入参数有误!");
             return result;
