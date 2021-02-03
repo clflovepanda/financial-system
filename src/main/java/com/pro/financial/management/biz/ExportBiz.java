@@ -43,7 +43,9 @@ public class ExportBiz {
         try ( CSVPrinter printer = ExportUtil.getCsvPrinter(fileName, CommonConst.export_deposit)){
             int i = 1;
             for (RevenueDto revenueDto : revenueDtos) {
-                String[] line = new String[]{i+"",revenueDto.getRevenueNo(),revenueDto.getCoName(),revenueDto.getReceivementTypeName()
+                String[] line = new String[]{i+"",revenueDto.getRevenueNo()
+                        ,revenueDto.getProjectNo(),revenueDto.getProjectName()
+                        ,revenueDto.getCoName(),revenueDto.getReceivementTypeName()
                        ,revenueDto.getRemitter(),revenueDto.getRemitterMethodName()
                        ,revenueDto.getCnyMoney()+"",revenueDto.getUsername(),revenueDto.getCtime()+""
                        ,revenueDto.getToBeReturned()+"",revenueDto.getReturning()+"",revenueDto.getReturned()+""};

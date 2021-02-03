@@ -46,7 +46,7 @@ public interface ProjectDao extends BaseMapper<ProjectEntity> {
             "left join project_data_source " +
             "using(project_id) " +
             "left join data_source " +
-            "using(data_source_id) where project.auditing_state = 1 order by project.ctime desc limit 0,10")
+            "using(data_source_id) where project.auditing_state = 1 order by project.ctime desc")
     List<ProjectEntity> getAllProjectList();
 
     List<ProjectEntity> getList(@Param("ids") List<Integer> projectIds, @Param("projectNo") String projectNo, @Param("projectName") String projectName,
